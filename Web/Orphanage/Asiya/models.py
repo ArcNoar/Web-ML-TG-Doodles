@@ -44,7 +44,7 @@ class Person_Memory(models.Model): # Память о существах, и мн
             Sympathy - Симпатия (++++)
             FriendShip - Дружба (+++)
             Admiration - Восхищение (++)
-            Interest - Интерес (+)
+            Interest - Интерес (+) (Удалено)
 
             Mania - Мания (Должна влиять на установку пункта зависимости.)
 
@@ -53,7 +53,7 @@ class Person_Memory(models.Model): # Память о существах, и мн
             Spite - Злоба\Враждебность (----)
             DisAffection - Неприязнь\Недружелюбность (---)
             Fright - Страх (--)
-            Ennui -  Тоска(Скука) по отношению к объетку(-)
+            Ennui -  Тоска(Скука) по отношению к объетку(-) (Удалено)
 
 
 
@@ -95,7 +95,7 @@ class Person_Memory(models.Model): # Память о существах, и мн
     Sympathy = models.FloatField(default=0.0,verbose_name='Симпатия')
     FriendShip = models.FloatField(default=0.0,verbose_name='Дружба')
     Admiration = models.FloatField(default=0.0,verbose_name='Восхищение')
-    Interest = models.FloatField(default=0.0,verbose_name='Интерес')
+    
     
     #--Спец пункты
     
@@ -107,7 +107,7 @@ class Person_Memory(models.Model): # Память о существах, и мн
     Spite = models.FloatField(default=0.0,verbose_name='Враждебность')
     DisAffection = models.FloatField(default=0.0,verbose_name='Неприязнь')
     Fright = models.FloatField(default=0.0,verbose_name='Страх')
-    Ennui = models.FloatField(default=0.0,verbose_name='Тоска')
+    
 
 
     Rep_SUM = models.FloatField(null=True,blank=True,
@@ -138,7 +138,7 @@ class Person_Memory(models.Model): # Память о существах, и мн
                                on_delete=models.PROTECT,blank=True,null=True,verbose_name='Черта Характера (3) - ')
     
     def __str__(self):
-        return "%s %s" % (self.first_name, self.sur_name)
+        return "%s %s - %s" % (self.first_name, self.sur_name, self.Relation_To)
     
     class Meta:
         verbose_name_plural = 'Личностная Память'
@@ -176,18 +176,139 @@ class Character_Tags(models.Model): # Класс Черт характера.
         ordering = ['char_tag']
 
 
-class EmoState(models.Model): # Эмоциональное состояние
+
+
+
+class Emote_Reg(models.Model): # Эмоциональное состояние
     """
-    ЭТОТ КЛАСС НЕ ГОТОВ, НИЖЕ СТОЯЩЕЕ МУСОР, Я ГИТА, ВЫШЕ СТОЯЩИЕ ШТУКИ.
+    Началом этого кода всегда должно быть слово - Фундаментальная эмоция. [Happy - *Код*]
+    Emote_Name = Должен содержать в себе своеобразный генокод (Литералы Эмоций подряд) ('HFAH ... SAH')
+
+    Emote_Trigger = Кто вызвал подобную эмоцию (Если Сущность, в противном случае оставить NULL)
+    ET_Type = тип триггера  (Сущность, Объект, Событие)
+    ET_Descript = Описаение триггера (Короткая заметка, о том какой объект или событие, 
+                                            можно оставить пустым если вызвала Сущность)
+    ET_Date - Дата Триггера (Необязательна к заполнению, хотя скорее всего я вообще авто дату сделаю.)
+
+
     """
-    name = models.CharField(max_length=20, db_index=True,
-                            verbose_name= 'Вид Объекта')
+    
+    Emote_Name = models.CharField(max_length=100, db_index=True,
+                            verbose_name= 'Код Чувства')
+    
+    # Описательные переменные
+    Emote_Trigger = models.ForeignKey(Person_Memory,related_name='ETrig',blank=True,null=True,
+                                      on_delete=models.PROTECT,verbose_name='Кто Причина')
+
+    class ET_TypeChose(models.TextChoices): #Подкласс для параметра типа
+        CREATURE = 'Creature', 'Сущность'
+        ET_NONE = 'None','Неопределенный'
+        IVENT = 'Ivent','Событие'
+        OBJECT = 'Object', 'Объект'
+
+    ET_Type = models.CharField(max_length = 14,verbose_name='Тип Причины',choices=ET_TypeChose.choices,default=ET_TypeChose.ET_NONE)
+    ET_Descript = models.TextField(null=True, blank=True,verbose_name='Описание Причины.')
+
+    ET_Date = models.DateField(auto_now_add= True,verbose_name= 'Дата Возникновения')
+
+    # Компоненты Чувств.
+    # СТРАХ :
+    """
+        1 Horror = Ужас
+        2 Anxiety =  = Тревога
+        3 Concern = Беспокойство
+        4 Astonishment =  Удивление
+        5 Confusion = Замешательство
+        6 Timidity = Робость
+        7 Guilt = Вина
+        8 Embarrassment = Смущение
+        9 Doubt = Сомнение
+     """
+    Horror = models.FloatField(default=0.0,verbose_name='Ужас')
+    Anxiety = models.FloatField(default=0.0,verbose_name='Тревога')
+    Concern = models.FloatField(default=0.0,verbose_name='Беспокойство')
+    Astonishment = models.FloatField(default=0.0,verbose_name='Удивление')
+    Confusion = models.FloatField(default=0.0,verbose_name='Замешательство')
+    Timidity = models.FloatField(default=0.0,verbose_name='Робость')
+    Guilt = models.FloatField(default=0.0,verbose_name='Вина')
+    Embarrassment = models.FloatField(default=0.0,verbose_name='Смущение')
+    Doubt = models.FloatField(default=0.0,verbose_name='Сомнение')
+
+    
+    #ГНЕВ :
+    """
+        1 Rage = Ярость
+        2 Irritation = Раздражение
+        3 Resentment = Обида
+        4 Disgust = Отвращение\Презрительное
+        5 Jealousy = Ревность
+        6 Envy = Зависть
+        7 Indignation = Негодование/Возмущение
+        8 Nervousness = Нервозность
+        9 Disappointment = Разочарование
+    """
+    Rage = models.FloatField(default=0.0,verbose_name='Ярость')
+    Irritation = models.FloatField(default=0.0,verbose_name='Раздражение')
+    Resentment = models.FloatField(default=0.0,verbose_name='Обида')
+    Disgust = models.FloatField(default=0.0,verbose_name='Отвращение')
+    Jealousy = models.FloatField(default=0.0,verbose_name='Ревность')
+    Envy = models.FloatField(default=0.0,verbose_name='Зависть')
+    Indignation = models.FloatField(default=0.0,verbose_name='Возмущение')
+    Nervousness = models.FloatField(default=0.0,verbose_name='Нервозность')
+    Disappointment = models.FloatField(default=0.0,verbose_name='Разочарование')
+
+
+    #ГРУСТЬ:
+    """
+        1 Idleness = Лень
+        2 Despait = Отчаяние
+        3 Compassion = Жалость
+        4 Loneliness = Отрешенность/Одиночество
+        5 Helplessness = Беспомощность
+        6 Aloofness = Отчужденность
+        7 Regret = Сожаление
+        8 Boredom = Скука
+        9 Sadness = Печаль
+    """
+    Idleness = models.FloatField(default=0.0,verbose_name='Лень')
+    Despait = models.FloatField(default=0.0,verbose_name='Отчаяние')
+    Compassion = models.FloatField(default=0.0,verbose_name='Жалость')
+    Loneliness = models.FloatField(default=0.0,verbose_name='Отрешенность')
+    Helplessness = models.FloatField(default=0.0,verbose_name='Беспомощность')
+    Aloofness = models.FloatField(default=0.0,verbose_name='Отчужденность')
+    Regret = models.FloatField(default=0.0,verbose_name='Сожаление')
+    Boredom = models.FloatField(default=0.0,verbose_name='Скука')
+    Sadness = models.FloatField(default=0.0,verbose_name='Печаль')
+
+    #РАДОСТЬ :
+    """
+        1 Happiness = Счастье
+        2 Delight =  Восторг
+        3 Interest = Интерес
+        4 Excitement = Возбуждение
+        5 Curiosity = Любопытство
+        6 Confidence = Уверенность
+        7 Horny = Возбуждение(хорни)
+        8 Laugh = Смех
+        9 Satisfaction = Удовлетворение
+    """
+    Happiness = models.FloatField(default=0.0,verbose_name='Счастье')
+    Delight = models.FloatField(default=0.0,verbose_name='Восторг')
+    Interest = models.FloatField(default=0.0,verbose_name='Интерес')
+    Excitement = models.FloatField(default=0.0,verbose_name='Возбуждение')
+    Curiosity = models.FloatField(default=0.0,verbose_name='Любопытство')
+    Confidence = models.FloatField(default=0.0,verbose_name='Уверенность')
+    Horny = models.FloatField(default=0.0,verbose_name='Хорни')
+    Laugh = models.FloatField(default=0.0,verbose_name='Смех')
+    Satisfaction = models.FloatField(default=0.0,verbose_name='Удовлетворение')
+
+
 
     def __str__(self):
-        return self.name
+        return "КОД: %s  ||  Причина: %s  ||  Дата: (%s)" % (self.Emote_Name, self.Emote_Trigger, self.ET_Date)
 
     class Meta:
-        verbose_name_plural = 'Типизация'
-        verbose_name = 'Представление'
-        ordering = ['name']
+        verbose_name_plural = 'Архив Эмоций'
+        verbose_name = 'Чувство'
+        ordering = ['Emote_Name']
 
