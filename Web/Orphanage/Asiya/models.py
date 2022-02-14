@@ -1,4 +1,4 @@
-
+from django.db import models
 
 
 # Секция Личностой Памяти - Эмоции
