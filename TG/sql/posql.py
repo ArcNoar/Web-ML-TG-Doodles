@@ -2,6 +2,7 @@ import psycopg2
 
 from .conf import db_name,host,user,password
 #from Web.Asiya.models import Person_Memory
+#unic_id,first_name,sur_name,birthday,gender
 
 def sql_connector(): # Бесполезный Класс, так как вписывать все сюда, это дичь ебаная, буду создавать отдельные класс, с вызовом.
     try:
@@ -13,12 +14,7 @@ def sql_connector(): # Бесполезный Класс, так как впис
             database = db_name
             )
     
-        with connection.cursor() as cursor:
-            cursor.execute(
-                "SELECT version();"
-                )
-            print(f'Server version : {cursor.fetchone()}')
-
+                
     
     except Exception as _ex:
         print('Ошибка в ходе чтения ДБ', _ex)
@@ -27,6 +23,7 @@ def sql_connector(): # Бесполезный Класс, так как впис
         if connection:
             connection.close()
             print('Дб отключена')
+
 
 
 """

@@ -1,8 +1,8 @@
 from aiogram import types
 from aiogram.dispatcher import FSMContext
 
-from sql.posql import sql_connector
-#from Test.yep.models import Person_Memory
+
+
 
 from loader import dp
 
@@ -34,13 +34,7 @@ async def bot_echo(message: types.Message):
         else:
             recent_users[current_user.first_name] = current_user.id
             admin_user[current_user.first_name] = current_user.id
-            """
-            try:
-                act_user = Person_Memory(unic_id = current_user.id)
-                act_user.save()
-            except:
-                await dp.bot.send_message(Noah, f'Произошла ошибка при запоминании пользователя')
-            """
+            
                 
 
     else:

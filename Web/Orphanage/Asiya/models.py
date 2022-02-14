@@ -7,7 +7,7 @@ class Ego(models.Model):
     Этот класс содержит данные Асии. Вроде Имени, Возраста, Дня рождения 
     """
     
-    #Appearance = models.ImageField() #Это в последнюю очередь тип, там сложный момент, потом сделаю.
+    Appearance = models.ImageField(upload_to='photo/Asiya/%Y/%m/%d',verbose_name='Облик',null=True) #Это в последнюю очередь тип, там сложный момент, потом сделаю.
 
 
     first_name = models.CharField(max_length=25,verbose_name='Имя')
@@ -72,7 +72,7 @@ class Person_Memory(models.Model): # Память о существах, и мн
     Char_3 - Черта Характера Присвоенная Асией
 
     """
-    #Appearance = models.ImageField() #Это в последнюю очередь тип, там сложный момент, потом сделаю.
+    Appearance = models.ImageField(upload_to='photo/%Y/%m/%d',verbose_name='Внешний Вид',null=True) #Это в последнюю очередь тип, там сложный момент, потом сделаю.
     
     unic_id = models.CharField(max_length = 25,primary_key=True,verbose_name='ID')
     first_name = models.CharField(max_length=25,verbose_name='Имя')

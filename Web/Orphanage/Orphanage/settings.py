@@ -5,7 +5,7 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
+import os
 
 
 
@@ -25,7 +25,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'Asiya'
+    'Asiya.apps.AsiyaConfig'
 ]
 
 MIDDLEWARE = [
@@ -103,6 +103,9 @@ USE_TZ = True
 
 
 STATIC_URL = 'static/'
+
+MEDIA_ROOT = os.path.join(BASE_DIR,'Media')
+MEDIA_URL = '/Media/'
 
 
 
