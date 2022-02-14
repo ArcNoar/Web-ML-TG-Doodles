@@ -75,9 +75,9 @@ class Person_Memory(models.Model): # Память о существах, и мн
     Appearance = models.ImageField(upload_to='photo/%Y/%m/%d',verbose_name='Внешний Вид',null=True) #Это в последнюю очередь тип, там сложный момент, потом сделаю.
     
     unic_id = models.CharField(max_length = 25,primary_key=True,verbose_name='ID')
-    first_name = models.CharField(max_length=25,verbose_name='Имя')
-    sur_name = models.CharField(max_length=40,verbose_name='Фамилия')
-    birthday = models.DateField(blank=True,verbose_name = 'Дата Рождения')
+    first_name = models.CharField(max_length=25,null=True,verbose_name='Имя')
+    sur_name = models.CharField(max_length=40,null=True,verbose_name='Фамилия')
+    birthday = models.DateField(blank=True,null=True,verbose_name = 'Дата Рождения')
 
 
     class GenChose(models.TextChoices): #Подкласс для параметра Гендера
@@ -92,22 +92,22 @@ class Person_Memory(models.Model): # Память о существах, и мн
     # Репутационный блок - Числовые ЭКВЫ
     #--Положительное отношение
 
-    Affection = models.FloatField(default=0.0,verbose_name='Любовь')
-    Sympathy = models.FloatField(default=0.0,verbose_name='Симпатия')
-    FriendShip = models.FloatField(default=0.0,verbose_name='Дружба')
-    Admiration = models.FloatField(default=0.0,verbose_name='Восхищение')
+    Affection = models.FloatField(default=0.0,null=True,verbose_name='Любовь')
+    Sympathy = models.FloatField(default=0.0,null=True,verbose_name='Симпатия')
+    FriendShip = models.FloatField(default=0.0,null=True,verbose_name='Дружба')
+    Admiration = models.FloatField(default=0.0,null=True,verbose_name='Восхищение')
     
     
     #--Спец пункты
     
-    Mania = models.FloatField(default=0.0,verbose_name='Мания')
+    Mania = models.FloatField(default=0.0,null=True,verbose_name='Мания')
 
     #--Негативное отношение
 
-    Abhorrence = models.FloatField(default=0.0,verbose_name='Ненависть')
-    Spite = models.FloatField(default=0.0,verbose_name='Враждебность')
-    DisAffection = models.FloatField(default=0.0,verbose_name='Неприязнь')
-    Fright = models.FloatField(default=0.0,verbose_name='Страх')
+    Abhorrence = models.FloatField(default=0.0,null=True,verbose_name='Ненависть')
+    Spite = models.FloatField(default=0.0,null=True,verbose_name='Враждебность')
+    DisAffection = models.FloatField(default=0.0,null=True,verbose_name='Неприязнь')
+    Fright = models.FloatField(default=0.0,null=True,verbose_name='Страх')
     
 
 
@@ -126,7 +126,7 @@ class Person_Memory(models.Model): # Память о существах, и мн
                                       on_delete=models.SET_NULL,blank=True,null=True,verbose_name='Отношение Сущности к Асии:')
     
     
-    Meet_Date = models.DateField(auto_now_add=True,verbose_name= 'Дата Знакомства')
+    Meet_Date = models.DateField(auto_now_add=True,null=True,verbose_name= 'Дата Знакомства')
 
     Fund_Description = models.TextField(null=True, blank=True,verbose_name='Краткое Описание')
     Local_Description = models.TextField(null=True,blank=True,verbose_name='Наблюдения Асии')

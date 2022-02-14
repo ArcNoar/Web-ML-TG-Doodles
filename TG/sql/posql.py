@@ -14,6 +14,11 @@ def sql_connector(): # Бесполезный Класс, так как впис
             database = db_name
             )
     
+        cursor = connection.cursor()
+        insert_query = """ INSERT INTO "Asiya_person_memory" (unic_id, first_name, sur_name,gender) VALUES
+                                          ('000000223', 'Ноев', 'Мудак','Male')"""
+        cursor.execute(insert_query)
+        connection.commit()
                 
     
     except Exception as _ex:
@@ -34,6 +39,6 @@ def sql_connector(): # Бесполезный Класс, так как впис
 
     
 """
-#class PM_Sql(Person_Memory):
+#class PM_Sql:
     
     
