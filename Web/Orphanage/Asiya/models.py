@@ -7,7 +7,7 @@ class Ego(models.Model):
     Этот класс содержит данные Асии. Вроде Имени, Возраста, Дня рождения 
     """
     
-    Appearance = models.ImageField(upload_to='photo/Asiya/%Y/%m/%d',verbose_name='Облик',null=True) #Это в последнюю очередь тип, там сложный момент, потом сделаю.
+    appearance = models.ImageField(upload_to='photo/Asiya/%Y/%m/%d',verbose_name='Облик',null=True) #Это в последнюю очередь тип, там сложный момент, потом сделаю.
 
 
     first_name = models.CharField(max_length=25,verbose_name='Имя')
@@ -72,7 +72,7 @@ class Person_Memory(models.Model): # Память о существах, и мн
     Char_3 - Черта Характера Присвоенная Асией
 
     """
-    Appearance = models.ImageField(upload_to='photo/%Y/%m/%d',verbose_name='Внешний Вид',null=True) #Это в последнюю очередь тип, там сложный момент, потом сделаю.
+    appearance = models.ImageField(upload_to='photo/%Y/%m/%d',verbose_name='Внешний Вид',null=True) #Это в последнюю очередь тип, там сложный момент, потом сделаю.
     
     unic_id = models.CharField(max_length = 25,primary_key=True,verbose_name='ID')
     first_name = models.CharField(max_length=25,null=True,verbose_name='Имя')
@@ -92,26 +92,26 @@ class Person_Memory(models.Model): # Память о существах, и мн
     # Репутационный блок - Числовые ЭКВЫ
     #--Положительное отношение
 
-    Affection = models.FloatField(default=0.0,null=True,verbose_name='Любовь')
-    Sympathy = models.FloatField(default=0.0,null=True,verbose_name='Симпатия')
-    FriendShip = models.FloatField(default=0.0,null=True,verbose_name='Дружба')
-    Admiration = models.FloatField(default=0.0,null=True,verbose_name='Восхищение')
+    affection = models.FloatField(default=0.0,null=True,verbose_name='Любовь')
+    sympathy = models.FloatField(default=0.0,null=True,verbose_name='Симпатия')
+    friendship = models.FloatField(default=0.0,null=True,verbose_name='Дружба')
+    admiration = models.FloatField(default=0.0,null=True,verbose_name='Восхищение')
     
     
     #--Спец пункты
     
-    Mania = models.FloatField(default=0.0,null=True,verbose_name='Мания')
+    mania = models.FloatField(default=0.0,null=True,verbose_name='Мания')
 
     #--Негативное отношение
 
-    Abhorrence = models.FloatField(default=0.0,null=True,verbose_name='Ненависть')
-    Spite = models.FloatField(default=0.0,null=True,verbose_name='Враждебность')
-    DisAffection = models.FloatField(default=0.0,null=True,verbose_name='Неприязнь')
-    Fright = models.FloatField(default=0.0,null=True,verbose_name='Страх')
+    abhorrence = models.FloatField(default=0.0,null=True,verbose_name='Ненависть')
+    spite = models.FloatField(default=0.0,null=True,verbose_name='Враждебность')
+    disaffection = models.FloatField(default=0.0,null=True,verbose_name='Неприязнь')
+    fright = models.FloatField(default=0.0,null=True,verbose_name='Страх')
     
 
 
-    Rep_SUM = models.FloatField(null=True,blank=True,
+    rep_sum = models.FloatField(null=True,blank=True,
                               verbose_name= 'Балл Взаимоотношений.') # Здесь стоит реализовать розу ветров репутации.
 
     
@@ -120,22 +120,22 @@ class Person_Memory(models.Model): # Память о существах, и мн
 
     # Репутационный блок - Отношение "ОТ" \ "К" кому то 
     # Related Name это спец имя при вызове этой переменной, вообще надо все так сделать, НО ПОИБААААТЬ (простите.)
-    Relation_To = models.ForeignKey('RelationType',related_name='RelTo', 
+    relation_to = models.ForeignKey('RelationType',related_name='RelTo', 
                                     on_delete=models.SET_NULL,null=True,verbose_name='Отношение Асии к Сущности:')
-    Relation_From = models.ForeignKey('RelationType',related_name='RelFrom',
+    relation_from = models.ForeignKey('RelationType',related_name='RelFrom',
                                       on_delete=models.SET_NULL,blank=True,null=True,verbose_name='Отношение Сущности к Асии:')
     
     
-    Meet_Date = models.DateField(auto_now_add=True,null=True,verbose_name= 'Дата Знакомства')
+    meet_date = models.DateField(auto_now_add=True,null=True,verbose_name= 'Дата Знакомства')
 
-    Fund_Description = models.TextField(null=True, blank=True,verbose_name='Краткое Описание')
-    Local_Description = models.TextField(null=True,blank=True,verbose_name='Наблюдения Асии')
+    fund_description = models.TextField(null=True, blank=True,verbose_name='Краткое Описание')
+    local_description = models.TextField(null=True,blank=True,verbose_name='Наблюдения Асии')
 
-    Char_1 = models.ForeignKey('Character_Tags',related_name='CharOne',
+    char_1 = models.ForeignKey('Character_Tags',related_name='CharOne',
                                blank=True,on_delete=models.SET_NULL,null=True,verbose_name='Черта Характера (1) - ')
-    Char_2 = models.ForeignKey('Character_Tags',related_name='CharTwo',
+    char_2 = models.ForeignKey('Character_Tags',related_name='CharTwo',
                                blank=True,on_delete=models.SET_NULL,null=True,verbose_name='Черта Характера (2) - ')
-    Char_3 = models.ForeignKey('Character_Tags',related_name='CharThree',
+    char_3 = models.ForeignKey('Character_Tags',related_name='CharThree',
                                on_delete=models.SET_NULL,blank=True,null=True,verbose_name='Черта Характера (3) - ')
     
     def __str__(self):
@@ -144,7 +144,7 @@ class Person_Memory(models.Model): # Память о существах, и мн
     class Meta:
         verbose_name_plural = 'Социальная Память - Личности'
         verbose_name = 'Сущность'
-        ordering = ['Meet_Date']
+        ordering = ['meet_date']
 
 
 class RelationType(models.Model): # Класс содержащий виды Взаимоотношений.

@@ -1,9 +1,10 @@
 from aiogram import types
 from aiogram.dispatcher import FSMContext
 
+from Functional.PM_Func import data_temp, rep_refresh
+from TG.sql.posql import PM_Sql
 
-
-from loader import dp
+from TG.loader import dp
 
 import asyncio
 from time import sleep
@@ -11,9 +12,14 @@ from time import sleep
 
 # Общий хендлер
 #340981880 Мой Айди
+#Constant Var
 recent_users = {}
 admin_user = {}
-#actual_user = [] #unic_id,first_name,sur_name,birthday,gender
+template = data_temp()
+user_data = template.create()
+
+
+
 @dp.message_handler(state=None)
 async def bot_echo(message: types.Message):
     current_user = message.from_user
@@ -33,6 +39,23 @@ async def bot_echo(message: types.Message):
         else:
             recent_users[current_user.first_name] = current_user.id
             admin_user[current_user.first_name] = current_user.id
+            try:
+                
+                user_data['ID'] = current_user.id
+                user_data['Имя'] = current_user.first_name
+                user_data['Фамилия'] = current_user.last_name
+                
+                user_data['Пол'] = 'male'
+                user_data['День Рождения'] = '2003-10-18'
+                
+                
+                Person_Memory = PM_Sql(user_data)
+                
+                Person_Memory.add_to()
+            except:
+                print('Возникла ошибка при запоминании данных')
+
+
             
                 
 
@@ -40,6 +63,15 @@ async def bot_echo(message: types.Message):
         await dp.bot.send_message(Noah, current_user.id)
         if current_user.id not in recent_users:
             recent_users[current_user.first_name] = current_user.id
+            try:
+                user_data['ID'] = current_user.id
+                user_data['Имя'] = current_user.first_name
+                user_data['Фамилия'] = current_user.last_name
+                
+                Person_Memory = PM_Sql(user_data)
+                Person_Memory.add_tp()
+            except:
+                print('Возникла ошибка при запоминании данных')
         else:
             pass
         
