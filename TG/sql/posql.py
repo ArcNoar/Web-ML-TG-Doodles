@@ -1,35 +1,7 @@
 import psycopg2
 from datetime import date
 from .conf import db_name,host,user,password
-
-
-def sql_connector(): # Бесполезный Класс, так как вписывать все сюда, это дичь ебаная, буду создавать отдельные класс, с вызовом.
-    try:
-        connection = psycopg2.connect(
-    
-            host = host,
-            user = user,
-            password = password,
-            database = db_name
-            )
-    
-        cursor = connection.cursor()
-        insert_query = """ INSERT INTO "Asiya_person_memory" (unic_id, first_name, sur_name,gender) VALUES
-                                          ('000000223', 'Ноев', 'Мудак','Male')"""
-        cursor.execute(insert_query)
-        connection.commit()
-                
-    
-    except Exception as _ex:
-        print('Ошибка в ходе чтения ДБ', _ex)
-    
-    finally:
-        if connection:
-            connection.close()
-            print('Дб отключена')
-
-
-
+from Functional.PM_Func import convert_to_dict
 """
 Нужно сделать связующую дб фукцию для каждого табла.
 Социальная Память:
@@ -75,9 +47,9 @@ class PM_Sql:
         
         self.Relation_From_id_d = data_dict['Отношение от']
         self.Relation_To_id_d = data_dict['Отношение к']
-    def add_to(self):
-        try:
-            connection = psycopg2.connect(
+        
+        
+        self.__connection = psycopg2.connect(
         
                 host = host,
                 user = user,
@@ -85,24 +57,54 @@ class PM_Sql:
                 database = db_name
                 )
         
-            cursor = connection.cursor()# Можно перенести функцию сюда
-            insert_query = """ INSERT INTO public."Asiya_person_memory" (unic_id,first_name,sur_name,gender,birthday,
+        self.__cursor = self.__connection.cursor()# Можно перенести функцию сюда
+
+
+
+    def new_user(self):
+
+        try:
+            insert_query = """ INSERT INTO public."Asiya_person_memory" (unic_id,first_name,sur_name,appearance,gender,birthday,
                                                 meet_date,affection,sympathy,friendship,admiration,mania,
                                                 abhorrence,spite,disaffection,fright,
-                                                rep_sum,relation_to_id) VALUES """ + f"""
-                                              ({self.unic_id_d}, '{self.first_name_d}', '{self.sur_name_d}','{self.gender_d}','{self.birthday_d}',
+                                                rep_sum,fund_description,local_description,relation_from_id,relation_to_id) VALUES """ + f"""
+                                              ({self.unic_id_d}, '{self.first_name_d}', '{self.sur_name_d}','{self.Appearance_d}','{self.gender_d}','{self.birthday_d}',
                                                '{self.Meet_Date_d}',{self.Affection_d},{self.Sympathy_d},{self.FriendShip_d},{self.Admiration_d},{self.Mania_d},
                                                {self.Abhorrence_d},{self.Spite_d},{self.DisAffection_d},{self.Fright_d},
-                                               {self.Rep_SUM_d},{self.Relation_To_id_d});"""
-            cursor.execute(insert_query)
-            connection.commit()
+                                               {self.Rep_SUM_d},'{self.Fund_Description_d}','{self.Local_Description_d}',{self.Relation_From_id_d},{self.Relation_To_id_d});"""
+            self.__cursor.execute(insert_query)
+            self.__connection.commit()
                     
         
         except Exception as _ex:
             print('Ошибка в ходе чтения ДБ', _ex)
         
         finally:
-            if connection:
-                connection.close()
+            if self.__connection:
+                self.__connection.close()
                 print('Дб отключена')
+
+    
+    def get_user(self):
+        """
+        return dict with data Where unic_id equal current_user.id
+        """
+        try:
+            select_query = f"""SELECT * FROM public."Asiya_person_memory" WHERE unic_id = '{self.unic_id_d}' ;"""
+            self.__cursor.execute(select_query)
+
+            print(f'Данные пользователя по ID - [{self.unic_id_d}] . Получены. ')
+
+            pulled_data = convert_to_dict(self.__cursor.fetchall())
+            #print(f'Данные пользователя : {pulled_data}')
+            return pulled_data
+
+        except Exception as _ex:
+            print('Ошибка в ходе чтения ДБ', _ex)
+        
+        finally:
+            if self.__connection:
+                self.__connection.close()
+                print('Дб отключена')
+
     

@@ -65,11 +65,11 @@ class data_temp:
         self.Rep_SUM = rep_sumarize(self.pa_sum,self.na_sum,self.spec_affects.get('Мания'))
         self.raw_data = {
             'ID' : None,
-            'Внешность' : 'photo/unknown_user/default',
+            'Внешность' : 'photo/unknown_user/default.jpg',
             'Имя' : None,
             'Фамилия' : None,
             'Пол' : 'None',
-            'День Рождения' : '????-??-??',
+            'День Рождения' : str(date.today()),
             'Дата Знакомства' : str(date.today()),
             'Любовь' : self.positive_affects['Любовь'],
             'Симпатия' : self.positive_affects['Симпатия'],
@@ -81,12 +81,12 @@ class data_temp:
             'Неприязнь' : self.negative_affects['Неприязнь'],
             'Страх' : self.negative_affects['Страх'],
             'Репутационный Бал' : self.Rep_SUM,
-            'Данные о Личности' : str('Нет информации'),
+            'Данные о Личности' : 'Нет информации',
             'Мнение о Личности' : 'Мнение не сформировано',
             'Черта Характера 1' : None,
             'Черта Характера 2' : None,
             'Черта Характера 3' : None,
-            'Отношение от' : None,
+            'Отношение от' : 1,
             'Отношение к' : 1,
 
             }
@@ -105,3 +105,50 @@ def rep_refresh(pack):
     template = data_temp()
     temp = template.recreate(pack)
     return temp
+
+
+def convert_to_dict(user_list):
+    """
+    !!! ONLY FOR CONVERT SQL REQUEST DATA_LIST !!!
+    data_list = Pm_sql(user_data).get_user() => returns [(ID,first_name,sur_name,....,appearance)]
+    
+    covert_to_dict(data_list) => return dict = {
+                                                'ID' : ID,
+                                                'first_name' : first_name,
+                                                 Key : Value,
+                                                }
+
+    """
+    data_list = user_list
+    try:
+        converted_data = {
+                'ID' : data_list[0][0],
+                'Имя' : data_list[0][1],
+                'Фамилия' : data_list[0][2],
+                'День Рождения' : str(data_list[0][3]),
+                'Пол' : data_list[0][4],
+                'Любовь' : data_list[0][5],
+                'Симпатия' : data_list[0][6],
+                'Дружба' : data_list[0][7],
+                'Восхищение' : data_list[0][8],
+                'Мания' : data_list[0][9],
+                'Ненависть' : data_list[0][10],
+                'Враждебность' : data_list[0][11],
+                'Неприязнь' : data_list[0][12],
+                'Страх' : data_list[0][13],
+                'Репутационный Бал' : data_list[0][14],
+                'Дата Знакомства' : str(data_list[0][15]),
+                'Данные о Личности' : data_list[0][16],
+                'Мнение о Личности' : data_list[0][17],
+                'Черта Характера 1' : data_list[0][18],
+                'Черта Характера 2' : data_list[0][19],
+                'Черта Характера 3' : data_list[0][20],
+                'Отношение от' : data_list[0][21],
+                'Отношение к' : data_list[0][22],
+                'Внешность' : data_list[0][23],
+
+                }
+        
+        return converted_data
+    except Exception as _ex:
+        print(_ex)

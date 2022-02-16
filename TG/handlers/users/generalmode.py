@@ -15,8 +15,12 @@ from time import sleep
 #Constant Var
 recent_users = {}
 admin_user = {}
+
+
+
 template = data_temp()
 user_data = template.create()
+
 
 
 
@@ -24,6 +28,14 @@ user_data = template.create()
 async def bot_echo(message: types.Message):
     current_user = message.from_user
     Noah = 340981880
+
+    user_data['ID'] = current_user.id
+    user_data['Имя'] = current_user.first_name
+    user_data['Фамилия'] = current_user.last_name
+
+    Person_Memory = PM_Sql(user_data)
+    actual_UD = Person_Memory.get_user()
+
     if current_user.id == Noah :
         if message.text == 'Я состоятельный' :
             await message.answer('К сожалению я не могу определить вашего состояния')
@@ -34,16 +46,16 @@ async def bot_echo(message: types.Message):
             await message.answer(f"Не поняла запроса\n"
                                  f"Ваше сообщение:\n"
                                  f"{message.text}")
-        if current_user.first_name in recent_users or current_user.first_name in admin_user:
-            pass
+        if str(current_user.id) in actual_UD['ID']:
+            await dp.bot.send_message(Noah, f'Приветствую {current_user.first_name}.')
         else:
             recent_users[current_user.first_name] = current_user.id
             admin_user[current_user.first_name] = current_user.id
             try:
                 
-                user_data['ID'] = current_user.id
-                user_data['Имя'] = current_user.first_name
-                user_data['Фамилия'] = current_user.last_name
+
+                user_data['Внешность'] = 'photo/Noah_Photo/Noah.jpg' 
+                user_data['Данные о Личности'] = 'Создатель Приюта. Администратор'
                 
                 user_data['Пол'] = 'male'
                 user_data['День Рождения'] = '2003-10-18'
@@ -51,9 +63,9 @@ async def bot_echo(message: types.Message):
                 
                 Person_Memory = PM_Sql(user_data)
                 
-                Person_Memory.add_to()
-            except:
-                print('Возникла ошибка при запоминании данных')
+                Person_Memory.new_user()
+            except Exception as _ex:
+                print(f'Возникла ошибка при запоминании данных [{_ex}]')
 
 
             
@@ -64,14 +76,10 @@ async def bot_echo(message: types.Message):
         if current_user.id not in recent_users:
             recent_users[current_user.first_name] = current_user.id
             try:
-                user_data['ID'] = current_user.id
-                user_data['Имя'] = current_user.first_name
-                user_data['Фамилия'] = current_user.last_name
-                
                 Person_Memory = PM_Sql(user_data)
-                Person_Memory.add_tp()
-            except:
-                print('Возникла ошибка при запоминании данных')
+                Person_Memory.new_user()
+            except Exception as _ex:
+                print(f'Возникла ошибка при запоминании данных [{_ex}]')
         else:
             pass
         
@@ -93,8 +101,8 @@ async def bot_echo_all(message: types.Message, state: FSMContext):
         await state.finish()
     else:
         await dp.bot.send_message(Noah, message.from_user.id)
-        if current_user.id not in recent_user:
-            recent_user[current_user.id] = current_user.first_name
+        if current_user.id not in recent_users:
+            recent_users[current_user.id] = current_user.first_name
         else:
             pass
         await state.finish()

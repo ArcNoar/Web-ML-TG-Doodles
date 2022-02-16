@@ -72,11 +72,11 @@ class Person_Memory(models.Model): # Память о существах, и мн
     Char_3 - Черта Характера Присвоенная Асией
 
     """
-    appearance = models.ImageField(upload_to='photo/%Y/%m/%d',verbose_name='Внешний Вид',null=True) #Это в последнюю очередь тип, там сложный момент, потом сделаю.
     
     unic_id = models.CharField(max_length = 25,primary_key=True,verbose_name='ID')
     first_name = models.CharField(max_length=25,null=True,verbose_name='Имя')
     sur_name = models.CharField(max_length=40,null=True,verbose_name='Фамилия')
+    appearance = models.ImageField(upload_to=f'photo/{first_name}_{sur_name}',verbose_name='Внешний Вид',null=True) #Это в последнюю очередь тип, там сложный момент, потом сделаю.
     birthday = models.DateField(blank=True,null=True,verbose_name = 'Дата Рождения')
 
 
@@ -139,7 +139,7 @@ class Person_Memory(models.Model): # Память о существах, и мн
                                on_delete=models.SET_NULL,blank=True,null=True,verbose_name='Черта Характера (3) - ')
     
     def __str__(self):
-        return "%s %s - %s" % (self.first_name, self.sur_name, self.Relation_To)
+        return "%s %s - %s" % (self.first_name, self.sur_name, self.relation_to)
     
     class Meta:
         verbose_name_plural = 'Социальная Память - Личности'
