@@ -2,7 +2,7 @@ from aiogram import types
 from aiogram.dispatcher import FSMContext
 
 from Functional.PM_Func import data_temp, rep_refresh
-from TG.sql.posql import PM_Sql
+from TG.sql.posql import New_data, Get_data, Edit_data
 
 from TG.loader import dp
 
@@ -10,15 +10,15 @@ import asyncio
 from time import sleep
 
 
-# Общий хендлер
+# TO DO этот хендлер убогий, пушо он неправильно прописан структурно, проверка на наличие в бд? Так если в бд нет будет ошибка.
+
 #340981880 Мой Айди
-#Constant Var
-recent_users = {}
+
+recent_users = {} # Два бесполезных словаря но пусть пока что будут
 admin_user = {}
 
 
-
-template = data_temp()
+template = data_temp() # Это темплейт заполнения нового пользователя
 user_data = template.create()
 
 
@@ -33,19 +33,22 @@ async def bot_echo(message: types.Message):
     user_data['Имя'] = current_user.first_name
     user_data['Фамилия'] = current_user.last_name
 
-    Person_Memory = PM_Sql(user_data)
-    actual_UD = Person_Memory.get_user()
+    Person_Add = New_data(user_data)
+    Person_Get = Get_data()
+    Person_Editor = Edit_data()
+    actual_UD = Person_Get.person(current_user.id)
 
     if current_user.id == Noah :
         if message.text == 'Я состоятельный' :
             await message.answer('К сожалению я не могу определить вашего состояния')
         elif message.text == 'Выдай мне список недавних пользователей.':
             await message.answer(f'Список недавних пользователей: \n {recent_users}')
-        else:
-            await dp.bot.send_message(Noah, f'Извините, {current_user.first_name}')
-            await message.answer(f"Не поняла запроса\n"
-                                 f"Ваше сообщение:\n"
-                                 f"{message.text}")
+        elif message.text == 'Мои Данные':
+            await message.answer(actual_UD)
+        elif message.text == 'Го дружить.':
+            await message.answer(f'Теперь мы друзья?')
+            Person_Editor.reputation('friendship',4,actual_UD)
+            
         if str(current_user.id) in actual_UD['ID']:
             await dp.bot.send_message(Noah, f'Приветствую {current_user.first_name}.')
         else:
@@ -61,9 +64,9 @@ async def bot_echo(message: types.Message):
                 user_data['День Рождения'] = '2003-10-18'
                 
                 
-                Person_Memory = PM_Sql(user_data)
+                Person_Add = New_data(user_data)
                 
-                Person_Memory.new_user()
+                Person_Add.person()
             except Exception as _ex:
                 print(f'Возникла ошибка при запоминании данных [{_ex}]')
 
@@ -76,8 +79,8 @@ async def bot_echo(message: types.Message):
         if current_user.id not in recent_users:
             recent_users[current_user.first_name] = current_user.id
             try:
-                Person_Memory = PM_Sql(user_data)
-                Person_Memory.new_user()
+                Person_Add = New_data(user_data)
+                Person_Add.person()
             except Exception as _ex:
                 print(f'Возникла ошибка при запоминании данных [{_ex}]')
         else:

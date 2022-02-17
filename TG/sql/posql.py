@@ -1,7 +1,7 @@
 import psycopg2
 from datetime import date
 from .conf import db_name,host,user,password
-from Functional.PM_Func import convert_to_dict
+from Functional.PM_Func import convert_to_dict, rep_refresh
 """
 Нужно сделать связующую дб фукцию для каждого табла.
 Социальная Память:
@@ -9,10 +9,10 @@ from Functional.PM_Func import convert_to_dict
     Возможно нам не пригодится писать триллиард дб, если мне сейчас удастся прикрутить сюда джангу
 
 Класс с функцией занесения, взятия данных, редактирования | удаления? (честно не уверен ибо это стоит поручить уже мне)
-
 """
-class PM_Sql:
 
+
+class New_data:
     def __init__(self,data_dict):
         self.unic_id_d = data_dict['ID']
         
@@ -61,8 +61,11 @@ class PM_Sql:
 
 
 
-    def new_user(self):
-
+    def person(self):
+        # В случае возникновения проблем в этом классе, попробуй перенести переменные инита сюда
+        """
+        Person_Memory create data
+        """
         try:
             insert_query = """ INSERT INTO public."Asiya_person_memory" (unic_id,first_name,sur_name,appearance,gender,birthday,
                                                 meet_date,affection,sympathy,friendship,admiration,mania,
@@ -84,16 +87,28 @@ class PM_Sql:
                 self.__connection.close()
                 print('Дб отключена')
 
-    
-    def get_user(self):
+class Get_data:
+    def __init__(self):
+        self.__connection = psycopg2.connect(
+            
+                    host = host,
+                    user = user,
+                    password = password,
+                    database = db_name
+                    )
+            
+        self.__cursor = self.__connection.cursor()
+        
+    def person(self,id): # Person_Memory get data
         """
+        Person_Memory get data
         return dict with data Where unic_id equal current_user.id
         """
         try:
-            select_query = f"""SELECT * FROM public."Asiya_person_memory" WHERE unic_id = '{self.unic_id_d}' ;"""
+            select_query = f"""SELECT * FROM public."Asiya_person_memory" WHERE unic_id = '{id}' ;"""
             self.__cursor.execute(select_query)
 
-            print(f'Данные пользователя по ID - [{self.unic_id_d}] . Получены. ')
+            print(f'Данные пользователя по ID - [{id}] . Получены. ')
 
             pulled_data = convert_to_dict(self.__cursor.fetchall())
             #print(f'Данные пользователя : {pulled_data}')
@@ -106,5 +121,240 @@ class PM_Sql:
             if self.__connection:
                 self.__connection.close()
                 print('Дб отключена')
+        
 
+class Edit_data:
+    def __init__(self):
+        self.__connection = psycopg2.connect(
+            
+                    host = host,
+                    user = user,
+                    password = password,
+                    database = db_name
+                    )
+            
+        self.__cursor = self.__connection.cursor()
+
+
+    def reputation(self,relate,value,user_data):
+        """
+        relate = 
+        affection = Любовь
+        sympathy = Симпатия
+        friendship = Дружба
+        admiration = Восхищение
+
+        mania = Мания
+
+        abhorrence = Ненависть
+        spite = Враждебность
+        disaffection = Неприязнь
+        fright = Страх
+
+        value = int
+        user_data = dict
+
+        """
+        try:
+            update_query = f"""UPDATE public."Asiya_person_memory" SET
+                               {relate} = '{value}'::double precision WHERE
+                               unic_id = '{user_data['ID']}'; """
+
+            self.__cursor.execute(update_query)
+            self.__connection.commit()
+            pull_data = Get_data()
+            usr_data = pull_data.person(user_data['ID'])
+            new_data = rep_refresh(usr_data)
+            rep_sum_query  = f"""UPDATE public."Asiya_person_memory" SET
+                               rep_sum = '{new_data['Репутационный Бал']}'::double precision WHERE
+                               unic_id = '{new_data['ID']}'; """
+            self.__cursor.execute(rep_sum_query)
+            self.__connection.commit()
+
+
+        except Exception as _ex:
+            print('Ошибка в ходе чтения ДБ', _ex)
+        
+        finally:
+            if self.__connection:
+                self.__connection.close()
+                print('Дб отключена')
+
+
+    def gender(self,gen,id):
+        """
+        gen = 'male','None','female'
+        """
+        try:
+            update_query = f"""UPDATE public."Asiya_person_memory" SET
+                                gender = '{gen}'::character varying WHERE
+                                unic_id = '{id}'; """
+            self.__cursor.execute(update_query)
+            self.__connection.commit()
+        except Exception as _ex:
+            print('Ошибка в ходе чтения ДБ', _ex)
+        
+        finally:
+            if self.__connection:
+                self.__connection.close()
+                print('Дб отключена')
+
+
+    def b_day(self,date,id):
+        """
+        date = 'YYYY-MM-DD'
+        """
+        try:
+            update_query = f"""UPDATE public."Asiya_person_memory" SET
+                                birthday = '{date}'::date WHERE
+                                unic_id = '{id}';"""
+            self.__cursor.execute(update_query)
+            self.__connection.commit()
+        except Exception as _ex:
+            print('Ошибка в ходе чтения ДБ', _ex)
+        
+        finally:
+            if self.__connection:
+                self.__connection.close()
+                print('Дб отключена')
+
+
+    def fund_des(self,des,id):
+        try:
+            update_query = f"""UPDATE public."Asiya_person_memory" SET
+                                fund_description = '{des}'::text WHERE
+                                unic_id = '{id}';"""
+            self.__cursor.execute(update_query)
+            self.__connection.commit()
+        except Exception as _ex:
+            print('Ошибка в ходе чтения ДБ', _ex)
+        
+        finally:
+            if self.__connection:
+                self.__connection.close()
+                print('Дб отключена')
+
+
+    def local_des(self,des,id):
+        try:
+            update_query = f"""UPDATE public."Asiya_person_memory" SET
+                                local_description = '{des}'::text WHERE
+                                unic_id = '{id}';"""
+            self.__cursor.execute(update_query)
+            self.__connection.commit()
+        except Exception as _ex:
+            print('Ошибка в ходе чтения ДБ', _ex)
+        
+        finally:
+            if self.__connection:
+                self.__connection.close()
+                print('Дб отключена')
+
+
+    def relate_from(self,relate_id,id):
+        """
+        relate id:
+            1 - Незнакомец
+            2 - Дочь
+        """
+        try:
+            update_query = f"""UPDATE public."Asiya_person_memory" SET
+                                relation_from_id = '{relate_id}'::bigint WHERE
+                                unic_id = '{id}';"""
+            self.__cursor.execute(update_query)
+            self.__connection.commit()
+        except Exception as _ex:
+            print('Ошибка в ходе чтения ДБ', _ex)
+        
+        finally:
+            if self.__connection:
+                self.__connection.close()
+                print('Дб отключена')
+
+
+    def relate_to(self,relate_id,id):
+        """
+        relate id:
+            1 - Незнакомец
+            2 - Дочь
+        """
+        try:
+            update_query = f"""UPDATE public."Asiya_person_memory" SET
+                                relation_to_id = '{relate_id}'::bigint WHERE
+                                unic_id = '{id}';"""
+            self.__cursor.execute(update_query)
+            self.__connection.commit()
+        except Exception as _ex:
+            print('Ошибка в ходе чтения ДБ', _ex)
+        
+        finally:
+            if self.__connection:
+                self.__connection.close()
+                print('Дб отключена')
+
+
+    def char_tag_first(self,char_id,id):
+        """
+        char id:
+            1 - Нарциссизм
+        """
+        try:
+            update_query = f"""UPDATE public."Asiya_person_memory" SET
+                                char_1_id = '{char_id}'::bigint WHERE
+                                unic_id = '{id}';"""
+            self.__cursor.execute(update_query)
+            self.__connection.commit()
+        except Exception as _ex:
+            print('Ошибка в ходе чтения ДБ', _ex)
+        
+        finally:
+            if self.__connection:
+                self.__connection.close()
+                print('Дб отключена')
+
+
+    def char_tag_second(self,char_id,id):
+        """
+        char id:
+            1 - Нарциссизм
+        """
+        try:
+            update_query = f"""UPDATE public."Asiya_person_memory" SET
+                                char_2_id = '{char_id}'::bigint WHERE
+                                unic_id = '{id}';"""
+            self.__cursor.execute(update_query)
+            self.__connection.commit()
+        except Exception as _ex:
+            print('Ошибка в ходе чтения ДБ', _ex)
+        
+        finally:
+            if self.__connection:
+                self.__connection.close()
+                print('Дб отключена')
+
+
+    def char_tag_third(self,char_id,id):
+        """
+        char id:
+            1 - Нарциссизм
+        """
+        try:
+            update_query = f"""UPDATE public."Asiya_person_memory" SET
+                                char_3_id = '{char_id}'::bigint WHERE
+                                unic_id = '{id}';"""
+            self.__cursor.execute(update_query)
+            self.__connection.commit()
+        except Exception as _ex:
+            print('Ошибка в ходе чтения ДБ', _ex)
+        
+        finally:
+            if self.__connection:
+                self.__connection.close()
+                print('Дб отключена')
+        
+        
+
+        
+        
+        
     
