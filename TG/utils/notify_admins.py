@@ -9,5 +9,6 @@ async def on_startup_notify(dp: Dispatcher):
     try:
         #await dp.bot.send_message(bahus, "Давно не виделись, да?")
         await dp.bot.send_message(Noah, "Успешный Запуск.")
+
     except Exception as err:
         logging.exception(err)

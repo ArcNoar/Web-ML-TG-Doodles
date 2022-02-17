@@ -101,15 +101,17 @@ class data_temp:
 
 
 
-def rep_refresh(pack):
+def rep_refresh(pack): # Refreshs REP_SUM
     template = data_temp()
     temp = template.recreate(pack)
     return temp
 
 
-def convert_to_dict(user_list):
+def CTD_single(user_list): 
     """
+    CTD = Conver To Dict
     !!! ONLY FOR CONVERT SQL REQUEST DATA_LIST !!!
+    
     data_list = Pm_sql(user_data).get_user() => returns [(ID,first_name,sur_name,....,appearance)]
     
     covert_to_dict(data_list) => return dict = {
@@ -152,3 +154,49 @@ def convert_to_dict(user_list):
         return converted_data
     except Exception as _ex:
         print(_ex)
+
+
+def CTD_many(users_list):
+    """
+    !!! ONLY FOR CONVERT SQL REQUEST DATA_LIST !!!
+    CTD = Conver To Dict
+    data_list = Pm_sql(user_data).get_user() => returns [(ID,first_name,sur_name,....,appearance)]
+    # Это можно по сути сделать основной функцией пушо что один что много, норм буит
+    """
+    dt_list = users_list
+    collected_users = []
+    for data_list in dt_list:
+        
+        try:
+            converted_data = {
+                    'ID' : data_list[0],
+                    'Имя' : data_list[1],
+                    'Фамилия' : data_list[2],
+                    'День Рождения' : str(data_list[3]),
+                    'Пол' : data_list[4],
+                    'Любовь' : data_list[5],
+                    'Симпатия' : data_list[6],
+                    'Дружба' : data_list[7],
+                    'Восхищение' : data_list[8],
+                    'Мания' : data_list[9],
+                    'Ненависть' : data_list[10],
+                    'Враждебность' : data_list[11],
+                    'Неприязнь' : data_list[12],
+                    'Страх' : data_list[13],
+                    'Репутационный Бал' : data_list[14],
+                    'Дата Знакомства' : str(data_list[15]),
+                    'Данные о Личности' : data_list[16],
+                    'Мнение о Личности' : data_list[17],
+                    'Черта Характера 1' : data_list[18],
+                    'Черта Характера 2' : data_list[19],
+                    'Черта Характера 3' : data_list[20],
+                    'Отношение от' : data_list[21],
+                    'Отношение к' : data_list[22],
+                    'Внешность' : data_list[23],
+
+                    }
+            
+            collected_users.append(converted_data)
+        except Exception as _ex:
+            print(_ex)
+    return collected_users

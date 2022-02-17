@@ -76,7 +76,7 @@ class Person_Memory(models.Model): # Память о существах, и мн
     unic_id = models.CharField(max_length = 25,primary_key=True,verbose_name='ID')
     first_name = models.CharField(max_length=25,null=True,verbose_name='Имя')
     sur_name = models.CharField(max_length=40,null=True,verbose_name='Фамилия')
-    appearance = models.ImageField(upload_to=f'photo/{first_name}_{sur_name}',verbose_name='Внешний Вид',null=True) #Это в последнюю очередь тип, там сложный момент, потом сделаю.
+    appearance = models.ImageField(upload_to=f'photo/%Y/%m',verbose_name='Внешний Вид',null=True) #Это в последнюю очередь тип, там сложный момент, потом сделаю.
     birthday = models.DateField(blank=True,null=True,verbose_name = 'Дата Рождения')
 
 
@@ -334,7 +334,7 @@ class VM_Word(models.Model): # Память слов.
     Word_Gender = Род
 
     """
-    Word = models.CharField(max_length = 100,primary_key=True,verbose_name='Слово')
+    Word = models.CharField(max_length = 100,primary_key=True,db_index=True,verbose_name='Слово')
     Polysemantic = models.BooleanField(default=False,verbose_name='Многозначность')
     Constant_W = models.BooleanField(default=False,verbose_name='Константа')
     Nomination = models.BooleanField(default=False,verbose_name='Слово - Наименование?')
@@ -382,7 +382,7 @@ class GOW(models.Model): # Group of Words
     Класс Группировки слов.
     COW = Category Of Words , Категория Слов (Как пример Приветственные)
     """
-    COW = models.CharField(max_length = 50, verbose_name='Категория Слов',primary_key=True)
+    COW = models.CharField(max_length = 50,db_index=True, verbose_name='Категория Слов',primary_key=True)
 
 
     def __str__(self):
@@ -430,7 +430,7 @@ class Context_Table(models.Model): # Содержит в себе вероятн
     Context
     Context_Desc
     """
-    Context = models.CharField(max_length=50,primary_key=True,verbose_name='Контекст')
+    Context = models.CharField(max_length=50,db_index=True,primary_key=True,verbose_name='Контекст')
     Context_Desc = models.TextField(verbose_name='Значение Контекста')
 
 

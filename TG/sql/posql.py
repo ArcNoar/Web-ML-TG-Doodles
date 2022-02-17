@@ -1,7 +1,7 @@
 import psycopg2
 from datetime import date
 from .conf import db_name,host,user,password
-from Functional.PM_Func import convert_to_dict, rep_refresh
+from Functional.PM_Func import CTD_single,CTD_many, rep_refresh
 """
 Нужно сделать связующую дб фукцию для каждого табла.
 Социальная Память:
@@ -12,7 +12,7 @@ from Functional.PM_Func import convert_to_dict, rep_refresh
 """
 
 
-class New_data:
+class Person_add:
     def __init__(self,data_dict):
         self.unic_id_d = data_dict['ID']
         
@@ -87,9 +87,17 @@ class New_data:
                 self.__connection.close()
                 print('Дб отключена')
 
-class Get_data:
-    def __init__(self):
-        self.__connection = psycopg2.connect(
+
+
+class Person_get:
+    
+    def person(self,id): # Person_Memory get data
+        """
+        Person_Memory get data
+        return dict with data Where unic_id equal current_user.id
+        """
+        try:
+            connection = psycopg2.connect(
             
                     host = host,
                     user = user,
@@ -97,20 +105,16 @@ class Get_data:
                     database = db_name
                     )
             
-        self.__cursor = self.__connection.cursor()
-        
-    def person(self,id): # Person_Memory get data
-        """
-        Person_Memory get data
-        return dict with data Where unic_id equal current_user.id
-        """
-        try:
+            cursor = connection.cursor()
+
+
+
             select_query = f"""SELECT * FROM public."Asiya_person_memory" WHERE unic_id = '{id}' ;"""
-            self.__cursor.execute(select_query)
+            cursor.execute(select_query)
 
             print(f'Данные пользователя по ID - [{id}] . Получены. ')
 
-            pulled_data = convert_to_dict(self.__cursor.fetchall())
+            pulled_data = CTD_single(cursor.fetchall())
             #print(f'Данные пользователя : {pulled_data}')
             return pulled_data
 
@@ -118,12 +122,46 @@ class Get_data:
             print('Ошибка в ходе чтения ДБ', _ex)
         
         finally:
-            if self.__connection:
-                self.__connection.close()
+            if connection:
+                connection.close()
+                print('Дб отключена')
+    
+    def top_persons(self):
+        """
+        get 10 Persons with highest rep_sum
+        """
+        try:
+            connection = psycopg2.connect(
+            
+                    host = host,
+                    user = user,
+                    password = password,
+                    database = db_name
+                    )
+            
+            cursor = connection.cursor()
+
+
+
+            select_query = """SELECT * FROM public."Asiya_person_memory"
+                                                    ORDER BY unic_id ASC LIMIT 10
+                                                    """
+            cursor.execute(select_query)
+
+            pulled_data = CTD_many(cursor.fetchall())
+            return pulled_data
+            
+            
+        except Exception as _ex:
+            print('Ошибка в ходе чтения ДБ', _ex)
+        
+        finally:
+            if connection:
+                connection.close()
                 print('Дб отключена')
         
 
-class Edit_data:
+class Person_Edit:
     def __init__(self):
         self.__connection = psycopg2.connect(
             

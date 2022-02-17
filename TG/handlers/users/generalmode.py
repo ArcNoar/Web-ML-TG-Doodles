@@ -2,7 +2,7 @@ from aiogram import types
 from aiogram.dispatcher import FSMContext
 
 from Functional.PM_Func import data_temp, rep_refresh
-from TG.sql.posql import New_data, Get_data, Edit_data
+from TG.sql.posql import Person_add, Person_get, Person_Edit
 
 from TG.loader import dp
 
@@ -33,21 +33,12 @@ async def bot_echo(message: types.Message):
     user_data['Имя'] = current_user.first_name
     user_data['Фамилия'] = current_user.last_name
 
-    Person_Add = New_data(user_data)
-    Person_Get = Get_data()
-    Person_Editor = Edit_data()
-    actual_UD = Person_Get.person(current_user.id)
+    P_Add = Person_add(user_data)
+    P_Get = Person_get()
+    P_Editor = Person_Edit()
+    actual_UD = P_Get.person(current_user.id)
 
     if current_user.id == Noah :
-        if message.text == 'Я состоятельный' :
-            await message.answer('К сожалению я не могу определить вашего состояния')
-        elif message.text == 'Выдай мне список недавних пользователей.':
-            await message.answer(f'Список недавних пользователей: \n {recent_users}')
-        elif message.text == 'Мои Данные':
-            await message.answer(actual_UD)
-        elif message.text == 'Го дружить.':
-            await message.answer(f'Теперь мы друзья?')
-            Person_Editor.reputation('friendship',4,actual_UD)
             
         if str(current_user.id) in actual_UD['ID']:
             await dp.bot.send_message(Noah, f'Приветствую {current_user.first_name}.')
@@ -64,25 +55,43 @@ async def bot_echo(message: types.Message):
                 user_data['День Рождения'] = '2003-10-18'
                 
                 
-                Person_Add = New_data(user_data)
+                P_Add = Person_new(user_data)
                 
-                Person_Add.person()
+                P_Add.person()
             except Exception as _ex:
                 print(f'Возникла ошибка при запоминании данных [{_ex}]')
 
+        if message.text == 'Я состоятельный' :
+            await message.answer('К сожалению я не могу определить вашего состояния')
+        elif message.text == 'Выдай мне список недавних пользователей.':
+            await message.answer(f'Список недавних пользователей: \n {recent_users}')
+        elif message.text == 'Мои Данные':
+            await message.answer(actual_UD)
+        elif message.text == 'Го дружить.':
+            await message.answer(f'Теперь мы друзья?')
+            Person_Editor.reputation('friendship',4,actual_UD)
+        elif message.text == 'Топ Личностей.' :
+            await message.answer(f'Я пытаюсь но... \n по моему нихуя... {P_Get.top_persons()}')
+        
 
             
                 
 
     else:
-        await dp.bot.send_message(Noah, current_user.id)
+        #await dp.bot.send_message(Noah, current_user.id)
         if current_user.id not in recent_users:
             recent_users[current_user.first_name] = current_user.id
             try:
-                Person_Add = New_data(user_data)
-                Person_Add.person()
+                if str(current_user.id) in actual_UD['ID']:
+                    await dp.bot.send_message(current_user.id, f'Приветствую {current_user.first_name}.')
             except Exception as _ex:
-                print(f'Возникла ошибка при запоминании данных [{_ex}]')
+                print(f'[{_ex}] \n - Несуществующий пользователь? Проводим запоминание... ')
+                try:
+                    P_Add = Person_add(user_data)
+                    P_Add.person()
+                except Exception as _ex:
+                    print(f'Возникла ошибка при запоминании данных [{_ex}]')
+            
         else:
             pass
         
