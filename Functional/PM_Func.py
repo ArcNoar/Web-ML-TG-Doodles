@@ -1,6 +1,6 @@
 from datetime import date
 
-class data_temp:
+class user_temp:
     """
             'ID' : None,
             'Внешность' : 'photo/unknown_user/default.png',

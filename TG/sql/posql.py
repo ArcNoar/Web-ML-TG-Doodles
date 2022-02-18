@@ -4,13 +4,9 @@ from .conf import db_name,host,user,password
 from Functional.PM_Func import CTD_single,CTD_many, rep_refresh
 """
 Нужно сделать связующую дб фукцию для каждого табла.
-Социальная Память:
-    Person_Memory
-    Возможно нам не пригодится писать триллиард дб, если мне сейчас удастся прикрутить сюда джангу
-
-Класс с функцией занесения, взятия данных, редактирования | удаления? (честно не уверен ибо это стоит поручить уже мне)
+Ну скорее всего я потом буду объеденять эти три класс в один, ну если конечно в это есть необходимость
 """
-
+#Person Memory
 
 class Person_add:
     def __init__(self,data_dict):
@@ -393,6 +389,26 @@ class Person_Edit:
         
 
         
-        
-        
+class Person_Del:
+
+    pass
+
+
+
+
+
+#Verbal Memory
+# Word Memory
+class VM_Word:
     
+    class New:
+
+        def learn_word(self):
+            pass
+
+    class Get:
+        pass
+    class Edit:
+        pass
+    class Del:
+        pass
