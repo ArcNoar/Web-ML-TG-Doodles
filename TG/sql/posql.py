@@ -44,16 +44,6 @@ class Person_add:
         self.Relation_From_id_d = data_dict['Отношение от']
         self.Relation_To_id_d = data_dict['Отношение к']
         
-        
-        self.__connection = psycopg2.connect(
-        
-                host = host,
-                user = user,
-                password = password,
-                database = db_name
-                )
-        
-        self.__cursor = self.__connection.cursor()# Можно перенести функцию сюда
 
 
 
@@ -63,6 +53,20 @@ class Person_add:
         Person_Memory create data
         """
         try:
+
+            connection = psycopg2.connect(
+            
+                    host = host,
+                    user = user,
+                    password = password,
+                    database = db_name
+                    )
+            
+            cursor = connection.cursor()
+
+
+
+
             insert_query = """ INSERT INTO public."Asiya_person_memory" (unic_id,first_name,sur_name,appearance,gender,birthday,
                                                 meet_date,affection,sympathy,friendship,admiration,mania,
                                                 abhorrence,spite,disaffection,fright,
@@ -71,16 +75,16 @@ class Person_add:
                                                '{self.Meet_Date_d}',{self.Affection_d},{self.Sympathy_d},{self.FriendShip_d},{self.Admiration_d},{self.Mania_d},
                                                {self.Abhorrence_d},{self.Spite_d},{self.DisAffection_d},{self.Fright_d},
                                                {self.Rep_SUM_d},'{self.Fund_Description_d}','{self.Local_Description_d}',{self.Relation_From_id_d},{self.Relation_To_id_d});"""
-            self.__cursor.execute(insert_query)
-            self.__connection.commit()
+            cursor.execute(insert_query)
+            connection.commit()
                     
         
         except Exception as _ex:
             print('Ошибка в ходе чтения ДБ', _ex)
         
         finally:
-            if self.__connection:
-                self.__connection.close()
+            if connection:
+                connection.close()
                 print('Дб отключена')
 
 
@@ -158,16 +162,7 @@ class Person_get:
         
 
 class Person_Edit:
-    def __init__(self):
-        self.__connection = psycopg2.connect(
-            
-                    host = host,
-                    user = user,
-                    password = password,
-                    database = db_name
-                    )
-            
-        self.__cursor = self.__connection.cursor()
+    
 
 
     def reputation(self,relate,value,user_data):
@@ -190,28 +185,40 @@ class Person_Edit:
 
         """
         try:
+            connection = psycopg2.connect(
+            
+                    host = host,
+                    user = user,
+                    password = password,
+                    database = db_name
+                    )
+            
+            cursor = connection.cursor()
+
+
+
             update_query = f"""UPDATE public."Asiya_person_memory" SET
                                {relate} = '{value}'::double precision WHERE
                                unic_id = '{user_data['ID']}'; """
 
-            self.__cursor.execute(update_query)
-            self.__connection.commit()
-            pull_data = Get_data()
+            cursor.execute(update_query)
+            connection.commit()
+            pull_data = Person_get()
             usr_data = pull_data.person(user_data['ID'])
             new_data = rep_refresh(usr_data)
             rep_sum_query  = f"""UPDATE public."Asiya_person_memory" SET
                                rep_sum = '{new_data['Репутационный Бал']}'::double precision WHERE
                                unic_id = '{new_data['ID']}'; """
-            self.__cursor.execute(rep_sum_query)
-            self.__connection.commit()
+            cursor.execute(rep_sum_query)
+            connection.commit()
 
 
         except Exception as _ex:
             print('Ошибка в ходе чтения ДБ', _ex)
         
         finally:
-            if self.__connection:
-                self.__connection.close()
+            if connection:
+                connection.close()
                 print('Дб отключена')
 
 
@@ -220,17 +227,30 @@ class Person_Edit:
         gen = 'male','None','female'
         """
         try:
+            connection = psycopg2.connect(
+            
+                    host = host,
+                    user = user,
+                    password = password,
+                    database = db_name
+                    )
+            
+            cursor = connection.cursor()
+
+
+
+
             update_query = f"""UPDATE public."Asiya_person_memory" SET
                                 gender = '{gen}'::character varying WHERE
                                 unic_id = '{id}'; """
-            self.__cursor.execute(update_query)
-            self.__connection.commit()
+            cursor.execute(update_query)
+            connection.commit()
         except Exception as _ex:
             print('Ошибка в ходе чтения ДБ', _ex)
         
         finally:
-            if self.__connection:
-                self.__connection.close()
+            if connection:
+                connection.close()
                 print('Дб отключена')
 
 
@@ -239,49 +259,88 @@ class Person_Edit:
         date = 'YYYY-MM-DD'
         """
         try:
+
+            connection = psycopg2.connect(
+            
+                    host = host,
+                    user = user,
+                    password = password,
+                    database = db_name
+                    )
+            
+            cursor = connection.cursor()
+
+
+
+
             update_query = f"""UPDATE public."Asiya_person_memory" SET
                                 birthday = '{date}'::date WHERE
                                 unic_id = '{id}';"""
-            self.__cursor.execute(update_query)
-            self.__connection.commit()
+            cursor.execute(update_query)
+            connection.commit()
         except Exception as _ex:
             print('Ошибка в ходе чтения ДБ', _ex)
         
         finally:
-            if self.__connection:
-                self.__connection.close()
+            if connection:
+                connection.close()
                 print('Дб отключена')
 
 
     def fund_des(self,des,id):
         try:
+
+            connection = psycopg2.connect(
+            
+                    host = host,
+                    user = user,
+                    password = password,
+                    database = db_name
+                    )
+            
+            cursor = connection.cursor()
+
+
+
             update_query = f"""UPDATE public."Asiya_person_memory" SET
                                 fund_description = '{des}'::text WHERE
                                 unic_id = '{id}';"""
-            self.__cursor.execute(update_query)
-            self.__connection.commit()
+            cursor.execute(update_query)
+            connection.commit()
         except Exception as _ex:
             print('Ошибка в ходе чтения ДБ', _ex)
         
         finally:
-            if self.__connection:
-                self.__connection.close()
+            if connection:
+                connection.close()
                 print('Дб отключена')
 
 
     def local_des(self,des,id):
         try:
+
+            connection = psycopg2.connect(
+            
+                    host = host,
+                    user = user,
+                    password = password,
+                    database = db_name
+                    )
+            
+            cursor = connection.cursor()
+
+
             update_query = f"""UPDATE public."Asiya_person_memory" SET
                                 local_description = '{des}'::text WHERE
                                 unic_id = '{id}';"""
-            self.__cursor.execute(update_query)
-            self.__connection.commit()
+            cursor.execute(update_query)
+            connection.commit()
         except Exception as _ex:
             print('Ошибка в ходе чтения ДБ', _ex)
         
         finally:
-            if self.__connection:
-                self.__connection.close()
+            if connection:
+                connection.close()
                 print('Дб отключена')
 
 
@@ -295,14 +354,14 @@ class Person_Edit:
             update_query = f"""UPDATE public."Asiya_person_memory" SET
                                 relation_from_id = '{relate_id}'::bigint WHERE
                                 unic_id = '{id}';"""
-            self.__cursor.execute(update_query)
-            self.__connection.commit()
+            cursor.execute(update_query)
+            connection.commit()
         except Exception as _ex:
             print('Ошибка в ходе чтения ДБ', _ex)
         
         finally:
-            if self.__connection:
-                self.__connection.close()
+            if connection:
+                connection.close()
                 print('Дб отключена')
 
 
@@ -313,17 +372,31 @@ class Person_Edit:
             2 - Дочь
         """
         try:
+
+
+            connection = psycopg2.connect(
+            
+                    host = host,
+                    user = user,
+                    password = password,
+                    database = db_name
+                    )
+            
+            cursor = connection.cursor()
+
+
+
             update_query = f"""UPDATE public."Asiya_person_memory" SET
                                 relation_to_id = '{relate_id}'::bigint WHERE
                                 unic_id = '{id}';"""
-            self.__cursor.execute(update_query)
-            self.__connection.commit()
+            cursor.execute(update_query)
+            connection.commit()
         except Exception as _ex:
             print('Ошибка в ходе чтения ДБ', _ex)
         
         finally:
-            if self.__connection:
-                self.__connection.close()
+            if connection:
+                connection.close()
                 print('Дб отключена')
 
 
@@ -333,17 +406,30 @@ class Person_Edit:
             1 - Нарциссизм
         """
         try:
+
+            connection = psycopg2.connect(
+            
+                    host = host,
+                    user = user,
+                    password = password,
+                    database = db_name
+                    )
+            
+            cursor = connection.cursor()
+
+
+
             update_query = f"""UPDATE public."Asiya_person_memory" SET
                                 char_1_id = '{char_id}'::bigint WHERE
                                 unic_id = '{id}';"""
-            self.__cursor.execute(update_query)
-            self.__connection.commit()
+            cursor.execute(update_query)
+            connection.commit()
         except Exception as _ex:
             print('Ошибка в ходе чтения ДБ', _ex)
         
         finally:
-            if self.__connection:
-                self.__connection.close()
+            if connection:
+                connection.close()
                 print('Дб отключена')
 
 
@@ -353,17 +439,31 @@ class Person_Edit:
             1 - Нарциссизм
         """
         try:
+
+            connection = psycopg2.connect(
+            
+                    host = host,
+                    user = user,
+                    password = password,
+                    database = db_name
+                    )
+            
+            cursor = connection.cursor()
+
+
+
+
             update_query = f"""UPDATE public."Asiya_person_memory" SET
                                 char_2_id = '{char_id}'::bigint WHERE
                                 unic_id = '{id}';"""
-            self.__cursor.execute(update_query)
-            self.__connection.commit()
+            cursor.execute(update_query)
+            connection.commit()
         except Exception as _ex:
             print('Ошибка в ходе чтения ДБ', _ex)
         
         finally:
-            if self.__connection:
-                self.__connection.close()
+            if connection:
+                connection.close()
                 print('Дб отключена')
 
 
@@ -373,17 +473,31 @@ class Person_Edit:
             1 - Нарциссизм
         """
         try:
+
+            connection = psycopg2.connect(
+            
+                    host = host,
+                    user = user,
+                    password = password,
+                    database = db_name
+                    )
+            
+            cursor = connection.cursor()
+
+
+
+
             update_query = f"""UPDATE public."Asiya_person_memory" SET
                                 char_3_id = '{char_id}'::bigint WHERE
                                 unic_id = '{id}';"""
-            self.__cursor.execute(update_query)
-            self.__connection.commit()
+            cursor.execute(update_query)
+            connection.commit()
         except Exception as _ex:
             print('Ошибка в ходе чтения ДБ', _ex)
         
         finally:
-            if self.__connection:
-                self.__connection.close()
+            if connection:
+                connection.close()
                 print('Дб отключена')
         
         
@@ -402,9 +516,54 @@ class Person_Del:
 class VM_Word:
     
     class New:
+        def __init__(self,template):
+            self.Word = template['Слово']
+            self.Polysemantic = template['Многозначность']
+            self.Constant_W = template['Константность']
+
+            self.Nomination = template['Нарекающее']
+            self.Word_Type = template['Тип']
+            self.Word_Gender = template['Род']
+
+            self.Word_Des = template['Значение']
+            self.Associated_W_id = template['Ассоциация']
+            self.Group_Of_Word_id = template['Синоним']
+
+            self.Synonym_W_id = template['Категория']
 
         def learn_word(self):
-            pass
+            #
+
+            try:
+
+                connection = psycopg2.connect(
+                
+                        host = host,
+                        user = user,
+                        password = password,
+                        database = db_name
+                        )
+                
+                cursor = connection.cursor()
+
+
+                second_query = """INSERT INTO public."Asiya_vm_word" (
+                                    word, polysemantic, constant_w, nomination, word_type, word_gender, word_des, associate_w_id, group_of_word_id, synonym_w_id) VALUES """ + f""" (
+                                    '{self.Word}'::character varying, {self.Polysemantic}::boolean, {self.Constant_W}::boolean, {self.Nomination}::boolean, 
+                                    '{self.Word_Type}'::character varying, '{self.Word_Gender}'::character varying, '{self.Word_Des}'::text, 
+                                    {self.Associated_W_id}::bigint, {self.Group_Of_Word_id}::character varying, {self.Synonym_W_id}::bigint)
+                                     returning word;"""
+                cursor.execute(second_query)
+                connection.commit()
+                        
+            
+            except Exception as _ex:
+                print('Ошибка в ходе чтения ДБ', _ex)
+            
+            finally:
+                if connection:
+                    connection.close()
+                    print('Дб отключена')
 
     class Get:
         pass

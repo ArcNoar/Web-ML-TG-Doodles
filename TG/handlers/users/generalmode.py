@@ -5,6 +5,7 @@ from Functional.PM_Func import user_temp
 from Functional.VMW_Func import word_temp
 
 from TG.sql.posql import Person_add, Person_get, Person_Edit
+from TG.sql.posql import VM_Word
 
 from TG.loader import dp
 
@@ -21,7 +22,8 @@ from time import sleep
 template = user_temp() # Это темплейт заполнения нового пользователя
 user_data = template.create()
 
-word_params = word_temp() # Темплейт запоминания слов
+word_template = word_temp() # Темплейт запоминания слов
+word_params = word_template.create()
 
 
 
@@ -42,22 +44,38 @@ async def bot_echo(message: types.Message):
 
     try:
         if str(current_user.id) in actual_UD['ID']:
+
             await dp.bot.send_message(current_user.id, f'Приветствую {current_user.first_name}.')
                 
             if current_user.id == Noah:
                 if message.text == 'Я состоятельный' :
                     await message.answer('К сожалению я не могу определить вашего состояния')
-                elif message.text == 'Выдай мне список недавних пользователей.':
-                    await message.answer(f'Список недавних пользователей: \n {recent_users}')
+                
                 elif message.text == 'Мои Данные':
                     await message.answer(actual_UD)
                 elif message.text == 'Го дружить.':
                     await message.answer(f'Теперь мы друзья?')
-                    Person_Editor.reputation('friendship',4,actual_UD)
+                    P_Editor.reputation('friendship',4,actual_UD)
                 elif message.text == 'Топ Личностей.' :
                     await message.answer(f'Я пытаюсь но... \n по моему нихуя... {P_Get.top_persons()}')
+                else:
+                    try:
+                        bag_of_word = (message.text).split(' ')
+                        print(bag_of_word)
+                        for word in bag_of_word:
+                            word_params['Слово'] = word 
+                            print(word_params)
+                            
+                            Word_func = VM_Word()
+                            Word_add = Word_func.New(word_params)
+                            Word_add.learn_word()
+
+                    except Exception as _ex:
+                        print('Запоминание слов пошло пиздй братанчик.')
+
             else:
                 pass
+
         else:
             await dp.bot.send_message(Noah,'Бред какой. По пользователю нет совпадений, но он есть???')
 
@@ -72,9 +90,10 @@ async def bot_echo(message: types.Message):
                 
                 user_data['Пол'] = 'male'
                 user_data['День Рождения'] = '2003-10-18'
+                user_data['Отношение от'] = 10
                 
                 
-                P_Add = Person_new(user_data)
+                P_Add = Person_add(user_data)
                 
                 P_Add.person()
             else:

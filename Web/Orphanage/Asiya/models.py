@@ -334,18 +334,18 @@ class VM_Word(models.Model): # Память слов.
     Word_Gender = Род
 
     """
-    Word = models.CharField(max_length = 100,primary_key=True,db_index=True,verbose_name='Слово')
-    Polysemantic = models.BooleanField(default=False,verbose_name='Многозначность')
-    Constant_W = models.BooleanField(default=False,verbose_name='Константа')
-    Nomination = models.BooleanField(default=False,verbose_name='Слово - Наименование?')
-    Associate_W = models.ForeignKey('VM_Word',blank=True,null=True,on_delete=models.SET_NULL,
+    word = models.CharField(max_length = 100,db_index=True,unique=True,verbose_name='Слово')
+    polysemantic = models.BooleanField(default=False,verbose_name='Многозначность')
+    constant_w = models.BooleanField(default=False,verbose_name='Константа')
+    nomination = models.BooleanField(default=False,verbose_name='Слово - Наименование?')
+    associate_w = models.ForeignKey('VM_Word',blank=True,null=True,on_delete=models.SET_NULL,
                                     related_name='AW',verbose_name='Слово Ассоциация')
-    Synonym_W = models.ForeignKey('VM_Word',blank=True,null=True,on_delete=models.SET_NULL,
+    synonym_w = models.ForeignKey('VM_Word',blank=True,null=True,on_delete=models.SET_NULL,
                                   related_name='SynW',verbose_name='Слово Синоним')
-
-    Group_Of_Word = models.ForeignKey('GOW',blank=True,null=True,on_delete=models.SET_NULL,
-                                      related_name='GOW',verbose_name='Группировка Слов')
     
+    group_of_word = models.ForeignKey('GOW',blank=True,null=True,on_delete=models.SET_NULL,
+                                      related_name='GOW',verbose_name='Группировка Слов')
+   
     class WT_Chose(models.TextChoices): # Подкласс типа слова
         ACTION = 'Motion', 'Глагол'
         ADJECTIVE = 'Descriptor', 'Прилагательное'
@@ -356,7 +356,7 @@ class VM_Word(models.Model): # Память слов.
 
 
 
-    Word_Type = models.CharField(max_length = 16,verbose_name='Тип слова',choices=WT_Chose.choices,default=WT_Chose.NOUN)
+    word_type = models.CharField(max_length = 16,verbose_name='Тип слова',choices=WT_Chose.choices,default=WT_Chose.NOUN)
 
 
     class WGen_Chose(models.TextChoices): # Подкласс рода слова
@@ -364,17 +364,17 @@ class VM_Word(models.Model): # Память слов.
         NEUTRAL = 'Neutral', 'Средний'
         FEMALE = 'Female', 'Женский'
     
-    Word_Gender = models.CharField(max_length = 16,verbose_name='Род слова',choices=WGen_Chose.choices,default=WGen_Chose.NEUTRAL)
+    word_gender = models.CharField(max_length = 16,verbose_name='Род слова',choices=WGen_Chose.choices,default=WGen_Chose.NEUTRAL)
 
-    Word_Des = models.TextField(blank=True,null=True,verbose_name='Значение слова')
+    word_des = models.TextField(blank=True,null=True,verbose_name='Значение слова')
 
     def __str__(self):
-        return "Слово: %s  ||  Тип: %s  ||  Константа: (%s)" % (self.Word, self.Word_Type , self.Constant_W)
+        return "Слово: %s  ||  Тип: %s  ||  Константа: (%s)" % (self.word, self.word_type , self.constant_w)
 
     class Meta:
         verbose_name_plural = 'Постоянная Память - Вербальная Память'
         verbose_name = 'Слова'
-        ordering = ['Word']
+        ordering = ['word']
 
 
 class GOW(models.Model): # Group of Words
@@ -382,7 +382,7 @@ class GOW(models.Model): # Group of Words
     Класс Группировки слов.
     COW = Category Of Words , Категория Слов (Как пример Приветственные)
     """
-    COW = models.CharField(max_length = 50,db_index=True, verbose_name='Категория Слов',primary_key=True)
+    COW = models.CharField(max_length = 50,primary_key=True,verbose_name='Категория Слов')
 
 
     def __str__(self):
