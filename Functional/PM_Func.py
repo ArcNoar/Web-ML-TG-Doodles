@@ -102,7 +102,7 @@ class user_temp:
 
 
 def rep_refresh(pack): # Refreshs REP_SUM
-    template = data_temp()
+    template = user_temp()
     temp = template.recreate(pack)
     return temp
 

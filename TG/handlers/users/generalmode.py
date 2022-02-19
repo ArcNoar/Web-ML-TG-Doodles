@@ -42,6 +42,9 @@ async def bot_echo(message: types.Message):
     P_Editor = Person_Edit() # Инициализация класс редактирования данных пользователя
     actual_UD = P_Get.person(current_user.id) # Получение данных о пользователе, если таковой имеется.
 
+    VM_Get = VM_Word.Get()
+    VM_Edit = VM_Word.Edit()
+
     try:
         if str(current_user.id) in actual_UD['ID']:
 
@@ -58,13 +61,42 @@ async def bot_echo(message: types.Message):
                     P_Editor.reputation('friendship',4,actual_UD)
                 elif message.text == 'Топ Личностей.' :
                     await message.answer(f'Я пытаюсь но... \n по моему нихуя... {P_Get.top_persons()}')
+                elif (message.text).startswith('Распознай предложение : ') == True:
+                    sentence_to_proc = (message.text)[24:]
+                    bag_of_word = (sentence_to_proc).split(' ')
+                    try:
+                        for word in bag_of_word:
+                            VM_Get.one_word(word)
+                        print('Вроде распознала')
+                    except Exception as _ex:
+                        print('Либо нет такого слова, либо какая то хуйня. [SENTENCE]', _ex)
+                elif (message.text).startswith('Слово по номеру : ') == True:
+                    
+                    
+                    wordId_to_proc = (message.text)[19:]
+                    
+                    try:
+                        
+                        pulled_word = VM_Get.word_by_id(wordId_to_proc)
+                        print(f"Ты о [{pulled_word['Слово']}] ?")
+                        await message.answer(f"""Ты о "{pulled_word['Слово']}" ?""")
+                    except Exception as _ex:
+                        print('Либо нет такого слова, либо какая то хуйня. [WORD_BY_ID]', _ex)
+                    
+                elif message.text == 'Обработчик говна':
+                    try:
+                        VM_Edit.associate_w('Пизды',90)
+                    except Exception as _ex:
+                        print('-Не братан, ты хуйню опять сделал, ошибка в редактуре полисемантики слова.',_ex)
+
+
                 else:
                     try:
                         bag_of_word = (message.text).split(' ')
-                        print(bag_of_word)
-                        for word in bag_of_word:
+                        #print(bag_of_word)
+                        for word in bag_of_word: 
                             word_params['Слово'] = word 
-                            print(word_params)
+                            #print(word_params)
                             
                             Word_func = VM_Word()
                             Word_add = Word_func.New(word_params)

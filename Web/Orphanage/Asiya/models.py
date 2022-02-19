@@ -353,6 +353,9 @@ class VM_Word(models.Model): # Память слов.
         STATE = 'STATE', 'Состояние'
         NOMIN = 'NOMIN', 'Местоимение'
         SOUND = 'SOUND', 'Звук'
+        PUNKT = 'PUNCTATION', 'Пунктуация'
+        NUM = 'NUM', 'Число'
+        UNION = 'UNION', 'Союз'
 
 
 
@@ -362,9 +365,10 @@ class VM_Word(models.Model): # Память слов.
     class WGen_Chose(models.TextChoices): # Подкласс рода слова
         MALE = 'Male', 'Мужской'
         NEUTRAL = 'Neutral', 'Средний'
+        NONE = 'NONE', 'Без рода'
         FEMALE = 'Female', 'Женский'
     
-    word_gender = models.CharField(max_length = 16,verbose_name='Род слова',choices=WGen_Chose.choices,default=WGen_Chose.NEUTRAL)
+    word_gender = models.CharField(max_length = 16,verbose_name='Род слова',choices=WGen_Chose.choices,default=WGen_Chose.NONE)
 
     word_des = models.TextField(blank=True,null=True,verbose_name='Значение слова')
 
