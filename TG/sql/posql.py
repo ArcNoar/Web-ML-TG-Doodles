@@ -938,3 +938,83 @@ class VM_Word:
         
     class Del:
         pass
+
+
+#SENTENCE MEMORY
+class VM_Sentence:
+    """
+    Взять предложение вообще легко, по сути тупо инсертишь.
+    Описание, ну пусть будет какое то стандартное я полагаю?
+    А вот дешифровка это ептить проблема.
+    Нужно же брать в учет фактор того что она не знает какого то слова.
+    Ну наверное брать циклом с автозаполнением? Тип если нет результата = ставим Автозаполнение, если есть, ставим айдишник.
+    Еще надо будет гет реализовать
+    еще надо будет протестить дешифровку, т.е предложение со всеми известными словами как себя поведет,
+    а вот эдит я хз че туда, только описание?
+    Ну дешифровка это ыа наверное, мб даже не стоит делать автозаполнение??
+    В общем, это не такой сложный пункт, но важный очень.
+    Я на отпускной, тип увидимся 23-24 числа наверное.
+    """
+    def deschcode(self,sentence):
+        Word_Func = VM_Word.Get()
+        
+        bag_of_word = (sentence).split(' ')
+        words_id_list = []
+        d_code = ''
+        
+        for wd in bag_of_word:
+            try:
+                current_word = Word_Func.one_word(wd)
+                words_id_list.append(str(current_word['ID']))
+            except Exception as _ex:
+                print('Возникла ошиба при дешифрации предложения. [VM_Sentence - deschcode]',_ex)
+                words_id_list.append('??')
+        d_code = '-'.join(words_id_list)
+        return d_code
+    class New:
+        def __init__(self,template):
+            self.Sentence = template['Предложение']
+            sent_func = VM_Sentence()
+            self.Sent_Desch = sent_func.deschcode(self.Sentence)
+            self.Short_Mean = template['Краткая суть']
+            self.From_who = template['От кого']
+            self.Context = template['Контекст']
+
+
+        def sent_reg(self):
+            try:
+
+                connection = psycopg2.connect(
+                
+                        host = host,
+                        user = user,
+                        password = password,
+                        database = db_name
+                        )
+                
+                cursor = connection.cursor()
+                
+               
+
+
+                add_query = f"""INSERT INTO public."Asiya_sentence_memory" (
+                                sentence, sent_dech, short_mean, from_who_id, sent_context_id) VALUES (
+                                '{self.Sentence}'::text, '{self.Sent_Desch}'::text, '{self.Short_Mean}'::text, 
+                                '{self.From_who}'::character varying, '{self.Context}'::character varying)
+                                 returning sentence;"""
+                cursor.execute(add_query)
+                #СУКА КТО КОМИТ СПИЗДИЛ
+                connection.commit()
+                        
+            
+            except Exception as _ex:
+                print('Ошибка в ходе чтения ДБ.[[VM_Sentence-NEW[SENT_REG] ]', _ex)
+            
+            finally:
+                if connection:
+                    connection.close()
+                    print('Дб отключена')
+
+        
+            
+

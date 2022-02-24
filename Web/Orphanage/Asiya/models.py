@@ -408,23 +408,23 @@ class Sentence_Memory(models.Model): # Память содержащая в се
     From_Who
     Short_Mean 
     """
-    Sentence = models.TextField(primary_key=True,verbose_name='Предложение')
-    Sent_Dech = models.TextField(verbose_name='Код-Дешифровка предложения')
-    Sent_Context = models.ForeignKey('Context_Table',blank=True,null=True,
+    sentence = models.TextField(primary_key=True,verbose_name='Предложение')
+    sent_dech = models.TextField(verbose_name='Код-Дешифровка предложения')
+    sent_context = models.ForeignKey('Context_Table',blank=True,null=True,
                                      on_delete=models.SET_NULL,verbose_name='Контекст предложения')
 
-    From_Who = models.ForeignKey(Person_Memory,blank=True,null=True,
+    from_who = models.ForeignKey(Person_Memory,blank=True,null=True,
                                      on_delete=models.SET_NULL,verbose_name='Источник Предложения')
 
-    Short_Mean = models.TextField(blank=True,null=True,verbose_name='Краткая суть')
+    short_mean = models.TextField(blank=True,null=True,verbose_name='Краткая суть')
 
     def __str__(self):
-        return self.Sent_Dech
+        return self.sent_dech
 
     class Meta:
         verbose_name_plural = 'Постоянная Память - Предложения'
         verbose_name = 'Предложение'
-        ordering = ['Sentence']
+        ordering = ['sentence']
 
 
 

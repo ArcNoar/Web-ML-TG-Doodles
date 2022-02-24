@@ -3,9 +3,11 @@ from aiogram.dispatcher import FSMContext
 
 from Functional.PM_Func import user_temp
 from Functional.VMW_Func import word_temp
+from Functional.VMS_Func import sentence_temp
 
 from TG.sql.posql import Person_add, Person_get, Person_Edit
 from TG.sql.posql import VM_Word
+from TG.sql.posql import VM_Sentence
 
 from TG.loader import dp
 
@@ -25,6 +27,9 @@ user_data = template.create()
 word_template = word_temp() # Темплейт запоминания слов
 word_params = word_template.create()
 
+sent_template = sentence_temp()
+sent_config = sent_template.create()
+
 
 
 
@@ -42,8 +47,11 @@ async def bot_echo(message: types.Message):
     P_Editor = Person_Edit() # Инициализация класс редактирования данных пользователя
     actual_UD = P_Get.person(current_user.id) # Получение данных о пользователе, если таковой имеется.
 
+    Word_func = VM_Word()
     VM_Get = VM_Word.Get()
     VM_Edit = VM_Word.Edit()
+
+    
 
     try:
         if str(current_user.id) in actual_UD['ID']:
@@ -98,12 +106,22 @@ async def bot_echo(message: types.Message):
                             word_params['Слово'] = word 
                             #print(word_params)
                             
-                            Word_func = VM_Word()
+                            
                             Word_add = Word_func.New(word_params)
                             Word_add.learn_word()
 
                     except Exception as _ex:
                         print('Запоминание слов пошло пиздй братанчик.')
+
+
+                    try:
+                        sent_config['Предложение'] = message.text
+                        sent_config['От кого'] = current_user.id
+                        Sentence_Func = VM_Sentence.New(sent_config)
+                        Sentence_Func.sent_reg()
+                    except Exception as _ex: 
+                        print('Регистрация предложения провалилась. Ну или просто коряво прошла. Я хз ес чесна.',_ex)
+                        
 
             else:
                 pass
