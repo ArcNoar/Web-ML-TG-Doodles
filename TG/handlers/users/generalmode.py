@@ -12,7 +12,9 @@ from TG.sql.posql import VM_Sentence
 from TG.loader import dp
 
 import asyncio
+
 from time import sleep
+from random import randint
 
 
 # TO DO этот хендлер убогий, пушо он неправильно прописан структурно, проверка на наличие в бд? Так если в бд нет будет ошибка.
@@ -31,10 +33,12 @@ sent_template = sentence_temp()
 sent_config = sent_template.create()
 
 
-
+non_duple_counter = 0
 
 @dp.message_handler(state=None)
 async def bot_echo(message: types.Message):
+    global non_duple_counter
+
     current_user = message.from_user
     Noah = 340981880
 
@@ -55,8 +59,10 @@ async def bot_echo(message: types.Message):
 
     try:
         if str(current_user.id) in actual_UD['ID']:
+            if non_duple_counter == 0:
 
-            await dp.bot.send_message(current_user.id, f'Приветствую {current_user.first_name}.')
+                await dp.bot.send_message(current_user.id, f'Приветствую {current_user.first_name}.')
+                non_duple_counter += 1
                 
             if current_user.id == Noah:
                 if message.text == 'Я состоятельный' :
@@ -121,6 +127,31 @@ async def bot_echo(message: types.Message):
                         Sentence_Func.sent_reg()
                     except Exception as _ex: 
                         print('Регистрация предложения провалилась. Ну или просто коряво прошла. Я хз ес чесна.',_ex)
+
+
+
+                    try:
+                        VM_Get = VM_Word.Get()
+                        sentence_lenght = randint(2,7)
+
+                        sentence_parts = []
+                        sent = ''
+                        limiter = 0
+                        while limiter < sentence_lenght:
+                            try:
+                                max_ID = VM_Get.max_id()
+                                word_ident = str(randint(1,int(max_ID['ID'])))
+                                pulled_word = VM_Get.word_by_id(word_ident)
+                                sentence_parts.append(pulled_word['Слово'])
+                                limiter += 1
+                            except Exception as _ex:
+                                #print('ОШИБКА БРАТАН. СЕНТЕНС КОНСТРУКТОР ХУЙНЯ',_ex)
+                                continue
+
+                        sent = ' '.join(sentence_parts)
+                        await message.answer(sent)
+                    except Exception as _ex:
+                        print('При попытке спиздануть что то, возникла ошибка',_ex)
                         
 
             else:

@@ -109,3 +109,11 @@ def WTD_many(word_list):
         except Exception as _ex:
             print(_ex)
     return collected_users
+
+
+
+
+
+
+
+

@@ -113,7 +113,7 @@ class Person_get:
             select_query = f"""SELECT * FROM public."Asiya_person_memory" WHERE unic_id = '{id}' ;"""
             cursor.execute(select_query)
 
-            print(f'Данные пользователя по ID - [{id}] . Получены. ')
+            #print(f'Данные пользователя по ID - [{id}] . Получены. ')
 
             pulled_data = CTD_single(cursor.fetchall())
             #print(f'Данные пользователя : {pulled_data}')
@@ -125,7 +125,7 @@ class Person_get:
         finally:
             if connection:
                 connection.close()
-                print('Дб отключена')
+                #print('Дб отключена')
     
     def top_persons(self):
         """
@@ -575,7 +575,7 @@ class VM_Word:
             finally:
                 if connection:
                     connection.close()
-                    print('Дб отключена')
+                    #print('Дб отключена')
 
     class Get:
 
@@ -597,7 +597,7 @@ class VM_Word:
                 select_query = f"""SELECT * FROM public."Asiya_vm_word" WHERE word = '{the_word}'"""
                 cursor.execute(select_query)
                 pulled_data = WTD_single(cursor.fetchall())
-                print(pulled_data)
+                #print(pulled_data)
                 return pulled_data
             
             except Exception as _ex:
@@ -606,7 +606,7 @@ class VM_Word:
             finally:
                 if connection:
                     connection.close()
-                    print('Дб отключена')
+                    #print('Дб отключена')
         def word_by_id(self,word_id):
             try:
 
@@ -634,7 +634,38 @@ class VM_Word:
             finally:
                 if connection:
                     connection.close()
-                    print('Дб отключена')
+                    #print('Дб отключена')
+
+        def max_id(self):
+            try:
+
+
+                connection = psycopg2.connect(
+                
+                        host = host,
+                        user = user,
+                        password = password,
+                        database = db_name
+                        )
+                
+                cursor = connection.cursor()
+
+
+                select_query = """SELECT * FROM public."Asiya_vm_word"
+                                        ORDER BY id DESC LIMIT 1"""
+                cursor.execute(select_query)
+                pulled_data = WTD_single(cursor.fetchall())
+                #print('ВОТ ОН ЭТО МАКСИМАЛЬНЫЙ АЙДИ БРАТ',pulled_data)
+                
+                return pulled_data
+            
+            except Exception as _ex:
+                print('Ошибка в ходе чтения ДБ.[VM_WORD-GET [MAX_ID] ]', _ex)
+            
+            finally:
+                if connection:
+                    connection.close()
+                    #print('Дб отключена')
         
     class Edit:
         def poly_type(self,the_word,value):
@@ -954,6 +985,11 @@ class VM_Sentence:
     Ну дешифровка это ыа наверное, мб даже не стоит делать автозаполнение??
     В общем, это не такой сложный пункт, но важный очень.
     Я на отпускной, тип увидимся 23-24 числа наверное.
+    ____
+    Ну теперь эдит контекста, эдит описания.
+    Пул дешифвровки,
+    пул всего предложения.
+    и будет гатово.
     """
     def deschcode(self,sentence):
         Word_Func = VM_Word.Get()
