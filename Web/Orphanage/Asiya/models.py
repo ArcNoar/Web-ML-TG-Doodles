@@ -191,11 +191,11 @@ class Emote_Reg(models.Model): # Эмоциональное состояние
 
     """
     
-    Emote_Name = models.CharField(max_length=100, db_index=True,
+    emote_name = models.CharField(max_length=100, db_index=True,
                             verbose_name= 'Код Чувства')
     
     # Описательные переменные
-    Emote_Trigger = models.ForeignKey(Person_Memory,related_name='ETrig',blank=True,null=True,
+    emote_trigger = models.ForeignKey(Person_Memory,related_name='ETrig',blank=True,null=True,
                                       on_delete=models.SET_NULL,verbose_name='Кто Причина')
 
     class ET_TypeChose(models.TextChoices): #Подкласс для параметра типа
@@ -204,10 +204,10 @@ class Emote_Reg(models.Model): # Эмоциональное состояние
         IVENT = 'Ivent','Событие'
         OBJECT = 'Object', 'Объект'
 
-    ET_Type = models.CharField(max_length = 14,verbose_name='Тип Причины',choices=ET_TypeChose.choices,default=ET_TypeChose.ET_NONE)
-    ET_Descript = models.TextField(null=True, blank=True,verbose_name='Описание Причины.')
+    et_type = models.CharField(max_length = 14,verbose_name='Тип Причины',choices=ET_TypeChose.choices,default=ET_TypeChose.ET_NONE)
+    et_descript = models.TextField(null=True, blank=True,verbose_name='Описание Причины.')
 
-    ET_Date = models.DateField(auto_now_add= True,verbose_name= 'Дата Возникновения')
+    et_date = models.DateField(auto_now_add= True,verbose_name= 'Дата Возникновения')
 
     # Компоненты Чувств.
     # СТРАХ :
@@ -222,15 +222,15 @@ class Emote_Reg(models.Model): # Эмоциональное состояние
         8 Embarrassment = Смущение
         9 Doubt = Сомнение
      """
-    Horror = models.FloatField(default=0.0,verbose_name='Ужас')
-    Anxiety = models.FloatField(default=0.0,verbose_name='Тревога')
-    Concern = models.FloatField(default=0.0,verbose_name='Беспокойство')
-    Astonishment = models.FloatField(default=0.0,verbose_name='Удивление')
-    Confusion = models.FloatField(default=0.0,verbose_name='Замешательство')
-    Timidity = models.FloatField(default=0.0,verbose_name='Робость')
-    Guilt = models.FloatField(default=0.0,verbose_name='Вина')
-    Embarrassment = models.FloatField(default=0.0,verbose_name='Смущение')
-    Doubt = models.FloatField(default=0.0,verbose_name='Сомнение')
+    horror = models.FloatField(default=0.0,verbose_name='Ужас')
+    anxiety = models.FloatField(default=0.0,verbose_name='Тревога')
+    concern = models.FloatField(default=0.0,verbose_name='Беспокойство')
+    astonishment = models.FloatField(default=0.0,verbose_name='Удивление')
+    confusion = models.FloatField(default=0.0,verbose_name='Замешательство')
+    timidity = models.FloatField(default=0.0,verbose_name='Робость')
+    guilt = models.FloatField(default=0.0,verbose_name='Вина')
+    embarrassment = models.FloatField(default=0.0,verbose_name='Смущение')
+    doubt = models.FloatField(default=0.0,verbose_name='Сомнение')
 
     
     #ГНЕВ :
@@ -245,15 +245,15 @@ class Emote_Reg(models.Model): # Эмоциональное состояние
         8 Nervousness = Нервозность
         9 Disappointment = Разочарование
     """
-    Rage = models.FloatField(default=0.0,verbose_name='Ярость')
-    Irritation = models.FloatField(default=0.0,verbose_name='Раздражение')
-    Resentment = models.FloatField(default=0.0,verbose_name='Обида')
-    Disgust = models.FloatField(default=0.0,verbose_name='Отвращение')
-    Jealousy = models.FloatField(default=0.0,verbose_name='Ревность')
-    Envy = models.FloatField(default=0.0,verbose_name='Зависть')
-    Indignation = models.FloatField(default=0.0,verbose_name='Возмущение')
-    Nervousness = models.FloatField(default=0.0,verbose_name='Нервозность')
-    Disappointment = models.FloatField(default=0.0,verbose_name='Разочарование')
+    rage = models.FloatField(default=0.0,verbose_name='Ярость')
+    irritation = models.FloatField(default=0.0,verbose_name='Раздражение')
+    resentment = models.FloatField(default=0.0,verbose_name='Обида')
+    disgust = models.FloatField(default=0.0,verbose_name='Отвращение')
+    jealousy = models.FloatField(default=0.0,verbose_name='Ревность')
+    envy = models.FloatField(default=0.0,verbose_name='Зависть')
+    indignation = models.FloatField(default=0.0,verbose_name='Возмущение')
+    nervousness = models.FloatField(default=0.0,verbose_name='Нервозность')
+    disappointment = models.FloatField(default=0.0,verbose_name='Разочарование')
 
 
     #ГРУСТЬ:
@@ -268,15 +268,15 @@ class Emote_Reg(models.Model): # Эмоциональное состояние
         8 Boredom = Скука
         9 Sadness = Печаль
     """
-    Idleness = models.FloatField(default=0.0,verbose_name='Лень')
-    Despait = models.FloatField(default=0.0,verbose_name='Отчаяние')
-    Compassion = models.FloatField(default=0.0,verbose_name='Жалость')
-    Loneliness = models.FloatField(default=0.0,verbose_name='Отрешенность')
-    Helplessness = models.FloatField(default=0.0,verbose_name='Беспомощность')
-    Aloofness = models.FloatField(default=0.0,verbose_name='Отчужденность')
-    Regret = models.FloatField(default=0.0,verbose_name='Сожаление')
-    Boredom = models.FloatField(default=0.0,verbose_name='Скука')
-    Sadness = models.FloatField(default=0.0,verbose_name='Печаль')
+    idleness = models.FloatField(default=0.0,verbose_name='Лень')
+    despait = models.FloatField(default=0.0,verbose_name='Отчаяние')
+    compassion = models.FloatField(default=0.0,verbose_name='Жалость')
+    loneliness = models.FloatField(default=0.0,verbose_name='Отрешенность')
+    helplessness = models.FloatField(default=0.0,verbose_name='Беспомощность')
+    aloofness = models.FloatField(default=0.0,verbose_name='Отчужденность')
+    regret = models.FloatField(default=0.0,verbose_name='Сожаление')
+    boredom = models.FloatField(default=0.0,verbose_name='Скука')
+    sadness = models.FloatField(default=0.0,verbose_name='Печаль')
 
     #РАДОСТЬ :
     """
@@ -290,25 +290,25 @@ class Emote_Reg(models.Model): # Эмоциональное состояние
         8 Laugh = Смех
         9 Satisfaction = Удовлетворение
     """
-    Happiness = models.FloatField(default=0.0,verbose_name='Счастье')
-    Delight = models.FloatField(default=0.0,verbose_name='Восторг')
-    Interest = models.FloatField(default=0.0,verbose_name='Интерес')
-    Excitement = models.FloatField(default=0.0,verbose_name='Возбуждение')
-    Curiosity = models.FloatField(default=0.0,verbose_name='Любопытство')
-    Confidence = models.FloatField(default=0.0,verbose_name='Уверенность')
-    Horny = models.FloatField(default=0.0,verbose_name='Хорни')
-    Laugh = models.FloatField(default=0.0,verbose_name='Смех')
-    Satisfaction = models.FloatField(default=0.0,verbose_name='Удовлетворение')
+    happiness = models.FloatField(default=0.0,verbose_name='Счастье')
+    delight = models.FloatField(default=0.0,verbose_name='Восторг')
+    interest = models.FloatField(default=0.0,verbose_name='Интерес')
+    excitement = models.FloatField(default=0.0,verbose_name='Возбуждение')
+    curiosity = models.FloatField(default=0.0,verbose_name='Любопытство')
+    confidence = models.FloatField(default=0.0,verbose_name='Уверенность')
+    horny = models.FloatField(default=0.0,verbose_name='Хорни')
+    laugh = models.FloatField(default=0.0,verbose_name='Смех')
+    satisfaction = models.FloatField(default=0.0,verbose_name='Удовлетворение')
 
 
 
     def __str__(self):
-        return "КОД: %s  ||  Причина: %s  ||  Дата: (%s)" % (self.Emote_Name, self.Emote_Trigger, self.ET_Date)
+        return "КОД: %s  ||  Причина: %s  ||  Дата: (%s)" % (self.emote_name, self.emote_trigger, self.et_date)
 
     class Meta:
         verbose_name_plural = 'Социальная Память - Архив Эмоций'
         verbose_name = 'Чувство'
-        ordering = ['Emote_Name']
+        ordering = ['emote_name']
 
 
 
@@ -386,16 +386,16 @@ class GOW(models.Model): # Group of Words
     Класс Группировки слов.
     COW = Category Of Words , Категория Слов (Как пример Приветственные)
     """
-    COW = models.CharField(max_length = 50,primary_key=True,verbose_name='Категория Слов')
+    cow = models.CharField(max_length = 50,db_index=True,unique=True,verbose_name='Категория Слов')
 
 
     def __str__(self):
-        return self.COW
+        return self.cow
 
     class Meta:
         verbose_name_plural = 'Постоянная Память - Группирование Слов'
         verbose_name = 'Группа'
-        ordering = ['COW']
+        ordering = ['cow']
 
 
 
@@ -408,7 +408,7 @@ class Sentence_Memory(models.Model): # Память содержащая в се
     From_Who
     Short_Mean 
     """
-    sentence = models.TextField(primary_key=True,verbose_name='Предложение')
+    sentence = models.TextField(db_index=True,unique=True,verbose_name='Предложение')
     sent_dech = models.TextField(verbose_name='Код-Дешифровка предложения')
     sent_context = models.ForeignKey('Context_Table',blank=True,null=True,
                                      on_delete=models.SET_NULL,verbose_name='Контекст предложения')
@@ -434,18 +434,18 @@ class Context_Table(models.Model): # Содержит в себе вероятн
     Context
     Context_Desc
     """
-    Context = models.CharField(max_length=50,db_index=True,primary_key=True,verbose_name='Контекст')
-    Context_Desc = models.TextField(verbose_name='Значение Контекста')
+    context = models.CharField(max_length=50,db_index=True,verbose_name='Контекст')
+    context_desc = models.TextField(verbose_name='Значение Контекста')
 
 
 
     def __str__(self):
-        return self.Context
+        return self.context
 
     class Meta:
         verbose_name_plural = 'Постоянная Память - Контексты'
         verbose_name = 'Контекст'
-        ordering = ['Context']
+        ordering = ['context']
 
 
 
@@ -462,19 +462,19 @@ class Semantic_Memory(models.Model): # Обобщенные знания о Ми
     Value_Of_Note (VON) - Ценность Знания (Его достоверность)
     Note - Знание.
     """
-    DON = models.DateField(auto_now_add=True,verbose_name='Дата Занесения')
-    SON = models.ForeignKey(Person_Memory,on_delete=models.SET_NULL,null=True,blank=True,verbose_name='Источник Записи')
-    VON = models.FloatField(default=0.0,verbose_name='Доверие к записи')
+    don = models.DateField(auto_now_add=True,verbose_name='Дата Занесения')
+    son = models.ForeignKey(Person_Memory,on_delete=models.SET_NULL,null=True,blank=True,verbose_name='Источник Записи')
+    von = models.FloatField(default=0.0,verbose_name='Доверие к записи')
 
-    Note = models.TextField(primary_key=True,verbose_name='Запись')
+    note = models.TextField(db_index=True,unique=True,verbose_name='Запись')
 
     def __str__(self):
-        return "[ %s ] - [ %s ]" % (self.DON, self.SON)
+        return "[ %s ] - [ %s ]" % (self.don, self.son)
     
     class Meta:
         verbose_name_plural = 'Постоянная Память - Семантическая Память'
         verbose_name = 'Знание'
-        ordering = ['DON']
+        ordering = ['don']
 
 
 class Constant_Expression(models.Model): # Задаваемые константы (В будещем оспорить)
@@ -485,7 +485,7 @@ class Constant_Expression(models.Model): # Задаваемые констант
     Const_Expr
     Const_Type
     """
-    Const_Expr = models.TextField(primary_key=True,verbose_name='Утверждение')
+    const_expr = models.TextField(db_index=True,unique=True,verbose_name='Утверждение')
 
     class CE_Types(models.TextChoices):
         VERY_GOOD = 'Very_Good', 'Очень Хорошо'
@@ -496,15 +496,15 @@ class Constant_Expression(models.Model): # Задаваемые констант
         
 
 
-    Const_Type = models.CharField(max_length = 12,verbose_name='Моральная Оценка',choices=CE_Types.choices,default=CE_Types.NEUTRAL)
+    const_type = models.CharField(max_length = 12,verbose_name='Моральная Оценка',choices=CE_Types.choices,default=CE_Types.NEUTRAL)
 
     def __str__(self):
-        return " %s - [ %s ]" % (self.Const_Expr,self.Const_Type)
+        return " %s - [ %s ]" % (self.const_expr,self.const_type)
 
     class Meta:
         verbose_name_plural = 'Постоянная Память - Константы'
         verbose_name = 'Утверждение'
-        ordering = ['Const_Expr']
+        ordering = ['const_expr']
 
 
 class Episode_Memory(models.Model): # Эпизодическая Память
@@ -518,35 +518,35 @@ class Episode_Memory(models.Model): # Эпизодическая Память
     Emote_Type = Тип Воспоминания.
     """
 
-    Episode = models.TextField(primary_key=True,verbose_name='Содержание Воспоминания')
-    Share_With = models.ForeignKey(Person_Memory,on_delete=models.SET_NULL,blank=True,null=True,verbose_name='С кем разделяет')
-    Emote_Score = models.ForeignKey(Emote_Reg,on_delete=models.PROTECT,blank=True,null=True,verbose_name='Испытываемые Эмоции')
+    episode = models.TextField(primary_key=True,verbose_name='Содержание Воспоминания')
+    share_with = models.ForeignKey(Person_Memory,on_delete=models.SET_NULL,blank=True,null=True,verbose_name='С кем разделяет')
+    emote_score = models.ForeignKey(Emote_Reg,on_delete=models.PROTECT,blank=True,null=True,verbose_name='Испытываемые Эмоции')
 
-    DOR = models.DateField(auto_now_add=True,verbose_name='Дата Приобретения')
+    dor = models.DateField(auto_now_add=True,verbose_name='Дата Приобретения')
 
-    Emote_Type = models.ForeignKey('EM_Type',on_delete=models.SET_NULL,blank=True,null=True,verbose_name='Тип Воспоминания')
+    emote_type = models.ForeignKey('EM_Type',on_delete=models.SET_NULL,blank=True,null=True,verbose_name='Тип Воспоминания')
 
     def __str__(self):
-        return " %s - [ %s ]" % (self.Emote_Type,self.Share_With)
+        return " %s - [ %s ]" % (self.emote_type,self.share_with)
 
     class Meta:
         verbose_name_plural = 'Постоянная Память - Эпизодическая Память'
         verbose_name = 'Воспоминание'
-        ordering = ['Share_With']
+        ordering = ['share_with']
 
 class EM_Type(models.Model): # Тип Эпизодической Памяти.
     """
     Подкласс для категоризации воспоминаний.
     EMT = Тип Эмоции
     """
-    EMT = models.CharField(max_length=50,primary_key=True,verbose_name='Тип')
+    emt = models.CharField(max_length=50,db_index=True,verbose_name='Тип')
     def __str__(self):
-        return self.EMT
+        return self.emt
 
     class Meta:
         verbose_name_plural = 'Эпизодичская Память - Тип воспоминания'
         verbose_name = 'Тип'
-        ordering = ['EMT']
+        ordering = ['emt']
 
 
 # Личностная Память ("Я" Асии)
@@ -557,61 +557,61 @@ class Identity(models.Model):
     """
     comment = models.TextField(db_index=True,verbose_name='Заключение')
 
-    Emote_Condition = models.ForeignKey(Emote_Reg,on_delete=models.SET_NULL,
+    emote_condition = models.ForeignKey(Emote_Reg,on_delete=models.SET_NULL,
                                         blank=True,null=True,verbose_name='Эмоциональнео состояние')
 
-    Current_Motive = models.ForeignKey('Motives',on_delete=models.SET_NULL,
+    current_motive = models.ForeignKey('Motives',on_delete=models.SET_NULL,
                                         blank=True,null=True,verbose_name='Мотив')
 
-    Reg_Date = models.DateField(auto_now_add=True)
+    reg_date = models.DateField(auto_now_add=True)
 
     def __str__(self):
-        return "Синапс - [%s]" % (self.Reg_Date)
+        return "Синапс - [%s]" % (self.reg_date)
 
     class Meta:
         verbose_name_plural = 'Личностная Память - Эго Асии'
         verbose_name = 'Синапс'
-        ordering = ['Reg_Date']
+        ordering = ['reg_date']
 
 
 class Motives(models.Model):
     """
     Желания Асии.
     """
-    Aspiration = models.TextField(primary_key=True,verbose_name='Стремление')
-    Reg_Date = models.DateField(auto_now_add=True)
+    aspiration = models.TextField(primary_key=True,verbose_name='Стремление')
+    reg_date = models.DateField(auto_now_add=True)
 
 
     def __str__(self):
-        return self.Aspiration
+        return self.aspiration
 
     class Meta:
         verbose_name_plural = 'Личностная Память - Желания'
         verbose_name = 'Желание'
-        ordering = ['Aspiration']
+        ordering = ['aspiration']
 
 
 class Postulates(models.Model):
     """
     Постулаты Асии
     """
-    Postul = models.TextField(primary_key=True,verbose_name='Постулат')
-    Reg_Date = models.DateField(auto_now_add=True)
+    postul = models.TextField(primary_key=True,verbose_name='Постулат')
+    reg_date = models.DateField(auto_now_add=True)
 
     def __str__(self):
-        return self.Postul
+        return self.postul
 
     class Meta:
         verbose_name_plural = 'Личностная Память - Постулаты'
         verbose_name = 'Постулат'
-        ordering = ['Postul']
+        ordering = ['postul']
 
 class Like_Dislike(models.Model):
     """
     То что нравится\Не нравится Асие
     """
     subject = models.TextField(primary_key=True,verbose_name='Объект')
-    Reg_Date = models.DateField(auto_now_add=True)
+    reg_date = models.DateField(auto_now_add=True)
 
     class Evaluation(models.TextChoices):
         LIKE = 'Like','Нравится'

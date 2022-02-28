@@ -6,8 +6,9 @@ from Functional.VMW_Func import word_temp
 from Functional.VMS_Func import sentence_temp
 
 from TG.sql.posql import Person_add, Person_get, Person_Edit
-from TG.sql.posql import VM_Word
-from TG.sql.posql import VM_Sentence
+from TG.sql.posql import VM_Word , VM_Sentence , VM_Context
+
+
 
 from TG.loader import dp
 
@@ -99,9 +100,10 @@ async def bot_echo(message: types.Message):
                     
                 elif message.text == 'Обработчик говна':
                     try:
-                        VM_Edit.associate_w('Пизды',90)
+                        Context_Func = VM_Context.Get()
+                        print(Context_Func.one_by_id(1))
                     except Exception as _ex:
-                        print('-Не братан, ты хуйню опять сделал, ошибка в редактуре полисемантики слова.',_ex)
+                        print('-Не братан, ты хуйню опять сделал, ошибка в обработчике говна',_ex)
 
 
                 else:
@@ -129,13 +131,14 @@ async def bot_echo(message: types.Message):
                         print('Регистрация предложения провалилась. Ну или просто коряво прошла. Я хз ес чесна.',_ex)
 
 
-
+                    
                     try:
                         VM_Get = VM_Word.Get()
-                        sentence_lenght = randint(2,7)
+                        sentence_lenght = randint(2,10)
 
                         sentence_parts = []
                         sent = ''
+                        exception_counter = 0
                         limiter = 0
                         while limiter < sentence_lenght:
                             try:
@@ -146,13 +149,16 @@ async def bot_echo(message: types.Message):
                                 limiter += 1
                             except Exception as _ex:
                                 #print('ОШИБКА БРАТАН. СЕНТЕНС КОНСТРУКТОР ХУЙНЯ',_ex)
-                                continue
+                                if exception_counter < 10:
+                                    continue
+                                else:
+                                    break
 
                         sent = ' '.join(sentence_parts)
                         await message.answer(sent)
                     except Exception as _ex:
                         print('При попытке спиздануть что то, возникла ошибка',_ex)
-                        
+                    
 
             else:
                 pass

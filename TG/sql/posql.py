@@ -6,6 +6,8 @@ from Functional.VMW_Func import WTD_single, WTD_many
 """
 Нужно сделать связующую дб фукцию для каждого табла.
 Ну скорее всего я потом буду объеденять эти три класс в один, ну если конечно в это есть необходимость
+ПОСЛЕ ТЕСТОВ И ЗАНЕСЕНИЯ ДРОПНУТЬ ВСЮ ТАБЛИЦУ К ХУЯМ.
+НЕ ЗАБУДЬ ПОТОМ ЗАНЕСТИ ФУНКЦИИ УДАЛЕНИЯ, ЭТО ДЕЙСТВИТЕЛЬНО ВАЖНО.
 """
 #Person Memory
 
@@ -562,7 +564,7 @@ class VM_Word:
                                     word, polysemantic, constant_w, nomination, word_type, word_gender, word_des, associate_w_id, group_of_word_id, synonym_w_id) VALUES """ + f""" (
                                     '{self.Word}'::character varying, {self.Polysemantic}::boolean, {self.Constant_W}::boolean, {self.Nomination}::boolean, 
                                     '{self.Word_Type}'::character varying, '{self.Word_Gender}'::character varying, '{self.Word_Des}'::text, 
-                                    {self.Associated_W_id}::bigint, {self.Group_Of_Word_id}::character varying, {self.Synonym_W_id}::bigint)
+                                    {self.Associated_W_id}::bigint, {self.Group_Of_Word_id}::bigint, {self.Synonym_W_id}::bigint)
                                      returning word;"""
                 cursor.execute(second_query)
                 #СУКА КТО КОМИТ СПИЗДИЛ
@@ -906,7 +908,7 @@ class VM_Word:
                     connection.close()
                     print('Дб отключена')
 
-        def word_gow(self,the_word,gow):
+        def word_gow(self,the_word,gow_id):
             try:
 
                 connection = psycopg2.connect(
@@ -921,7 +923,7 @@ class VM_Word:
 
 
                 Edit_query = f"""UPDATE public."Asiya_vm_word" SET
-                                    group_of_word_id = '{gow}'::character varying WHERE
+                                    group_of_word_id = '{gow_id}'::bigint WHERE
                                     word = '{the_word}';"""
                 cursor.execute(Edit_query)
                 #СУКА КТО КОМИТ СПИЗДИЛ
@@ -972,6 +974,197 @@ class VM_Word:
 
 
 #SENTENCE MEMORY
+
+class VM_Context:
+
+    class New:
+        def context_reg(self,Context_name,Context_content):
+            try:
+
+                connection = psycopg2.connect(
+                
+                        host = host,
+                        user = user,
+                        password = password,
+                        database = db_name
+                        )
+                
+                cursor = connection.cursor()
+                
+               
+
+
+                add_query = f"""INSERT INTO public."Asiya_context_table" (
+                                    "context", "context_desc") VALUES (
+                                    '{Context_name}'::character varying, 
+                                    '{Context_content}'::text)
+                                     returning "Context";"""
+                cursor.execute(add_query)
+
+                #СУКА КТО КОМИТ СПИЗДИЛ
+                connection.commit()
+                        
+            
+            except Exception as _ex:
+                print('Ошибка в ходе чтения ДБ.[[VM_Context-NEW [CONTEXT_REG]]', _ex)
+            
+            finally:
+                if connection:
+                    connection.close()
+                    #print('Дб отключена')
+        
+
+
+    class Edit:
+        """
+        Полагаю переделать это под айдишник надо.
+        ну и мб добавить функцию изменения названия.
+        """
+        def content(self,new_content,context_tag):
+            try:
+
+                connection = psycopg2.connect(
+                
+                        host = host,
+                        user = user,
+                        password = password,
+                        database = db_name
+                        )
+                
+                cursor = connection.cursor()
+                
+               
+
+
+                edit_query = f"""UPDATE public."Asiya_context_table" SET
+                            "Context_Desc" = '{new_content}'::text WHERE
+                            "Context" = '{context_tag}';"""
+                cursor.execute(edit_query)
+                #СУКА КТО КОМИТ СПИЗДИЛ
+                connection.commit()
+                        
+            
+            except Exception as _ex:
+                print('Ошибка в ходе чтения ДБ.[[VM_Context-EDIT [CONTENT]]', _ex)
+            
+            finally:
+                if connection:
+                    connection.close()
+                    #print('Дб отключена')
+
+        def name_tag(self,new_tag,context_tag):
+            try:
+
+                connection = psycopg2.connect(
+                
+                        host = host,
+                        user = user,
+                        password = password,
+                        database = db_name
+                        )
+                
+                cursor = connection.cursor()
+                
+               
+
+
+                edit_query = f"""UPDATE public."Asiya_context_table" SET
+                            "context" = '{new_tag}'::text WHERE
+                            "context" = '{context_tag}';"""
+                cursor.execute(edit_query)
+                #СУКА КТО КОМИТ СПИЗДИЛ
+                connection.commit()
+                        
+            
+            except Exception as _ex:
+                print('Ошибка в ходе чтения ДБ.[[VM_Context-EDIT [NAME]]', _ex)
+            
+            finally:
+                if connection:
+                    connection.close()
+                    #print('Дб отключена')
+
+
+    class Get:
+        """
+        Здесь мы должны брать перечень айдишников контекста.
+        еще нужно будет прописать функцию для того чтобы это в список переделать.
+        """
+        def all(self):
+            try:
+                connection = psycopg2.connect(
+                
+                        host = host,
+                        user = user,
+                        password = password,
+                        database = db_name
+                        )
+                
+                cursor = connection.cursor()
+
+
+
+                select_query = """SELECT * FROM public."Asiya_context_table" """
+                cursor.execute(select_query)
+                pulled_data = cursor.fetchall()
+                context_dict = {}
+                pulled_contexts = []
+                for context in pulled_data:
+                    context_dict['ID'] = context[0]
+                    context_dict['Context_Name'] = context[1]
+                    context_dict['Descript'] = context[2]
+                    pulled_contexts.append(context_dict)
+                return pulled_contexts
+                
+                
+                
+            except Exception as _ex:
+                print('Ошибка в ходе чтения ДБ. [VM_CONTEXT [Get-ALL]]', _ex)
+            
+            finally:
+                if connection:
+                    connection.close()
+                    print('Дб отключена')
+
+        def one_by_id(self,id):
+            try:
+                connection = psycopg2.connect(
+                
+                        host = host,
+                        user = user,
+                        password = password,
+                        database = db_name
+                        )
+                
+                cursor = connection.cursor()
+
+
+
+                select_query = f"""SELECT * FROM public."Asiya_context_table" WHERE id = '{id}' """
+                cursor.execute(select_query)
+                pulled_data = cursor.fetchall()
+                context_dict = {}
+                
+                for context in pulled_data:
+                    context_dict['ID'] = context[0]
+                    context_dict['Context_Name'] = context[1]
+                    context_dict['Descript'] = context[2]
+                    
+                return context_dict
+                
+                
+                
+            except Exception as _ex:
+                print('Ошибка в ходе чтения ДБ. [VM_CONTEXT [Get-ALL]]', _ex)
+            
+            finally:
+                if connection:
+                    connection.close()
+                    print('Дб отключена')
+
+
+
+
 class VM_Sentence:
     """
     Взять предложение вообще легко, по сути тупо инсертишь.
@@ -1014,7 +1207,7 @@ class VM_Sentence:
             self.Sent_Desch = sent_func.deschcode(self.Sentence)
             self.Short_Mean = template['Краткая суть']
             self.From_who = template['От кого']
-            self.Context = template['Контекст']
+            self.Context_id = template['Контекст']
 
 
         def sent_reg(self):
@@ -1036,7 +1229,7 @@ class VM_Sentence:
                 add_query = f"""INSERT INTO public."Asiya_sentence_memory" (
                                 sentence, sent_dech, short_mean, from_who_id, sent_context_id) VALUES (
                                 '{self.Sentence}'::text, '{self.Sent_Desch}'::text, '{self.Short_Mean}'::text, 
-                                '{self.From_who}'::character varying, '{self.Context}'::character varying)
+                                '{self.From_who}'::character varying, {self.Context_id}::bigint)
                                  returning sentence;"""
                 cursor.execute(add_query)
                 #СУКА КТО КОМИТ СПИЗДИЛ
@@ -1053,4 +1246,88 @@ class VM_Sentence:
 
         
             
+
+
+
+
+    class Get:
+        """
+        Здесь нужно будет реализовывать расшифровку предолжений.
+        хз как но надо, (хотя по сути то.ПРЯМ НЕОБХОДИМОСТИ В ЭТОМ НЕТ. Тип ссылаться она и сама сможет по айдишниками на слова. А расшифврока это не анме.)
+        Еще надо будет брать краткий смысл
+        """
+
+        pass
+
+
+
+
+    class Edit:
+        def short_mean(self,new_mean,sentence_to_edit):
+            """
+            new_mean = str
+            sentence_to_edit = str
+            """
+            try:
+
+                connection = psycopg2.connect(
+                
+                        host = host,
+                        user = user,
+                        password = password,
+                        database = db_name
+                        )
+                
+                cursor = connection.cursor()
+                
+               
+
+
+                edit_query = f"""UPDATE public."Asiya_sentence_memory" SET
+                                short_mean = '{new_mean}'::text WHERE
+                                            sentence = '{sentence_to_edit}';"""
+                cursor.execute(edit_query)
+                #СУКА КТО КОМИТ СПИЗДИЛ
+                connection.commit()
+                        
+            
+            except Exception as _ex:
+                print('Ошибка в ходе чтения ДБ.[[VM_Sentence-EDIT[SHORT_Mean] ]', _ex)
+            
+            finally:
+                if connection:
+                    connection.close()
+                    #print('Дб отключена')
+
+        def sent_context(self,new_context,sentence_to_edit):
+            try:
+
+                connection = psycopg2.connect(
+                
+                        host = host,
+                        user = user,
+                        password = password,
+                        database = db_name
+                        )
+                
+                cursor = connection.cursor()
+                
+               
+
+
+                edit_query = f"""UPDATE public."Asiya_sentence_memory" SET
+                                short_mean = '{new_mean}'::text WHERE
+                                            sentence = '{sentence_to_edit}';"""
+                cursor.execute(edit_query)
+                #СУКА КТО КОМИТ СПИЗДИЛ
+                connection.commit()
+                        
+            
+            except Exception as _ex:
+                print('Ошибка в ходе чтения ДБ.[[VM_Sentence-EDIT[SHORT_Mean] ]', _ex)
+            
+            finally:
+                if connection:
+                    connection.close()
+                    #print('Дб отключена')
 
