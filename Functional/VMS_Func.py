@@ -23,3 +23,34 @@ class sentence_temp:
 
             }
         return Word_Template
+
+
+
+def STD_Single(sent_data):
+    """
+    STD = Sentence To Dict
+    !!! ONLY FOR CONVERT SQL REQUEST DATA_LIST !!!
+    
+    data_list = sql_pull_func(user_data).get_user() => returns [(ID,first_name,sur_name,....,appearance)]
+    
+    func(data_list) => return dict = {
+                                                'ID' : ID,
+                                                'first_name' : first_name,
+                                                 Key : Value,
+                                                }
+
+    """
+    data_list = sent_data
+    try:
+        converted_data = {
+                'ID' : data_list[0][0],
+                'Предложение' : data_list[0][1],
+                'Дешифровка' : data_list[0][2],
+                'Краткая суть' : data_list[0][3],
+                'От кого' : data_list[0][4],
+                'Контекст' : data_list[0][5],
+                }
+        
+        return converted_data
+    except Exception as _ex:
+        print(_ex)

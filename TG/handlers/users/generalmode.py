@@ -5,8 +5,8 @@ from Functional.PM_Func import user_temp
 from Functional.VMW_Func import word_temp
 from Functional.VMS_Func import sentence_temp
 
-from TG.sql.posql import Person_add, Person_get, Person_Edit
-from TG.sql.posql import VM_Word , VM_Sentence , VM_Context
+from TG.sql.Person_Mem import Person_M
+from TG.sql.Verbal_Mem import VM_Word , VM_Sentence , VM_Context
 
 
 
@@ -47,9 +47,9 @@ async def bot_echo(message: types.Message):
     user_data['Имя'] = current_user.first_name
     user_data['Фамилия'] = current_user.last_name
 
-    P_Add = Person_add(user_data) # Занесение шаблона в Класс
-    P_Get = Person_get() # Инициализация класса получение данных о пользователе
-    P_Editor = Person_Edit() # Инициализация класс редактирования данных пользователя
+    P_Add = Person_M.New(user_data) # Занесение шаблона в Класс
+    P_Get = Person_M.Get() # Инициализация класса получение данных о пользователе
+    P_Editor = Person_M.Edit() # Инициализация класс редактирования данных пользователя
     actual_UD = P_Get.person(current_user.id) # Получение данных о пользователе, если таковой имеется.
 
     Word_func = VM_Word()
@@ -100,8 +100,10 @@ async def bot_echo(message: types.Message):
                     
                 elif message.text == 'Обработчик говна':
                     try:
-                        Context_Func = VM_Context.Get()
-                        print(Context_Func.one_by_id(1))
+                        Sentence_Get = VM_Sentence.Get()
+                        result = Sentence_Get.sentence_data('Мойсес')
+                        await message.answer(result)
+                        #print(result)
                     except Exception as _ex:
                         print('-Не братан, ты хуйню опять сделал, ошибка в обработчике говна',_ex)
 
@@ -180,11 +182,11 @@ async def bot_echo(message: types.Message):
                 user_data['Отношение от'] = 10
                 
                 
-                P_Add = Person_add(user_data)
+                P_Add = Person_M.New(user_data)
                 
                 P_Add.person()
             else:
-                P_Add = Person_add(user_data)
+                P_Add = Person_M.New(user_data)
                 P_Add.person()
         except Exception as _ex:
             print(f'Возникла ошибка при запоминании данных [{_ex}]')   

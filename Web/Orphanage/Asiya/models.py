@@ -152,15 +152,15 @@ class RelationType(models.Model): # Класс содержащий виды В�
     Класс Взаимотношений ОТ\К
     - Relation - 
     """
-    Relation = models.CharField(max_length=50,db_index=True,
+    relation = models.CharField(max_length=50,db_index=True,
                                 verbose_name = 'Тип Отношений.')
     def __str__(self):
-        return self.Relation
+        return self.relation
 
     class Meta:
         verbose_name_plural = 'Социальная Память - Взаимотношения'
         verbose_name = 'Отношение'
-        ordering = ['Relation']
+        ordering = ['relation']
 
 class Character_Tags(models.Model): # Класс Черт характера.
     """
