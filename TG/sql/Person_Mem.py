@@ -1,5 +1,5 @@
 import psycopg2
-from datetime import date
+#from datetime import date
 from .conf import db_name,host,user,password
 from Functional.PM_Func import CTD_single,CTD_many, rep_refresh
 
@@ -527,7 +527,7 @@ class Person_M:
 
 
 
-#
+#Additional
 class Char_Tags:
     class New:
         def new_tag(self,tag_name):
@@ -642,8 +642,8 @@ class Char_Tags:
                 tag_dict = {}
                 tag_list = []
                 for tag in pulled_data:
-                    tag_dict['ID'] = pulled_data[0]
-                    tag_dict['Tag'] = pulled_data[0]
+                    tag_dict['ID'] = tag[0]
+                    tag_dict['Tag'] = tag[0]
                     tag_list.append(tag_dict)
                 return tag_list
 
@@ -694,14 +694,100 @@ class Rel_Type:
                     #print('Дб отключена')
 
 
-
-
-    
     class Edit:
-        pass
+        def relate_by_id(self,new_name,relate_id):
+            try:
+                connection = psycopg2.connect(
+                
+                        host = host,
+                        user = user,
+                        password = password,
+                        database = db_name
+                        )
+                
+                cursor = connection.cursor()
+
+
+
+                edit_query = f"""UPDATE public."Asiya_relationtype" SET
+                                relation = '{new_name}'::character varying WHERE
+                                                        id = '{relate_id}';"""
+                cursor.execute(edit_query)
+                connection.commit()
+                
+
+            except Exception as _ex:
+                print('Ошибка в ходе чтения ДБ. [Rel_Type [EDIT-edit_relate_by_id]]', _ex)
+            
+            finally:
+                if connection:
+                    connection.close()
+                    #print('Дб отключена')
+
+        def relate_by_name(self,new_name,old_name):
+            try:
+                connection = psycopg2.connect(
+                
+                        host = host,
+                        user = user,
+                        password = password,
+                        database = db_name
+                        )
+                
+                cursor = connection.cursor()
+
+
+
+                edit_query = f"""UPDATE public."Asiya_relationtype" SET
+                                relation = '{new_name}'::character varying WHERE
+                                                        relation = '{old_name}';"""
+                cursor.execute(edit_query)
+                connection.commit()
+                
+
+            except Exception as _ex:
+                print('Ошибка в ходе чтения ДБ. [Rel_Type [EDIT-edit_relate_by_name]]', _ex)
+            
+            finally:
+                if connection:
+                    connection.close()
+                    #print('Дб отключена')
 
     class Get:
-        pass
+        def get_relations(self):
+            try:
+                connection = psycopg2.connect(
+                
+                        host = host,
+                        user = user,
+                        password = password,
+                        database = db_name
+                        )
+                
+                cursor = connection.cursor()
+
+
+
+                edit_query = f"""SELECT * FROM public."Asiya_relationtype" 
+                                                        ORDER BY id ASC """
+                cursor.execute(edit_query)
+                pulled_data = cursor.fetchall()
+                relate_dict = {}
+                relate_list = []
+                for rel in pulled_data:
+                    relate_dict['ID'] = rel[0]
+                    relate_dict['Tag'] = rel[0]
+                    relate_list.append(relate_dict)
+                return relate_list
+
+                
+            except Exception as _ex:
+                print('Ошибка в ходе чтения ДБ. [Rel_Type [GET-Get_Relations]]', _ex)
+            
+            finally:
+                if connection:
+                    connection.close()
+                    #print('Дб отключена')
 
     class Del:
         pass

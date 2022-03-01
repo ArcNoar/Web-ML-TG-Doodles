@@ -1,7 +1,7 @@
 import psycopg2
-from datetime import date
+#from datetime import date
 from .conf import db_name,host,user,password
-from Functional.VMW_Func import WTD_single, WTD_many
+from Functional.VMW_Func import WTD_single #WTD_many
 from Functional.VMS_Func import STD_Single
 
 
@@ -835,19 +835,138 @@ class VM_Context:
                     connection.close()
                     print('Дб отключена')
 
-
+#GROUP OF WORDS
 class GOW:
     """
     Group of Words
     """
     class New:
-        pass
+        def new_group(self,group_name):
+            try:
+                connection = psycopg2.connect(
+                
+                        host = host,
+                        user = user,
+                        password = password,
+                        database = db_name
+                        )
+                
+                cursor = connection.cursor()
+
+
+
+                add_query = f"""INSERT INTO public."Asiya_gow" (
+                                                    char_tag) VALUES (
+                                                    '{group_name}'::character varying)
+                                                     returning id;"""
+                cursor.execute(add_query)
+                connection.commit()
+                
+
+            except Exception as _ex:
+                print('Ошибка в ходе чтения ДБ. [GOW [New-new_group]]', _ex)
+            
+            finally:
+                if connection:
+                    connection.close()
+                    #print('Дб отключена')
     
     class Edit:
-        pass
+        def group_by_id(self,new_name,group_id):
+            try:
+                connection = psycopg2.connect(
+                
+                        host = host,
+                        user = user,
+                        password = password,
+                        database = db_name
+                        )
+                
+                cursor = connection.cursor()
+
+
+
+                edit_query = f"""UPDATE public."Asiya_gow" SET
+                                    cow = '{new_name}'::character varying WHERE
+                                                        id = '{group_id}';"""
+                cursor.execute(edit_query)
+                connection.commit()
+                
+
+            except Exception as _ex:
+                print('Ошибка в ходе чтения ДБ. [GOW [EDIT-edit_Group_by_id]]', _ex)
+            
+            finally:
+                if connection:
+                    connection.close()
+                    #print('Дб отключена')
+
+        def group_by_name(self,new_name,relate_group):
+            try:
+                connection = psycopg2.connect(
+                
+                        host = host,
+                        user = user,
+                        password = password,
+                        database = db_name
+                        )
+                
+                cursor = connection.cursor()
+
+
+
+                edit_query = f"""UPDATE public."Asiya_gow" SET
+                                    cow = '{new_name}'::character varying WHERE
+                                                        cow = '{relate_group}';"""
+                cursor.execute(edit_query)
+                connection.commit()
+                
+
+            except Exception as _ex:
+                print('Ошибка в ходе чтения ДБ. [Char_Tag [EDIT-edit_tag_by_name]]', _ex)
+            
+            finally:
+                if connection:
+                    connection.close()
+                    #print('Дб отключена')
+        
 
     class Get:
-        pass
+        def get_groups(self):
+            try:
+                connection = psycopg2.connect(
+                
+                        host = host,
+                        user = user,
+                        password = password,
+                        database = db_name
+                        )
+                
+                cursor = connection.cursor()
+
+
+
+                edit_query = f"""SELECT * FROM public."Asiya_gow" 
+                                                        ORDER BY id ASC """
+                cursor.execute(edit_query)
+                pulled_data = cursor.fetchall()
+                group_dict = {}
+                group_list = []
+                for group in pulled_data:
+                    group_dict['ID'] = group[0]
+                    group_dict['Tag'] = group[0]
+                    group_list.append(group_dict)
+                return group_list
+
+                
+            except Exception as _ex:
+                print('Ошибка в ходе чтения ДБ. [GOW [GET-Get_groups]]', _ex)
+            
+            finally:
+                if connection:
+                    connection.close()
+                    #print('Дб отключена')
 
     class Del:
         pass
+
