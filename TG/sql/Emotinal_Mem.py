@@ -1,4 +1,0 @@
-"""
-Emote_Reg
-EmType
-"""

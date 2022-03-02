@@ -210,7 +210,7 @@ class Person_M:
 
                 cursor.execute(update_query)
                 connection.commit()
-                pull_data = Person_get()
+                pull_data = Person_M.Get()
                 usr_data = pull_data.person(user_data['ID'])
                 new_data = rep_refresh(usr_data)
                 rep_sum_query  = f"""UPDATE public."Asiya_person_memory" SET
