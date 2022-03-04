@@ -4,9 +4,11 @@ from aiogram.dispatcher import FSMContext
 from Functional.PM_Func import user_temp
 from Functional.VMW_Func import word_temp
 from Functional.VMS_Func import sentence_temp
+from Functional.EMR_Func import Emote_Temp
 
 from TG.sql.Person_Mem import Person_M
 from TG.sql.Verbal_Mem import VM_Word , VM_Sentence , VM_Context
+from TG.sql.Soul_Mem import Emote_Reg
 
 
 
@@ -30,8 +32,11 @@ user_data = template.create()
 word_template = word_temp() # Темплейт запоминания слов
 word_params = word_template.create()
 
-sent_template = sentence_temp()
+sent_template = sentence_temp() # Темплейт для запоминания предложения
 sent_config = sent_template.create()
+
+emote_template = Emote_Temp()
+emote_shell = emote_template.create()
 
 
 non_duple_counter = 0
@@ -55,6 +60,9 @@ async def bot_echo(message: types.Message):
     Word_func = VM_Word()
     VM_Get = VM_Word.Get()
     VM_Edit = VM_Word.Edit()
+
+    Emote_Func = Emote_Reg()
+    
 
     
 
@@ -107,6 +115,25 @@ async def bot_echo(message: types.Message):
                     except Exception as _ex:
                         print('-Не братан, ты хуйню опять сделал, ошибка в обработчике говна',_ex)
 
+                elif message.text == 'Регистратор Эмоций.':
+                    try:
+                        """
+                        emote_shell['Сущность-Триггер'] = current_user.id
+                        emote_shell['Тип Триггера'] = 'Creature'
+
+                        emote_shell['Эмоция']['СТРАХ']['Замешательство'] = 1.7
+
+                        Emote_Add = Emote_Func.New(emote_shell)
+                        Emote_Add.emote_reg()
+                        await message.answer('Эмоция занесена. Производим вывод в консоль.')
+                        """
+
+                        Emote_Get =  Emote_Reg.Get()
+                        emote_output =  Emote_Get.get_by_id(2)
+                        print(emote_output)
+                    except Exception as _ex:
+                        print('Возниклы траблы.',_ex)
+
 
                 else:
                     try:
@@ -135,7 +162,7 @@ async def bot_echo(message: types.Message):
 
                     
                     try:
-                        VM_Get = VM_Word.Get()
+                        
                         sentence_lenght = randint(2,10)
 
                         sentence_parts = []
@@ -179,7 +206,9 @@ async def bot_echo(message: types.Message):
                 
                 user_data['Пол'] = 'male'
                 user_data['День Рождения'] = '2003-10-18'
-                user_data['Отношение от'] = 10
+
+                
+                user_data['Отношение от'] = 9
                 
                 
                 P_Add = Person_M.New(user_data)

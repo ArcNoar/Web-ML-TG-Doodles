@@ -64,6 +64,7 @@ class Emote_Temp:
             'Код Эмоции' : 'SOMEEMOTE - [?|?|?|?|?_?|?]',
             'Сущность-Триггер' : None,
             'Тип Триггера' : 'None',
+            'Описание' : 'Нулевое Описание',
             'Дата' : str(date.today()),
             'Эмоция': {
                 'СТРАХ' : {
@@ -117,3 +118,149 @@ class Emote_Temp:
             }
         return empty_emote
 
+def ETD_single(emote_list): 
+    """
+    ETD = Conver To Dict
+    !!! ONLY FOR CONVERT SQL REQUEST DATA_LIST !!!
+    
+
+    """
+    data_list = emote_list
+    try:
+        converted_data = {
+                'ID' : data_list[0][0],
+                'Код Эмоции' : data_list[0][1],
+                'Сущность-Триггер' : data_list[0][41],
+                'Тип Триггера' : data_list[0][2],
+                'Описание' : data_list[0][3],
+                'Дата' : str(data_list[0][4]),
+                'Эмоция': {
+                    'СТРАХ' : {
+                        'Ужас' : data_list[0][5],
+                        'Тревога' : data_list[0][6],
+                        'Беспокойство' : data_list[0][7],
+                        'Удивление' : data_list[0][8],
+                        'Замешательство' : data_list[0][9],
+                        'Робость' : data_list[0][10],
+                        'Вина' : data_list[0][11],
+                        'Смущение' : data_list[0][12],
+                        'Сомнение' : data_list[0][13],
+                        },
+
+                    'ГНЕВ' : {
+                        'Ярость' : data_list[0][14],
+                        'Раздражение' : data_list[0][15],
+                        'Обида' : data_list[0][16],
+                        'Отвращение' : data_list[0][17],
+                        'Ревность' : data_list[0][18],
+                        'Зависть' : data_list[0][19],
+                        'Негодование' : data_list[0][20],
+                        'Нервозность' : data_list[0][21],
+                        'Разочарование' : data_list[0][22],
+                        },
+
+                    'ГРУСТЬ' : {
+                        'Лень' : data_list[0][23],
+                        'Отчаяние' : data_list[0][24],
+                        'Жалость' : data_list[0][25],
+                        'Отрешенность' : data_list[0][26],
+                        'Беспомощность' : data_list[0][27],
+                        'Отчужденность' : data_list[0][28],
+                        'Сожаление' : data_list[0][29],
+                        'Скука' : data_list[0][30],
+                        'Печаль' : data_list[0][31],
+                        },
+
+                    'РАДОСТЬ' : {
+                        'Счастье' : data_list[0][32],
+                        'Восторг' : data_list[0][33],
+                        'Интерес' : data_list[0][34],
+                        'Возбуждение' : data_list[0][35],
+                        'Любопытство' : data_list[0][36],
+                        'Уверенность' : data_list[0][37],
+                        'Хорни' : data_list[0][38],
+                        'Смех' : data_list[0][39],
+                        'Удовлетворение' : data_list[0][40],
+                        },
+                    },
+                }
+        
+        return converted_data
+    except Exception as _ex:
+        print(_ex)
+
+
+def ETD_many(emote_list):
+    """
+    !!! ONLY FOR CONVERT SQL REQUEST DATA_LIST !!!
+    ETD = Conver To Dict
+    data_list = Pm_sql(user_data).get_user() => returns [(ID,first_name,sur_name,....,appearance)]
+    # Это можно по сути сделать основной функцией пушо что один что много, норм буит
+    """
+    dt_list = emote_list
+    collected_emotions = []
+    for data_list in dt_list:
+        
+        try:
+            converted_data = {
+                'ID' : data_list[0],
+                'Код Эмоции' : data_list[1],
+                'Сущность-Триггер' : data_list[41],
+                'Тип Триггера' : data_list[2],
+                'Описание' : data_list[3],
+                'Дата' : str(data_list[4]),
+                'Эмоция': {
+                    'СТРАХ' : {
+                        'Ужас' : data_list[5],
+                        'Тревога' : data_list[6],
+                        'Беспокойство' : data_list[7],
+                        'Удивление' : data_list[8],
+                        'Замешательство' : data_list[9],
+                        'Робость' : data_list[10],
+                        'Вина' : data_list[11],
+                        'Смущение' : data_list[12],
+                        'Сомнение' : data_list[13],
+                        },
+
+                    'ГНЕВ' : {
+                        'Ярость' : data_list[14],
+                        'Раздражение' : data_list[15],
+                        'Обида' : data_list[16],
+                        'Отвращение' : data_list[17],
+                        'Ревность' : data_list[18],
+                        'Зависть' : data_list[19],
+                        'Негодование' : data_list[20],
+                        'Нервозность' : data_list[21],
+                        'Разочарование' : data_list[22],
+                        },
+
+                    'ГРУСТЬ' : {
+                        'Лень' : data_list[23],
+                        'Отчаяние' : data_list[24],
+                        'Жалость' : data_list[25],
+                        'Отрешенность' : data_list[26],
+                        'Беспомощность' : data_list[27],
+                        'Отчужденность' : data_list[28],
+                        'Сожаление' : data_list[29],
+                        'Скука' : data_list[30],
+                        'Печаль' : data_list[31],
+                        },
+
+                    'РАДОСТЬ' : {
+                        'Счастье' : data_list[32],
+                        'Восторг' : data_list[33],
+                        'Интерес' : data_list[34],
+                        'Возбуждение' : data_list[35],
+                        'Любопытство' : data_list[36],
+                        'Уверенность' : data_list[37],
+                        'Хорни' : data_list[38],
+                        'Смех' : data_list[39],
+                        'Удовлетворение' : data_list[40],
+                        },
+                    },
+                }
+            
+            collected_emotions.append(converted_data)
+        except Exception as _ex:
+            print(_ex)
+    return collected_emotions

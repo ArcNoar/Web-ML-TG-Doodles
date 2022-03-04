@@ -518,7 +518,7 @@ class Episode_Memory(models.Model): # Эпизодическая Память
     Emote_Type = Тип Воспоминания.
     """
 
-    episode = models.TextField(primary_key=True,verbose_name='Содержание Воспоминания')
+    episode = models.TextField(db_index=True,unique=True,verbose_name='Содержание Воспоминания')
     share_with = models.ForeignKey(Person_Memory,on_delete=models.SET_NULL,blank=True,null=True,verbose_name='С кем разделяет')
     emote_score = models.ForeignKey(Emote_Reg,on_delete=models.PROTECT,blank=True,null=True,verbose_name='Испытываемые Эмоции')
 
@@ -578,7 +578,7 @@ class Motives(models.Model):
     """
     Желания Асии.
     """
-    aspiration = models.TextField(primary_key=True,verbose_name='Стремление')
+    aspiration = models.TextField(db_index=True,unique=True,verbose_name='Стремление')
     reg_date = models.DateField(auto_now_add=True)
 
 
@@ -595,7 +595,7 @@ class Postulates(models.Model):
     """
     Постулаты Асии
     """
-    postul = models.TextField(primary_key=True,verbose_name='Постулат')
+    postul = models.TextField(db_index=True,unique=True,verbose_name='Постулат')
     reg_date = models.DateField(auto_now_add=True)
 
     def __str__(self):
@@ -610,7 +610,7 @@ class Like_Dislike(models.Model):
     """
     То что нравится\Не нравится Асие
     """
-    subject = models.TextField(primary_key=True,verbose_name='Объект')
+    subject = models.TextField(db_index=True,unique=True,verbose_name='Объект')
     reg_date = models.DateField(auto_now_add=True)
 
     class Evaluation(models.TextChoices):
