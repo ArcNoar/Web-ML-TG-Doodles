@@ -1,5 +1,5 @@
 import psycopg2
-
+from datetime import date
 from .conf import db_name,host,user,password
 from Functional.EMR_Func import ETD_single, ETD_many
 
@@ -11,7 +11,6 @@ Motives
 postulates
 Emote_Reg
 """
-
 
 class Emote_Reg:
     def Em_Code_Create(self,em_dict):
@@ -243,7 +242,7 @@ class Emote_Reg:
                 return pulled_data
 
             except Exception as _ex:
-                print('Ошибка в ходе чтения ДБ. [Person_Get [Get-Person]]', _ex)
+                print('Ошибка в ходе чтения ДБ. [Emote_Reg [Get-get_by_id]]', _ex)
             
             finally:
                 if connection:
@@ -253,6 +252,74 @@ class Emote_Reg:
         """
         Get by Emote_Code
         """
+        def get_by_main_emote(self,main_emote):
+            
+            
+          
+            try:
+                connection = psycopg2.connect(
+                
+                        host = host,
+                        user = user,
+                        password = password,
+                        database = db_name
+                        )
+                
+                cursor = connection.cursor()
+
+
+
+                select_query = f"""SELECT * FROM public."Asiya_emote_reg" WHERE emote_name LIKE '-{main_emote}-%' ;"""
+                cursor.execute(select_query)
+
+                #print(f'Данные пользователя по ID - [{id}] . Получены. ')
+
+                pulled_data = ETD_many(cursor.fetchall())
+                
+                return pulled_data
+
+            except Exception as _ex:
+                print('Ошибка в ходе чтения ДБ. [Emote_Reg [Get-get_by_main_emote]]', _ex)
+            
+            finally:
+                if connection:
+                    connection.close()
+                    #print('Дб отключена')
+
+        def get_by_code(self,full_code):
+            
+            
+          
+            try:
+                connection = psycopg2.connect(
+                
+                        host = host,
+                        user = user,
+                        password = password,
+                        database = db_name
+                        )
+                
+                cursor = connection.cursor()
+
+
+
+                select_query = f"""SELECT * FROM public."Asiya_emote_reg" WHERE emote_name = '{full_code}' ;"""
+                cursor.execute(select_query)
+
+                #print(f'Данные пользователя по ID - [{id}] . Получены. ')
+
+                pulled_data = ETD_single(cursor.fetchall())
+                
+                return pulled_data
+
+            except Exception as _ex:
+                print('Ошибка в ходе чтения ДБ. [Emote_Reg [Get-get_by_code]]', _ex)
+            
+            finally:
+                if connection:
+                    connection.close()
+                    #print('Дб отключена')
+
 
     class Edit:
         """
@@ -265,4 +332,614 @@ class Emote_Reg:
         """
         pass
     
+
+
+
+
+#Identity
+class Identity:
+
+    class New:
+        def __init__(self,Info_list):
+            self.Emo_State = Info_list['Эмоция']
+            self.Motive = Info_list['Мотив']
+            self.Note = Info_list['Комментарий']
+            self.Note_date = Info_list['Дата']
+
+        def Iden_infix(self):
+            try:
+            
+                connection = psycopg2.connect(
+                
+                        host = host,
+                        user = user,
+                        password = password,
+                        database = db_name
+                        )
+                
+                cursor = connection.cursor()
+
+
+                
+
+                insert_query = f"""INSERT INTO public."Asiya_identity" (
+                                      comment, reg_date, current_motive_id, emote_condition_id) VALUES (
+                                      '{self.Note}'::text, '{self.Note_date}'::date, '{self.Motive}'::bigint, '{self.Emo_State}'::bigint)
+                                       returning id;"""
+
+                cursor.execute(insert_query)
+                connection.commit()
+                        
+            
+            except Exception as _ex:
+                print('Ошибка в ходе чтения ДБ. [Identity [New - Iden_infix ]]', _ex)
+            
+            finally:
+                if connection:
+                    connection.close()
+                    print('Дб отключена')
+
+
+    class Get:
+        def all_Notes(self):
+            
+            try:
+            
+                connection = psycopg2.connect(
+                
+                        host = host,
+                        user = user,
+                        password = password,
+                        database = db_name
+                        )
+                
+                cursor = connection.cursor()
+
+
+                
+
+                insert_query = f"""SELECT * FROM public."Asiya_identity" """
+                cursor.execute(insert_query)
+                connection.commit()
+                        
+            
+            except Exception as _ex:
+                print('Ошибка в ходе чтения ДБ. [Identity [Get - All_Notes]]', _ex)
+            
+            finally:
+                if connection:
+                    connection.close()
+                    print('Дб отключена')
+
+        def by_note_id(self,id):
+            
+            try:
+            
+                connection = psycopg2.connect(
+                
+                        host = host,
+                        user = user,
+                        password = password,
+                        database = db_name
+                        )
+                
+                cursor = connection.cursor()
+
+
+                
+
+                insert_query = f"""SELECT * FROM public."Asiya_identity" WHERE id = '{id}' """
+                cursor.execute(insert_query)
+                connection.commit()
+                        
+            
+            except Exception as _ex:
+                print('Ошибка в ходе чтения ДБ. [Identity [Get - by_note_id]]', _ex)
+            
+            finally:
+                if connection:
+                    connection.close()
+                    print('Дб отключена')
+
+        def by_emote_state_id(self,id):
+            
+            try:
+            
+                connection = psycopg2.connect(
+                
+                        host = host,
+                        user = user,
+                        password = password,
+                        database = db_name
+                        )
+                
+                cursor = connection.cursor()
+
+
+                
+
+                insert_query = f"""SELECT * FROM public."Asiya_identity" WHERE emote_condition_id = '{id}' """
+                cursor.execute(insert_query)
+                connection.commit()
+                        
+            
+            except Exception as _ex:
+                print('Ошибка в ходе чтения ДБ. [Identity [Get - by_emote_state_id]]', _ex)
+            
+            finally:
+                if connection:
+                    connection.close()
+                    print('Дб отключена')
+
+
+        def by_motive_id(self,id):
+            
+            try:
+            
+                connection = psycopg2.connect(
+                
+                        host = host,
+                        user = user,
+                        password = password,
+                        database = db_name
+                        )
+                
+                cursor = connection.cursor()
+
+
+                
+
+                insert_query = f"""SELECT * FROM public."Asiya_identity" WHERE current_motive_id = '{id}' """
+                cursor.execute(insert_query)
+                connection.commit()
+                        
+            
+            except Exception as _ex:
+                print('Ошибка в ходе чтения ДБ. [Identity [Get - by_motive_id]]', _ex)
+            
+            finally:
+                if connection:
+                    connection.close()
+                    print('Дб отключена')
+
+
+
+#Motives 
+class Motives:
+
+    class New:
+        def will(self,content):
+            try:
+            
+                connection = psycopg2.connect(
+                
+                        host = host,
+                        user = user,
+                        password = password,
+                        database = db_name
+                        )
+                
+                cursor = connection.cursor()
+
+
+                reg_date = str(date.today())
+
+                insert_query = f"""INSERT INTO public."Asiya_motives" (
+                                    aspiration, reg_date) VALUES (
+                                    '{content}'::text, '{reg_date}'::date)
+                                     returning id;"""
+                cursor.execute(insert_query)
+                connection.commit()
+                        
+            
+            except Exception as _ex:
+                print('Ошибка в ходе чтения ДБ. [Motives [New - will]]', _ex)
+            
+            finally:
+                if connection:
+                    connection.close()
+                    print('Дб отключена')
+
+    
+    class Get:
+        def all_wishes(self):
+            
+            try:
+            
+                connection = psycopg2.connect(
+                
+                        host = host,
+                        user = user,
+                        password = password,
+                        database = db_name
+                        )
+                
+                cursor = connection.cursor()
+
+
+                
+
+                insert_query = f"""SELECT * FROM public."Asiya_motives" """
+                cursor.execute(insert_query)
+                connection.commit()
+                        
+            
+            except Exception as _ex:
+                print('Ошибка в ходе чтения ДБ. [Motives [Get - All_wishes]]', _ex)
+            
+            finally:
+                if connection:
+                    connection.close()
+                    print('Дб отключена')
+
+        def by_will_id(self,id):
+            
+            try:
+            
+                connection = psycopg2.connect(
+                
+                        host = host,
+                        user = user,
+                        password = password,
+                        database = db_name
+                        )
+                
+                cursor = connection.cursor()
+
+
+                
+
+                insert_query = f"""SELECT * FROM public."Asiya_motives" WHERE id = '{id}' """
+                cursor.execute(insert_query)
+                connection.commit()
+                        
+            
+            except Exception as _ex:
+                print('Ошибка в ходе чтения ДБ. [Motives [Get - by_will_id]]', _ex)
+            
+            finally:
+                if connection:
+                    connection.close()
+                    print('Дб отключена')
+
+        
+
+    class Forget:
+        pass
+
+#Like_Dislike
+class Like_Dislike:
+
+    class New:
+        def rate_subject(self,subject,relation):
+            """
+            Relation = Like\Neutral\Dislike
+            """
+            try:
+            
+                connection = psycopg2.connect(
+                
+                        host = host,
+                        user = user,
+                        password = password,
+                        database = db_name
+                        )
+                
+                cursor = connection.cursor()
+
+
+                reg_date = str(date.today())
+
+                insert_query = f"""INSERT INTO public."Asiya_like_dislike" (
+                                        subject, reg_date, rel_to) VALUES (
+                                        '{subject}'::text, '{reg_date}'::date, '{relation}'::character varying)
+                                         returning id;"""
+                cursor.execute(insert_query)
+                connection.commit()
+                        
+            
+            except Exception as _ex:
+                print('Ошибка в ходе чтения ДБ. [Like_Dislike [New - Rate_Subject]]', _ex)
+            
+            finally:
+                if connection:
+                    connection.close()
+                    print('Дб отключена')
+
+
+    class Get:
+        def all_Rates(self):
+            
+            try:
+            
+                connection = psycopg2.connect(
+                
+                        host = host,
+                        user = user,
+                        password = password,
+                        database = db_name
+                        )
+                
+                cursor = connection.cursor()
+
+
+                
+
+                select_query = f"""SELECT * FROM public."Asiya_like_dislike" """
+                cursor.execute(select_query)
+                connection.commit()
+                        
+            
+            except Exception as _ex:
+                print('Ошибка в ходе чтения ДБ. [Like_Dislike [Get - All_Rates]]', _ex)
+            
+            finally:
+                if connection:
+                    connection.close()
+                    print('Дб отключена')
+
+        def by_rate_id(self,id):
+            
+            try:
+            
+                connection = psycopg2.connect(
+                
+                        host = host,
+                        user = user,
+                        password = password,
+                        database = db_name
+                        )
+                
+                cursor = connection.cursor()
+
+
+                
+
+                select_query = f"""SELECT * FROM public."Asiya_like_dislike" WHERE id = '{id}' """
+                cursor.execute(select_query)
+                connection.commit()
+                        
+            
+            except Exception as _ex:
+                print('Ошибка в ходе чтения ДБ. [Like_Dislike [Get - by_rate_id]]', _ex)
+            
+            finally:
+                if connection:
+                    connection.close()
+                    print('Дб отключена')
+
+        def by_rate_type(self,relation):
+            """
+            Relation = Like/Dislike/Neutral
+            """
+            
+            try:
+            
+                connection = psycopg2.connect(
+                
+                        host = host,
+                        user = user,
+                        password = password,
+                        database = db_name
+                        )
+                
+                cursor = connection.cursor()
+
+
+                
+
+                select_query = f"""SELECT * FROM public."Asiya_like_dislike" WHERE rel_to = '{relation}' """
+                cursor.execute(select_query)
+                connection.commit()
+                        
+            
+            except Exception as _ex:
+                print('Ошибка в ходе чтения ДБ. [Like_Dislike [Get - by_rate_type]]', _ex)
+            
+            finally:
+                if connection:
+                    connection.close()
+                    print('Дб отключена')
+        
+
+    class Edit:
+        def change_rate_by_id(self,id,new_relation):
+            try:
+            
+                connection = psycopg2.connect(
+                
+                        host = host,
+                        user = user,
+                        password = password,
+                        database = db_name
+                        )
+                
+                cursor = connection.cursor()
+
+
+                
+
+                edit_query = f"""UPDATE public."Asiya_like_dislike" SET
+                                    rel_to = '{new_relation}'::character varying WHERE
+                                    id = '{id}';"""
+                cursor.execute(edit_query)
+                connection.commit()
+                        
+            
+            except Exception as _ex:
+                print('Ошибка в ходе чтения ДБ. [Like_Dislike [Edit - By id]]', _ex)
+            
+            finally:
+                if connection:
+                    connection.close()
+                    print('Дб отключена')
+
+
+        def change_rate_by_subject(self,subject,new_relation):
+            try:
+            
+                connection = psycopg2.connect(
+                
+                        host = host,
+                        user = user,
+                        password = password,
+                        database = db_name
+                        )
+                
+                cursor = connection.cursor()
+
+
+                
+
+                edit_query = f"""UPDATE public."Asiya_like_dislike" SET
+                                    rel_to = '{new_relation}'::character varying WHERE
+                                    subject = '{subject}';"""
+                cursor.execute(edit_query)
+                connection.commit()
+                        
+            
+            except Exception as _ex:
+                print('Ошибка в ходе чтения ДБ. [Like_Dislike [Edit - By subject]]', _ex)
+            
+            finally:
+                if connection:
+                    connection.close()
+                    print('Дб отключена')
+
+
+#Postulates
+class Postulates:
+
+    class New:
+        def make_postule(self,postul):
+            """
+            Relation = Like\Neutral\Dislike
+            """
+            try:
+            
+                connection = psycopg2.connect(
+                
+                        host = host,
+                        user = user,
+                        password = password,
+                        database = db_name
+                        )
+                
+                cursor = connection.cursor()
+
+
+                reg_date = str(date.today())
+
+                insert_query = f"""INSERT INTO public."Asiya_postulates" (
+                                        postul, reg_date) VALUES (
+                                        '{postul}'::text, '{reg_date}'::date)
+                                         returning id;"""
+                cursor.execute(insert_query)
+                connection.commit()
+                        
+            
+            except Exception as _ex:
+                print('Ошибка в ходе чтения ДБ. [Postulates [New - make_postule]]', _ex)
+            
+            finally:
+                if connection:
+                    connection.close()
+                    print('Дб отключена')
+
+
+    class Get:
+        def all_Postuls(self):
+            
+            try:
+            
+                connection = psycopg2.connect(
+                
+                        host = host,
+                        user = user,
+                        password = password,
+                        database = db_name
+                        )
+                
+                cursor = connection.cursor()
+
+
+                
+
+                select_query = f"""SELECT * FROM public."Asiya_postulates" """
+                cursor.execute(select_query)
+                connection.commit()
+                        
+            
+            except Exception as _ex:
+                print('Ошибка в ходе чтения ДБ. [Postulates [Get - All_Postuls]]', _ex)
+            
+            finally:
+                if connection:
+                    connection.close()
+                    print('Дб отключена')
+
+        def by_postul_id(self,id):
+            
+            try:
+            
+                connection = psycopg2.connect(
+                
+                        host = host,
+                        user = user,
+                        password = password,
+                        database = db_name
+                        )
+                
+                cursor = connection.cursor()
+
+
+                
+
+                select_query = f"""SELECT * FROM public."Asiya_postulates" WHERE id = '{id}' """
+                cursor.execute(select_query)
+                connection.commit()
+                        
+            
+            except Exception as _ex:
+                print('Ошибка в ходе чтения ДБ. [Postulates [Get - by_postul_id]]', _ex)
+            
+            finally:
+                if connection:
+                    connection.close()
+                    print('Дб отключена')
+
+        
+        
+
+    class Edit:
+        def change_postul_by_id(self,id,edited_postul):
+            try:
+            
+                connection = psycopg2.connect(
+                
+                        host = host,
+                        user = user,
+                        password = password,
+                        database = db_name
+                        )
+                
+                cursor = connection.cursor()
+
+
+                
+
+                edit_query = f"""UPDATE public."Asiya_postulates" SET
+                                    postul = '{edited_postul}'::character varying WHERE
+                                    id = '{id}';"""
+                cursor.execute(edit_query)
+                connection.commit()
+                        
+            
+            except Exception as _ex:
+                print('Ошибка в ходе чтения ДБ. [Postulates [Edit - By id]]', _ex)
+            
+            finally:
+                if connection:
+                    connection.close()
+                    print('Дб отключена')
 

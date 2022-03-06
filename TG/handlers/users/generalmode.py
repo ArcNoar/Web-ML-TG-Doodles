@@ -129,7 +129,8 @@ async def bot_echo(message: types.Message):
                         """
 
                         Emote_Get =  Emote_Reg.Get()
-                        emote_output =  Emote_Get.get_by_id(2)
+                        #emote_output =  Emote_Get.get_by_id(2)
+                        emote_output =  Emote_Get.get_by_code('-СТРАХ-|Cnf')
                         print(emote_output)
                     except Exception as _ex:
                         print('Возниклы траблы.',_ex)
