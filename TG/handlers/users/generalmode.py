@@ -9,6 +9,7 @@ from Functional.EMR_Func import Emote_Temp
 from TG.sql.Person_Mem import Person_M
 from TG.sql.Verbal_Mem import VM_Word , VM_Sentence , VM_Context
 from TG.sql.Soul_Mem import Emote_Reg
+from TG.sql.Fundametal_Mem import Ego
 
 
 
@@ -135,6 +136,14 @@ async def bot_echo(message: types.Message):
                     except Exception as _ex:
                         print('Возниклы траблы.',_ex)
 
+                elif message.text == 'Эго':
+                    try:
+                        
+                        Ego_Pull = Ego.Get()
+                        Ego_Pull.personal()
+
+                    except Exception as _ex:
+                        print('Ouch!',_ex)
 
                 else:
                     try:

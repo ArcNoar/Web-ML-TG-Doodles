@@ -561,7 +561,7 @@ class Motives:
 
                 insert_query = f"""SELECT * FROM public."Asiya_motives" """
                 cursor.execute(insert_query)
-                connection.commit()
+                #connection.commit()
                         
             
             except Exception as _ex:
@@ -613,7 +613,7 @@ class Like_Dislike:
     class New:
         def rate_subject(self,subject,relation):
             """
-            Relation = Like\Neutral\Dislike
+            Relation = Like / Neutral / Dislike
             """
             try:
             
@@ -667,7 +667,19 @@ class Like_Dislike:
 
                 select_query = f"""SELECT * FROM public."Asiya_like_dislike" """
                 cursor.execute(select_query)
-                connection.commit()
+                raw_data = cursor.fetchall()
+
+                pulled_data = []
+                for rate in raw_data:
+                    former = {}
+                    former['ID'] = rate[0]
+                    former['Subject'] = rate[1]
+                    former['Date'] = rate[2]
+                    former['Rate_Type'] = rate[3]
+                    pulled_data.append(former)
+
+                return pulled_data
+                #connection.commit()
                         
             
             except Exception as _ex:
@@ -697,7 +709,61 @@ class Like_Dislike:
 
                 select_query = f"""SELECT * FROM public."Asiya_like_dislike" WHERE id = '{id}' """
                 cursor.execute(select_query)
-                connection.commit()
+                raw_data = cursor.fetchone()
+
+                pulled_data = []
+                
+                former = {}
+                former['ID'] = raw_data[0]
+                former['Subject'] = raw_data[1]
+                former['Date'] = raw_data[2]
+                former['Rate_Type'] = raw_data[3]
+                pulled_data.append(former)
+
+                return pulled_data
+                #connection.commit()
+                        
+            
+            except Exception as _ex:
+                print('Ошибка в ходе чтения ДБ. [Like_Dislike [Get - by_rate_id]]', _ex)
+            
+            finally:
+                if connection:
+                    connection.close()
+                    print('Дб отключена')
+
+        def by_subject(self,subject):
+            
+            try:
+            
+                connection = psycopg2.connect(
+                
+                        host = host,
+                        user = user,
+                        password = password,
+                        database = db_name
+                        )
+                
+                cursor = connection.cursor()
+
+
+                
+
+                select_query = f"""SELECT * FROM public."Asiya_like_dislike" WHERE subject = '{subject}' """
+                cursor.execute(select_query)
+                raw_data = cursor.fetchone()
+
+                pulled_data = []
+                
+                former = {}
+                former['ID'] = raw_data[0]
+                former['Subject'] = raw_data[1]
+                former['Date'] = raw_data[2]
+                former['Rate_Type'] = raw_data[3]
+                pulled_data.append(former)
+
+                return pulled_data
+                #connection.commit()
                         
             
             except Exception as _ex:
@@ -710,7 +776,7 @@ class Like_Dislike:
 
         def by_rate_type(self,relation):
             """
-            Relation = Like/Dislike/Neutral
+            Relation = Like Dislike Neutral
             """
             
             try:
@@ -730,7 +796,19 @@ class Like_Dislike:
 
                 select_query = f"""SELECT * FROM public."Asiya_like_dislike" WHERE rel_to = '{relation}' """
                 cursor.execute(select_query)
-                connection.commit()
+                raw_data = cursor.fetchall()
+
+                pulled_data = []
+                for rate in raw_data:
+                    former = {}
+                    former['ID'] = rate[0]
+                    former['Subject'] = rate[1]
+                    former['Date'] = rate[2]
+                    former['Rate_Type'] = rate[3]
+                    pulled_data.append(former)
+
+                return pulled_data
+                #connection.commit()
                         
             
             except Exception as _ex:
@@ -813,7 +891,7 @@ class Postulates:
     class New:
         def make_postule(self,postul):
             """
-            Relation = Like\Neutral\Dislike
+            Relation = Like / Neutral / Dislike
             """
             try:
             
@@ -867,7 +945,7 @@ class Postulates:
 
                 select_query = f"""SELECT * FROM public."Asiya_postulates" """
                 cursor.execute(select_query)
-                connection.commit()
+                #connection.commit()
                         
             
             except Exception as _ex:
@@ -897,7 +975,7 @@ class Postulates:
 
                 select_query = f"""SELECT * FROM public."Asiya_postulates" WHERE id = '{id}' """
                 cursor.execute(select_query)
-                connection.commit()
+                #connection.commit()
                         
             
             except Exception as _ex:
