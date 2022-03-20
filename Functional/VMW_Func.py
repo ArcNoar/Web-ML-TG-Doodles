@@ -3,19 +3,33 @@
 
 class word_temp:
     """
-        Word (Слово) = None
-        Polysemantic (Многозначное) = false
-        Constant_W (Константа) = false
+        Word_Template = {
+            'Слово' : None ,
+            'Многозначность' : 'false',
+            'Константность' : 'false',
+            'Нарекающее' : 'false',
+            
+            'Тип' : 'NOUN',
+            'Тип_2' : 'NONE_T',
 
-        Nomination (Наименование) = false
-        Word_Type (Тип) = NOUN
-        Word_Gender (Род) = Neutral
+            'Род' : 'NONE',
+            'Множественное' : 'false',
+            'Падеж' : 'None',
+            'Собственное' : 'false'
+            'Ст_Сравнения' : 'None',
+            'Наклонение' : 'None',
+            'Одушевленность' : 'None',
+            'Время' : 'None',
 
-        Word_Des (Значение) = Смысл слова не известен.
-        Associated_W_id = None
-        Group_Of_Word_id = None
 
-        Synonym_W_id = None
+            'Значение' : 'Смысл слова не известен.',
+            'Ассоциация' : 'NULL',
+            'Синоним' : 'NULL',
+            'Антоним' : 'NULL',
+            'Категория' : 'NULL',
+
+
+            }
         
     """
     def create(self):
@@ -24,12 +38,26 @@ class word_temp:
             'Многозначность' : 'false',
             'Константность' : 'false',
             'Нарекающее' : 'false',
+            
             'Тип' : 'NOUN',
+            'Тип_2' : 'NONE_T',
+
             'Род' : 'NONE',
+            'Множественное' : 'false',
+            'Падеж' : 'None',
+            'Собственное' : 'false',
+            'Ст_Сравнения' : 'None',
+            'Наклонение' : 'None',
+            'Одушевленность' : 'None',
+            'Время' : 'None',
+
+
             'Значение' : 'Смысл слова не известен.',
             'Ассоциация' : 'NULL',
             'Синоним' : 'NULL',
+            'Антоним' : 'NULL',
             'Категория' : 'NULL',
+
 
             }
         return Word_Template
@@ -68,6 +96,16 @@ def WTD_single(pulled_word):
                 'Ассоциация' : data_list[0][8],
                 'Синоним' : data_list[0][9],
                 'Категория' : data_list[0][10],
+                'Падеж' : data_list[0][11],
+                'Собственное' : data_list[0][12],
+                'Антоним' : data_list[0][13],
+                'Степень Сравнения' : data_list[0][14],
+                'Наклонение' : data_list[0][15],
+                'Множественное' : data_list[0][16],
+                'Одушевленность' : data_list[0][17],
+                'Время' : data_list[0][18],
+                'Тип_2' : data_list[0][19],
+                
                 
 
                 }
@@ -101,6 +139,15 @@ def WTD_many(word_list):
                     'Ассоциация' : data_list[8],
                     'Синоним' : data_list[9],
                     'Категория' : data_list[10],
+                    'Падеж' : data_list[11],
+                    'Собственное' : data_list[12],
+                    'Антоним' : data_list[13],
+                    'Степень Сравнения' : data_list[14],
+                    'Наклонение' : data_list[15],
+                    'Множественное' : data_list[16],
+                    'Одушевленность' : data_list[17],
+                    'Время' : data_list[18],
+                    'Тип_2' : data_list[19],
                     
 
                     }

@@ -335,31 +335,135 @@ class VM_Word(models.Model): # Память слов.
 
     """
     word = models.CharField(max_length = 100,db_index=True,unique=True,verbose_name='Слово')
+
     polysemantic = models.BooleanField(default=False,verbose_name='Многозначность')
     constant_w = models.BooleanField(default=False,verbose_name='Константа')
     nomination = models.BooleanField(default=False,verbose_name='Слово - Наименование?')
+    proper_noun = models.BooleanField(default=False,verbose_name='Имя собственное ?')
+
+
     associate_w = models.ForeignKey('VM_Word',blank=True,null=True,on_delete=models.SET_NULL,
                                     related_name='AW',verbose_name='Слово Ассоциация')
     synonym_w = models.ForeignKey('VM_Word',blank=True,null=True,on_delete=models.SET_NULL,
                                   related_name='SynW',verbose_name='Слово Синоним')
+
+    antonym_w = models.ForeignKey('VM_Word',blank=True,null=True,on_delete=models.SET_NULL,
+                                  related_name='AntW',verbose_name='Слово Антоним')
     
     group_of_word = models.ForeignKey('GOW',blank=True,null=True,on_delete=models.SET_NULL,
                                       related_name='GOW',verbose_name='Группировка Слов')
+
+
+    class W_Numer(models.TextChoices): # Число
+        PLURAL = 'PLURAL', 'Множественное'
+        SINGULAR = 'SINGULAR', 'Единственное'
+        
+        NONE_N = 'None', 'Не исчисляемо'
+
+
+
+    w_mult = models.CharField(max_length = 16,verbose_name='Число',choices=W_Numer.choices,default=W_Numer.NONE_N)
+
+
+    class W_Spec(models.TextChoices): # Вид
+        PERFECT = 'PERFECT', 'Совершенный'
+        IMPERFECT = 'IMPERFECT', 'Несовершенный'
+        
+        NONE_N = 'None', 'Нет Вида.'
+
+
+
+    w_spesh = models.CharField(max_length = 16,verbose_name='Вид',choices=W_Spec.choices,default=W_Spec.NONE_N)
+    """
+    Это касается и других морфологических признаков, это уже дрочильная, так что ну его нахуй, если они явно мне пригодятся, тогда ок. А так
+    в пизду.
+    #Краткая\Полная Форма? (НУ В ПИЗДУ)
+    #Возвратность (НУ В ПИЗДУ)
+    """
+    class W_Soul(models.TextChoices): # Душа
+        ANIMA = 'ANIMA', 'Одушевленный'
+        INANIMA = 'INANIMA', 'Неодушевленный'
+        
+        NONE_N = 'None', 'Ничего.'
+
+
+
+    w_spesh = models.CharField(max_length = 16,verbose_name='Одушевленность',choices=W_Soul.choices,default=W_Soul.NONE_N)
+
+
+    class W_Time(models.TextChoices): # Число
+        PRESENT = 'PLURAL', 'Настоящее'
+        PAST = 'SINGULAR', 'Прошлое'
+        FUTURE = 'FUTURE', 'Будущее'
+        
+        NONE_N = 'None', 'Нет времени.'
+
+
+
+    w_time = models.CharField(max_length = 16,verbose_name='Время',choices=W_Time.choices,default=W_Time.NONE_N)
+
+    class W_Inclin(models.TextChoices): # Наклонение (Глагол)
+        INDIC = 'INDIC', 'Индикатив'
+        SUBINDIC = 'SUBINDIC', 'Субьюнктив'
+        IMPER = 'IMPER', 'Императив'
+        
+        NONE_N = 'None', 'Нет Наклонения'
+
+
+
+    w_inclin = models.CharField(max_length = 16,verbose_name='Наклонение',choices=W_Inclin.choices,default=W_Inclin.NONE_N)
+
+    class W_Comparative(models.TextChoices): # Степень сравнения (Прилагательное)
+        POSIT = 'POSIT', 'Положительная'
+        COMPAR = 'COMPAR', 'Сравнительная'
+        SUPERIOR = 'SUPER', 'Превосходная'
+        
+        NONE_N = 'None', 'Нет степени.'
+
+
+
+    w_compar = models.CharField(max_length = 16,verbose_name='Степень Сравнения',choices=W_Comparative.choices,default=W_Comparative.NONE_N)
+
+
+
+    class WT_Case(models.TextChoices): # Подкласс типа слова
+        IMP = 'IMP', 'Именительный'
+        RP = 'RP', 'Родительный'
+        DP = 'DP', 'Дательный'
+        VP = 'VP', 'Винительный'
+        TP = 'TP', 'Творительный'
+        PP = 'PP', 'Предложный'
+        NoneP = 'None', 'Без падежа'
+
+
+
+    word_case = models.CharField(max_length = 16,verbose_name='Падеж',choices=WT_Case.choices,default=WT_Case.NoneP)
    
     class WT_Chose(models.TextChoices): # Подкласс типа слова
-        ACTION = 'Motion', 'Глагол'
-        ADJECTIVE = 'Descriptor', 'Прилагательное'
+        VERB = 'VERB', 'Глагол'
+        ADJECTIVE = 'ADJECTIVE', 'Прилагательное'
         NOUN = 'NOUN', 'Существительное'
-        STATE = 'STATE', 'Состояние'
+        ADVERB = 'STATE', 'Наречие'
         NOMIN = 'NOMIN', 'Местоимение'
-        SOUND = 'SOUND', 'Звук'
+        INTER = 'INTER', 'Междометие'
+        PRICH = 'PRICH', 'Причастие'
+        DEPRICH = 'DEPRICH', 'Деепричастие'
+        UNION = 'UNION', 'Союз'
+        PREPOS = 'PREPOS', 'Предлог'
+        NUMIN = 'NUMIN', 'Числительное'
+        PREDICAT = 'PREDICAT', 'Предикатив'
+
         PUNKT = 'PUNCTATION', 'Пунктуация'
         NUM = 'NUM', 'Число'
-        UNION = 'UNION', 'Союз'
+        SYMBOL = 'SYMBOL', 'Символ'
+
+        NONE_T = 'NONE_T', 'Не имеется'
 
 
 
-    word_type = models.CharField(max_length = 16,verbose_name='Тип слова',choices=WT_Chose.choices,default=WT_Chose.NOUN)
+    word_type = models.CharField(max_length = 20,verbose_name='Часть Речи',choices=WT_Chose.choices,default=WT_Chose.NOUN)
+
+    wt_secondary = models.CharField(max_length = 20,verbose_name='Адаптивная часть речи',choices=WT_Chose.choices,default=WT_Chose.NONE_T)
 
 
     class WGen_Chose(models.TextChoices): # Подкласс рода слова

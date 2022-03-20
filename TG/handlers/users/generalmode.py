@@ -42,9 +42,11 @@ emote_shell = emote_template.create()
 
 non_duple_counter = 0
 
+LOG_STATE = True
+
 @dp.message_handler(state=None)
 async def bot_echo(message: types.Message):
-    global non_duple_counter
+    global non_duple_counter, LOG_STATE
 
     current_user = message.from_user
     Noah = 340981880
@@ -63,6 +65,8 @@ async def bot_echo(message: types.Message):
     VM_Edit = VM_Word.Edit()
 
     Emote_Func = Emote_Reg()
+
+    
     
 
     
@@ -73,13 +77,23 @@ async def bot_echo(message: types.Message):
 
                 await dp.bot.send_message(current_user.id, f'Приветствую {current_user.first_name}.')
                 non_duple_counter += 1
-                
+             
             if current_user.id == Noah:
                 if message.text == 'Я состоятельный' :
                     await message.answer('К сожалению я не могу определить вашего состояния')
                 
                 elif message.text == 'Мои Данные':
                     await message.answer(actual_UD)
+                
+                elif message.text == 'Включить Логи':
+                    
+                    LOG_STATE = True
+                    await message.answer('Лог сообщений включен.')
+
+                elif message.text == 'Отключить Логи':
+                    LOG_STATE = False
+                    await message.answer('Лог сообщений выключить.')
+
                 elif message.text == 'Го дружить.':
                     await message.answer(f'Теперь мы друзья?')
                     P_Editor.reputation('friendship',4,actual_UD)
@@ -150,7 +164,7 @@ async def bot_echo(message: types.Message):
                         bag_of_word = (message.text).split(' ')
                         #print(bag_of_word)
                         for word in bag_of_word: 
-                            word_params['Слово'] = word 
+                            word_params['Слово'] = word.lower()
                             #print(word_params)
                             
                             
@@ -162,7 +176,8 @@ async def bot_echo(message: types.Message):
 
 
                     try:
-                        sent_config['Предложение'] = message.text
+                        sent_config['Предложение'] = (message.text).lower()
+                        #print(sent_config['Предложение'])
                         sent_config['От кого'] = current_user.id
                         Sentence_Func = VM_Sentence.New(sent_config)
                         Sentence_Func.sent_reg()
@@ -189,6 +204,7 @@ async def bot_echo(message: types.Message):
                             except Exception as _ex:
                                 #print('ОШИБКА БРАТАН. СЕНТЕНС КОНСТРУКТОР ХУЙНЯ',_ex)
                                 if exception_counter < 10:
+                                    exception_counter += 1
                                     continue
                                 else:
                                     break
@@ -200,7 +216,113 @@ async def bot_echo(message: types.Message):
                     
 
             else:
-                pass
+                
+                
+                if LOG_STATE == True:
+                    await dp.bot.send_message(Noah, f"Пользователь :{current_user.first_name} ({current_user.id}) \n написал : {message.text}")
+                else:
+                    pass
+
+                if message.text == 'Я состоятельный' :
+                    await message.answer('К сожалению я не могу определить вашего состояния')
+                
+                elif message.text == 'Мои Данные':
+                    await message.answer(actual_UD)
+                elif message.text == 'Го дружить.':
+                    await message.answer(f'Теперь мы друзья?')
+                    P_Editor.reputation('friendship',4,actual_UD)
+                elif message.text == 'Топ Личностей.' :
+                    await message.answer(f'Я пытаюсь но... \n по моему нихуя... {P_Get.top_persons()}')
+                elif (message.text).startswith('Распознай предложение : ') == True:
+                    sentence_to_proc = (message.text)[24:]
+                    bag_of_word = (sentence_to_proc).split(' ')
+                    try:
+                        for word in bag_of_word:
+                            VM_Get.one_word(word)
+                        print('Вроде распознала')
+                    except Exception as _ex:
+                        print('Либо нет такого слова, либо какая то хуйня. [SENTENCE]', _ex)
+                elif (message.text).startswith('Слово по номеру : ') == True:
+                    
+                    
+                    wordId_to_proc = (message.text)[19:]
+                    
+                    try:
+                        
+                        pulled_word = VM_Get.word_by_id(wordId_to_proc)
+                        print(f"Ты о [{pulled_word['Слово']}] ?")
+                        await message.answer(f"""Ты о "{pulled_word['Слово']}" ?""")
+                    except Exception as _ex:
+                        print('Либо нет такого слова, либо какая то хуйня. [WORD_BY_ID]', _ex)
+                    
+                elif message.text == 'Обработчик говна':
+                    try:
+                        Sentence_Get = VM_Sentence.Get()
+                        result = Sentence_Get.sentence_data('Сука')
+                        await message.answer(result)
+                        #print(result)
+                    except Exception as _ex:
+                        print('-Не братан, ты хуйню опять сделал, ошибка в обработчике говна',_ex)
+
+                
+
+                
+
+                else:
+                    try:
+                        bag_of_word = (message.text).split(' ')
+                        #print(bag_of_word)
+                        for word in bag_of_word: 
+                            word_params['Слово'] = word.lower()
+                            #print(word_params)
+                            
+                            
+                            Word_add = Word_func.New(word_params)
+                            Word_add.learn_word()
+
+                    except Exception as _ex:
+                        print('Запоминание слов пошло пиздй братанчик.')
+
+
+                    try:
+                        sent_config['Предложение'] = (message.text).lower()
+                        #print(sent_config['Предложение'])
+                        sent_config['От кого'] = current_user.id
+                        Sentence_Func = VM_Sentence.New(sent_config)
+                        Sentence_Func.sent_reg()
+                    except Exception as _ex: 
+                        print('Регистрация предложения провалилась. Ну или просто коряво прошла. Я хз ес чесна.',_ex)
+
+
+                    
+                    try:
+                        
+                        sentence_lenght = randint(2,10)
+
+                        sentence_parts = []
+                        sent = ''
+                        exception_counter = 0
+                        limiter = 0
+                        while limiter < sentence_lenght:
+                            try:
+                                max_ID = VM_Get.max_id()
+                                word_ident = str(randint(1,int(max_ID['ID'])))
+                                pulled_word = VM_Get.word_by_id(word_ident)
+                                sentence_parts.append(pulled_word['Слово'])
+                                limiter += 1
+                            except Exception as _ex:
+                                #print('ОШИБКА БРАТАН. СЕНТЕНС КОНСТРУКТОР ХУЙНЯ',_ex)
+                                if exception_counter < 10:
+                                    exception_counter += 1
+                                    continue
+                                else:
+                                    break
+
+                        sent = ' '.join(sentence_parts)
+                        await message.answer(sent)
+                    except Exception as _ex:
+                        print('При попытке спиздануть что то, возникла ошибка',_ex)
+                
 
         else:
             await dp.bot.send_message(Noah,'Бред какой. По пользователю нет совпадений, но он есть???')
@@ -209,6 +331,7 @@ async def bot_echo(message: types.Message):
     except Exception as _ex:
         #
         print(f'[{_ex}] \n - Несуществующий пользователь? Проводим запоминание... ')
+        await message.answer('Незнакомец? Подожди секунду, надо запомнить тебя...')
         try:
             if current_user.id == Noah:
                 user_data['Внешность'] = 'photo/Noah_Photo/Noah.jpg' 
