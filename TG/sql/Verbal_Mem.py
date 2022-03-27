@@ -23,13 +23,16 @@ class VM_Word:
             self.W_Type_2 = template['Тип_2']
 
             self.Word_Gender = template['Род']
-            self.Multi = template['Множественное']
+            self.Multi = template['Число']
             self.W_Case = template['Падеж']
             self.Proper = template['Собственное']
             self.W_Compars = template['Ст_Сравнения']
             self.W_Inclin = template['Наклонение']
-            self.W_Spesh = template['Одушевленность']
+            self.W_Spesh = template['Вид']
+            self.W_Soul = template['Одушевленность']
             self.W_Time = template['Время']
+            self.W_Declin = template['Склонение']
+            self.W_Face = template['Лицо']
 
             self.Word_Des = template['Значение']
             self.Associated_W_id = template['Ассоциация']
@@ -58,13 +61,13 @@ class VM_Word:
                 second_query = """INSERT INTO public."Asiya_vm_word" (
                                     word, polysemantic, constant_w, nomination, word_type, word_gender,
                                    word_des, associate_w_id, group_of_word_id, synonym_w_id, w_mult, word_case,
-                                  proper_noun,antonym_w_id,w_compar,w_inclin,w_spesh,w_time,wt_secondary) VALUES """ + f""" (
+                                  proper_noun,antonym_w_id,w_compar,w_inclin,w_spesh,w_time,wt_secondary,w_soul, w_face,w_declin) VALUES """ + f""" (
                                     '{self.Word}'::character varying, {self.Polysemantic}::boolean, {self.Constant_W}::boolean, {self.Nomination}::boolean, 
                                     '{self.Word_Type}'::character varying, '{self.Word_Gender}'::character varying, '{self.Word_Des}'::text, 
-                                    {self.Associated_W_id}::bigint, {self.Group_Of_Word_id}::bigint, {self.Synonym_W_id}::bigint,{self.Multi}::boolean,
+                                    {self.Associated_W_id}::bigint, {self.Group_Of_Word_id}::bigint, {self.Synonym_W_id}::bigint,'{self.Multi}'::boolean,
                                     '{self.W_Case}'::character varying, {self.Proper}::boolean,{self.Antonym_W_id}::bigint,'{self.W_Compars}'::character varying,
                                     '{self.W_Inclin}'::character varying,'{self.W_Spesh}'::character varying,'{self.W_Time}'::character varying,
-                                    '{self.W_Type_2}'::character varying)
+                                    '{self.W_Type_2}'::character varying,'{self.W_Soul}'::character varying, '{self.W_Face}'::character varying,'{self.W_Declin}'::character varying)
                                      returning word;"""
                 cursor.execute(second_query)
                 #СУКА КТО КОМИТ СПИЗДИЛ

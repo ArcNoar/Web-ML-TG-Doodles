@@ -388,7 +388,7 @@ class VM_Word(models.Model): # Память слов.
 
 
 
-    w_spesh = models.CharField(max_length = 16,verbose_name='Одушевленность',choices=W_Soul.choices,default=W_Soul.NONE_N)
+    w_soul = models.CharField(max_length = 16,verbose_name='Одушевленность',choices=W_Soul.choices,default=W_Soul.NONE_N)
 
 
     class W_Time(models.TextChoices): # Число
@@ -402,6 +402,15 @@ class VM_Word(models.Model): # Память слов.
 
     w_time = models.CharField(max_length = 16,verbose_name='Время',choices=W_Time.choices,default=W_Time.NONE_N)
 
+    class W_Face(models.TextChoices): # Число
+        FIRST = 'FIRST', 'Первое'
+        SECOND = 'SECOND', 'Второе'
+        THIRD = 'THIRD', 'Третье'
+        
+        NONE_N = 'None', 'Нет Лица.'
+    
+    w_face = models.CharField(max_length = 16,verbose_name='Лицо.',choices=W_Face.choices,default=W_Face.NONE_N)
+
     class W_Inclin(models.TextChoices): # Наклонение (Глагол)
         INDIC = 'INDIC', 'Индикатив'
         SUBINDIC = 'SUBINDIC', 'Субьюнктив'
@@ -412,6 +421,17 @@ class VM_Word(models.Model): # Память слов.
 
 
     w_inclin = models.CharField(max_length = 16,verbose_name='Наклонение',choices=W_Inclin.choices,default=W_Inclin.NONE_N)
+
+    class W_Declin(models.TextChoices): # СКЛОНЕНИЕ
+        F_DLN = 'FIRST', 'Первое'
+        S_DLN = 'SECOND', 'Второе'
+        T_DLN = 'THIRD', 'Третье'
+        
+        NONE_N = 'None', 'Нет склонения'
+
+
+
+    w_declin = models.CharField(max_length = 16,verbose_name='Склонение',choices=W_Declin.choices,default=W_Declin.NONE_N)
 
     class W_Comparative(models.TextChoices): # Степень сравнения (Прилагательное)
         POSIT = 'POSIT', 'Положительная'
@@ -456,6 +476,7 @@ class VM_Word(models.Model): # Память слов.
         PUNKT = 'PUNCTATION', 'Пунктуация'
         NUM = 'NUM', 'Число'
         SYMBOL = 'SYMBOL', 'Символ'
+        SMILE = 'SMILE', 'Смайл'
 
         NONE_T = 'NONE_T', 'Не имеется'
 
@@ -523,7 +544,7 @@ class Sentence_Memory(models.Model): # Память содержащая в се
     short_mean = models.TextField(blank=True,null=True,verbose_name='Краткая суть')
 
     def __str__(self):
-        return self.sent_dech
+        return self.sentence
 
     class Meta:
         verbose_name_plural = 'Постоянная Память - Предложения'
