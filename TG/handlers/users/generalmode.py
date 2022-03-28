@@ -6,12 +6,12 @@ from Functional.VMW_Func import word_temp
 from Functional.VMS_Func import sentence_temp
 from Functional.EMR_Func import Emote_Temp
 
-from Functional.GRAM_Pars import gramma_fill
+
 
 from TG.sql.Person_Mem import Person_M
 from TG.sql.Verbal_Mem import VM_Word , VM_Sentence , VM_Context
 from TG.sql.Soul_Mem import Emote_Reg
-from TG.sql.Fundametal_Mem import Ego
+
 
 
 
@@ -46,51 +46,10 @@ non_duple_counter = 0
 
 LOG_STATE = False
 IGNORE_USER = True
-TEST_MOD = True
+TEST_MOD = False
 
 if TEST_MOD == True:
-    try:
-        VM_Get = VM_Word.Get()
-        """
-        sentence_lenght = randint(1,10)
-
-        word_list = []
-        
-        exception_counter = 0
-        limiter = 0
-        while limiter < sentence_lenght:
-            try:
-                max_ID = VM_Get.max_id()
-                word_ident = str(randint(1,int(max_ID['ID'])))
-                pulled_word = VM_Get.word_by_id(word_ident)
-                word_list.append(pulled_word)
-                limiter += 1
-            except Exception as _ex:
-                #print('ОШИБКА БРАТАН. СЕНТЕНС КОНСТРУКТОР ХУЙНЯ',_ex)
-                if exception_counter < 10:
-                    exception_counter += 1
-                    continue
-                else:
-                    break
-                            #print(result)
-        """
-        limiter = True
-        while limiter:
-            try:
-                r_id = randint(1, 1146)
-                pulled_word = VM_Get.word_by_id(r_id)
-
-        
-                result = gramma_fill(pulled_word)
-                limiter = False
-            except Exception as _ex:
-                print(f'Ой ну понеслась дерьмина, мы попытались запулить слово под айдишником {r_id} и получили "{pulled_word}"',_ex)
-            
-    except Exception as _ex:
-        #
-
-        print('-Не братан, ты хуйню опять сделал, тест провален по причине пидорас и вот этой мелочи :',_ex)
-        #print(word_list)
+    pass
 
 @dp.message_handler(state=None)
 async def bot_echo(message: types.Message):
@@ -152,105 +111,17 @@ async def bot_echo(message: types.Message):
                     await message.answer('Лог сообщений выключить.')
 
 
-                elif (message.text).lower() == 'го дружить.':
-                    await message.answer(f'Теперь мы друзья?')
-                    P_Editor.reputation('friendship',4,actual_UD)
-                elif message.text == 'топ личностей.' :
-                    await message.answer(f'Я пытаюсь но... \n по моему нихуя... {P_Get.top_persons()}')
-                elif (message.text).startswith('распознай предложение : ') == True:
-                    sentence_to_proc = (message.text)[24:]
-                    bag_of_word = (sentence_to_proc).split(' ')
-                    try:
-                        for word in bag_of_word:
-                            VM_Get.one_word(word)
-                        print('Вроде распознала')
-                    except Exception as _ex:
-                        print('Либо нет такого слова, либо какая то хуйня. [SENTENCE]', _ex)
-                elif (message.text).startswith('Слово по номеру : ') == True:
-                    
-                    
-                    wordId_to_proc = (message.text)[19:]
-                    
-                    try:
-                        
-                        pulled_word = VM_Get.word_by_id(wordId_to_proc)
-                        print(f"Ты о [{pulled_word['Слово']}] ?")
-                        await message.answer(f"""Ты о "{pulled_word['Слово']}" ?""")
-                    except Exception as _ex:
-                        print('Либо нет такого слова, либо какая то хуйня. [WORD_BY_ID]', _ex)
-                    
-                elif (message.text).lower() == 'обработчик говна':
-                    try:
-                        """
-                        sentence_lenght = randint(1,10)
-
-                        word_list = []
-                        
-                        exception_counter = 0
-                        limiter = 0
-                        while limiter < sentence_lenght:
-                            try:
-                                max_ID = VM_Get.max_id()
-                                word_ident = str(randint(1,int(max_ID['ID'])))
-                                pulled_word = VM_Get.word_by_id(word_ident)
-                                word_list.append(pulled_word)
-                                limiter += 1
-                            except Exception as _ex:
-                                #print('ОШИБКА БРАТАН. СЕНТЕНС КОНСТРУКТОР ХУЙНЯ',_ex)
-                                if exception_counter < 10:
-                                    exception_counter += 1
-                                    continue
-                                else:
-                                    break
-                                            #print(result)
-                        """
-                        pulled_word = VM_Get.word_by_id(32)
-
-                        
-                        result = gramma_fill(pulled_word)
-                            
-                    except Exception as _ex:
-                        #
-
-                        print('-Не братан, ты хуйню опять сделал, ошибка в обработчике говна',_ex)
-                        #print(word_list)
-
-                elif (message.text).lower() == 'регистратор эмоций.':
-                    try:
-                        """
-                        emote_shell['Сущность-Триггер'] = current_user.id
-                        emote_shell['Тип Триггера'] = 'Creature'
-
-                        emote_shell['Эмоция']['СТРАХ']['Замешательство'] = 1.7
-
-                        Emote_Add = Emote_Func.New(emote_shell)
-                        Emote_Add.emote_reg()
-                        await message.answer('Эмоция занесена. Производим вывод в консоль.')
-                        """
-
-                        Emote_Get =  Emote_Reg.Get()
-                        #emote_output =  Emote_Get.get_by_id(2)
-                        emote_output =  Emote_Get.get_by_code('-СТРАХ-|Cnf')
-                        print(emote_output)
-                    except Exception as _ex:
-                        print('Возниклы траблы.',_ex)
-
-                elif message.text == 'эго':
-                    try:
-                        
-                        Ego_Pull = Ego.Get()
-                        Ego_Pull.personal()
-
-                    except Exception as _ex:
-                        print('Ouch!',_ex)
 
                 else:
+                    await message.answer('Я тоже заебалась.')
+                    """
                     try:
+                        
                         bag_of_word = (message.text).split(' ')
                         #print(bag_of_word)
                         for word in bag_of_word: 
                             word_params['Слово'] = word.lower()
-                            print(parse(word.lower()))
+                            
                             #print(word_params)
                             
                             
@@ -299,7 +170,7 @@ async def bot_echo(message: types.Message):
                         await message.answer(sent)
                     except Exception as _ex:
                         print('При попытке спиздануть что то, возникла ошибка',_ex)
-                    
+                    """
 
             else:
                 if IGNORE_USER == False:
