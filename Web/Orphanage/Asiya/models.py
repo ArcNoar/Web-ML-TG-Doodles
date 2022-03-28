@@ -316,7 +316,7 @@ class Emote_Reg(models.Model): # Эмоциональное состояние
 
 # Секция Фундаментальной памяти. (Слова и Предложения)
 
-class VM_Alph(models.model):
+class VM_Alph(models.Model):
     construct = models.CharField(max_length = 5,db_index=True,unique=True,verbose_name='Конструкт')
 
     class A_Chose(models.TextChoices): # Подкласс типа слова
@@ -341,6 +341,14 @@ class VM_Alph(models.model):
     alph_t = models.CharField(max_length = 20,verbose_name='Тип',choices=A_Chose.choices,default=A_Chose.LETTER)
 
     alph_t2 = models.CharField(max_length = 20,verbose_name='Тип 2',choices=A_Chose.choices,default=A_Chose.NONE_T)
+
+    def __str__(self):
+        return "Конструкт: %s  ||  Тип: %s  " % (self.construct, self.alph_t)
+
+    class Meta:
+        verbose_name_plural = 'Постоянная Память - Конструкты'
+        verbose_name = 'Конструкт'
+        ordering = ['alph_t']
 
 
 class VM_Word(models.Model): # Память слов. 
@@ -388,7 +396,7 @@ class VM_Word(models.Model): # Память слов.
     
 
     def __str__(self):
-        return "Слово: %s  ||  Тип: %s  ||  Константа: (%s)" % (self.word, self.word_type )
+        return "Слово: %s  ||  Тип: %s  " % (self.word, self.word_type )
 
     class Meta:
         verbose_name_plural = 'Постоянная Память - Вербальная Память'
