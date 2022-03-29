@@ -7,7 +7,41 @@ from Functional.VMS_Func import STD_Single
 
 
 
+class VM_Alph:
+    class New:
+        def add_construct(self,cstr,type='LETTER',type_2 = 'NONE_T'):
+            try:
 
+                connection = psycopg2.connect(
+                
+                        host = host,
+                        user = user,
+                        password = password,
+                        database = db_name
+                        )
+                
+                cursor = connection.cursor()
+
+
+                second_query = f"""INSERT INTO public."Asiya_vm_alph" (
+                                    construct, alp_t, alp_t2) VALUES (
+                                    '{cstr}'::character varying, '{type}'::character varying, '{type_2}'::character varying)
+                                     returning id;"""
+                cursor.execute(second_query)
+                #СУКА КТО КОМИТ СПИЗДИЛ
+                connection.commit()
+                        
+            
+            except Exception as _ex:
+                print('Ошибка в ходе чтения ДБ.[[VM_ALPH-NEW[NEW_CONSTRUCT] ]', _ex)
+            
+            finally:
+                if connection:
+                    connection.close()
+                    #print('Дб отключена')
+
+    class Get:
+        pass
 
 # --Word Memory
 class VM_Word:
@@ -15,18 +49,11 @@ class VM_Word:
     class New:
         def __init__(self,template):
             self.Word = template['Слово']
-            self.Polysemantic = template['Многозначность']
-            self.Constant_W = template['Константность']
-
-            self.Nomination = template['Нарекающее']
             self.Word_Type = template['Тип']
-            self.Word_Gender = template['Род']
-
             self.Word_Des = template['Значение']
-            self.Associated_W_id = template['Ассоциация']
-            self.Group_Of_Word_id = template['Синоним']
-
-            self.Synonym_W_id = template['Категория']
+            self.Group_Id = template['Категория']
+            self.W_Code = template['Код']
+            
 
         def learn_word(self):
             #
@@ -44,12 +71,11 @@ class VM_Word:
                 cursor = connection.cursor()
 
 
-                second_query = """INSERT INTO public."Asiya_vm_word" (
-                                    word, polysemantic, constant_w, nomination, word_type, word_gender, word_des, associate_w_id, group_of_word_id, synonym_w_id) VALUES """ + f""" (
-                                    '{self.Word}'::character varying, {self.Polysemantic}::boolean, {self.Constant_W}::boolean, {self.Nomination}::boolean, 
-                                    '{self.Word_Type}'::character varying, '{self.Word_Gender}'::character varying, '{self.Word_Des}'::text, 
-                                    {self.Associated_W_id}::bigint, {self.Group_Of_Word_id}::bigint, {self.Synonym_W_id}::bigint)
-                                     returning word;"""
+                second_query = f"""INSERT INTO public."Asiya_vm_word" (
+                                word, word_type, word_des, group_of_word_id, word_code) VALUES (
+                                '{self.Word}'::character varying, '{self.Word_Type}'::character varying, '{self.Word_Des}'::text,
+                                 '{self.Group_Id}'::bigint, '??'::character varying)
+                                 returning id;"""
                 cursor.execute(second_query)
                 #СУКА КТО КОМИТ СПИЗДИЛ
                 connection.commit()
@@ -154,105 +180,7 @@ class VM_Word:
                     #print('Дб отключена')
         
     class Edit:
-        def poly_type(self,the_word,value):
-            """
-            value = true/false
-            """
-            try:
-
-                connection = psycopg2.connect(
-                
-                        host = host,
-                        user = user,
-                        password = password,
-                        database = db_name
-                        )
-                
-                cursor = connection.cursor()
-
-
-                Edit_query = f"""UPDATE public."Asiya_vm_word" SET
-                                polysemantic = {value}::boolean WHERE
-                                word = '{the_word}';"""
-                cursor.execute(Edit_query)
-                #СУКА КТО КОМИТ СПИЗДИЛ
-                connection.commit()
-                        
-            
-            except Exception as _ex:
-                print('Ошибка в ходе чтения ДБ[Word_Edit-PolyType]', _ex)
-            
-            finally:
-                if connection:
-                    connection.close()
-                    print('Дб отключена')
-
-        def const_type(self,the_word,value):
-            """
-            value = false/true
-            """
-            try:
-
-                connection = psycopg2.connect(
-                
-                        host = host,
-                        user = user,
-                        password = password,
-                        database = db_name
-                        )
-                
-                cursor = connection.cursor()
-
-
-                Edit_query = f"""UPDATE public."Asiya_vm_word" SET
-                                constant_w = {value}::boolean WHERE
-                                word = '{the_word}';"""
-                cursor.execute(Edit_query)
-                #СУКА КТО КОМИТ СПИЗДИЛ
-                connection.commit()
-                        
-            
-            except Exception as _ex:
-                print('Ошибка в ходе чтения ДБ[Word_Edit-ConstType]', _ex)
-            
-            finally:
-                if connection:
-                    connection.close()
-                    print('Дб отключена')
-
-        def nomin_type(self,the_word,value):
-            """
-            value = false/true
-            """
-            try:
-
-                connection = psycopg2.connect(
-                
-                        host = host,
-                        user = user,
-                        password = password,
-                        database = db_name
-                        )
-                
-                cursor = connection.cursor()
-
-
-                Edit_query = f"""UPDATE public."Asiya_vm_word" SET
-                                nomination = {value}::boolean WHERE
-                                word = '{the_word}';"""
-                cursor.execute(Edit_query)
-                #СУКА КТО КОМИТ СПИЗДИЛ
-                connection.commit()
-                        
-            
-            except Exception as _ex:
-                print('Ошибка в ходе чтения ДБ[Word_Edit-NominType]', _ex)
-            
-            finally:
-                if connection:
-                    connection.close()
-                    print('Дб отключена')
-
+       
         def word_type(self,the_word,type):
             """
             type:
@@ -295,42 +223,7 @@ class VM_Word:
                     connection.close()
                     print('Дб отключена')
 
-        def word_gender(self,the_word,gen):
-            """
-            gen :
-                male
-                female
-                neutral
-                NONE
-            """
-            try:
-
-                connection = psycopg2.connect(
-                
-                        host = host,
-                        user = user,
-                        password = password,
-                        database = db_name
-                        )
-                
-                cursor = connection.cursor()
-
-
-                Edit_query = f"""UPDATE public."Asiya_vm_word" SET
-                                    word_gender = '{gen}'::character varying WHERE
-                                    word = '{the_word}';"""
-                cursor.execute(Edit_query)
-                #СУКА КТО КОМИТ СПИЗДИЛ
-                connection.commit()
-                        
-            
-            except Exception as _ex:
-                print('Ошибка в ходе чтения ДБ[Word_Edit-Gender]', _ex)
-            
-            finally:
-                if connection:
-                    connection.close()
-                    print('Дб отключена')
+        
 
         def word_des(self,the_word,desc):
             try:
@@ -362,35 +255,6 @@ class VM_Word:
                     connection.close()
                     print('Дб отключена')
 
-        def associate_w(self,the_word,assoc_id):
-            try:
-
-                connection = psycopg2.connect(
-                
-                        host = host,
-                        user = user,
-                        password = password,
-                        database = db_name
-                        )
-                
-                cursor = connection.cursor()
-
-
-                Edit_query = f"""UPDATE public."Asiya_vm_word" SET
-                                    associate_w_id = {assoc_id}::bigint WHERE
-                                    word = '{the_word}';"""
-                cursor.execute(Edit_query)
-                #СУКА КТО КОМИТ СПИЗДИЛ
-                connection.commit()
-                        
-            
-            except Exception as _ex:
-                print('Ошибка в ходе чтения ДБ[Word_Edit-Associate]', _ex)
-            
-            finally:
-                if connection:
-                    connection.close()
-                    print('Дб отключена')
 
         def word_gow(self,the_word,gow_id):
             try:
@@ -422,35 +286,7 @@ class VM_Word:
                     connection.close()
                     print('Дб отключена')
 
-        def synonym_w(self,the_word,synon_id):
-            try:
-
-                connection = psycopg2.connect(
-                
-                        host = host,
-                        user = user,
-                        password = password,
-                        database = db_name
-                        )
-                
-                cursor = connection.cursor()
-
-
-                Edit_query = f"""UPDATE public."Asiya_vm_word" SET
-                                    synonym_w_id = {synon_id}::bigint WHERE
-                                    word = '{the_word}';"""
-                cursor.execute(Edit_query)
-                #СУКА КТО КОМИТ СПИЗДИЛ
-                connection.commit()
-                        
-            
-            except Exception as _ex:
-                print('Ошибка в ходе чтения ДБ[Word_Edit-Synonym]', _ex)
-            
-            finally:
-                if connection:
-                    connection.close()
-                    print('Дб отключена')
+        
 
         
     class Del:

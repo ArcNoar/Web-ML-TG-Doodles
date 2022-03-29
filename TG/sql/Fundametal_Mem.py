@@ -701,7 +701,7 @@ class Episode_Memory:
 
 class Semantic_Memory:
     class New:
-        def learn(self,source=None,veracity,note):
+        def learn(self,veracity,note,source=None):
             """
             Note = Содержание Воспоминания
             

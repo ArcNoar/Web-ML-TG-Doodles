@@ -314,66 +314,89 @@ class Emote_Reg(models.Model): # Эмоциональное состояние
 
 
 # Секция Фундаментальной памяти. (Слова и Предложения)
+
+class VM_Alph(models.Model):
+    construct = models.CharField(max_length = 100,db_index=True,unique=True,verbose_name='Слово')
+    
+    
+   
+    class CT_Chose(models.TextChoices): # Подкласс типа слова
+        
+        LETTER = 'LETTER', 'Кириллица'
+        ENG_LET = 'ENG_LET', 'Латинница'
+
+        NOMIN = 'NOMIN', 'Местоимение'
+        INTER = 'INTER', 'Междометие'
+        UNION = 'UNION', 'Союз'
+        PREPOS = 'PREPOS', 'Предлог'
+
+        PUNKT = 'PUNCTATION', 'Пунктуация'
+        NUM = 'NUM', 'Число'
+        SYMBOL = 'SYMBOL', 'Символ'
+        SMILE = 'SMILE', 'Смайл'
+
+        NONE_T = 'NONE_T', 'Не имеется'
+
+
+
+    alp_t = models.CharField(max_length = 16,verbose_name='Тип ',choices=CT_Chose.choices,default=CT_Chose.LETTER)
+    alp_t2 = models.CharField(max_length = 16,verbose_name='Тип 2',choices=CT_Chose.choices,default=CT_Chose.NONE_T)
+
+
+    
+
+    def __str__(self):
+        return "Конструкт: %s  ||  Тип: %s  ||" % (self.construct, self.alp_t )
+
+    class Meta:
+        verbose_name_plural = 'Постоянная Память - Конструкты'
+        verbose_name = 'Конструкт'
+        ordering = ['alp_t']
+
+
 class VM_Word(models.Model): # Память слов. 
     """
-    Verbose Memory - Words
-    Секция Фундаментально памяти. Класс Вербальной Памяти - База Данных СЛОВ
-
-    Word = Слово (Будет содежрать в себе слово, не обрезанное) Обязательно сделать праймари Кей.
-    Polysemantic = Многозначное или нет? (НЕ ВПЛАНЕ КОНТЕКСТА)
-    Constant_W = Это слово константа? (Первородное значение , предназанченное для описания или оценки)
-    Word_Type = это слово Действие/Описание/Существительное
-    Nomination = Это наименование?
-
-    Associate_W = Ассоциативное Слово(Необязательно)
-    Synonym_W = Синоним слова (Необязательно)
-    Group_Of_Word = Группа слов, объедянются общим смыслом и назначением
-
-    Word_Des = Описание слова (Необязательно)
-
-    Word_Gender = Род
+   
 
     """
     word = models.CharField(max_length = 100,db_index=True,unique=True,verbose_name='Слово')
-    polysemantic = models.BooleanField(default=False,verbose_name='Многозначность')
-    constant_w = models.BooleanField(default=False,verbose_name='Константа')
-    nomination = models.BooleanField(default=False,verbose_name='Слово - Наименование?')
-    associate_w = models.ForeignKey('VM_Word',blank=True,null=True,on_delete=models.SET_NULL,
-                                    related_name='AW',verbose_name='Слово Ассоциация')
-    synonym_w = models.ForeignKey('VM_Word',blank=True,null=True,on_delete=models.SET_NULL,
-                                  related_name='SynW',verbose_name='Слово Синоним')
+    word_code = models.CharField(max_length = 100,verbose_name='Код')
+    
+    
     
     group_of_word = models.ForeignKey('GOW',blank=True,null=True,on_delete=models.SET_NULL,
                                       related_name='GOW',verbose_name='Группировка Слов')
    
     class WT_Chose(models.TextChoices): # Подкласс типа слова
-        ACTION = 'Motion', 'Глагол'
-        ADJECTIVE = 'Descriptor', 'Прилагательное'
+        VERB = 'VERB', 'Глагол'
+        ADJECTIVE = 'ADJECTIVE', 'Прилагательное'
         NOUN = 'NOUN', 'Существительное'
-        STATE = 'STATE', 'Состояние'
+        ADVERB = 'STATE', 'Наречие'
         NOMIN = 'NOMIN', 'Местоимение'
-        SOUND = 'SOUND', 'Звук'
+        INTER = 'INTER', 'Междометие'
+        PRICH = 'PRICH', 'Причастие'
+        DEPRICH = 'DEPRICH', 'Деепричастие'
+        UNION = 'UNION', 'Союз'
+        PREPOS = 'PREPOS', 'Предлог'
+        NUMIN = 'NUMIN', 'Числительное'
+        PREDICAT = 'PREDICAT', 'Предикатив'
+
         PUNKT = 'PUNCTATION', 'Пунктуация'
         NUM = 'NUM', 'Число'
-        UNION = 'UNION', 'Союз'
+        SYMBOL = 'SYMBOL', 'Символ'
+        SMILE = 'SMILE', 'Смайл'
+
+        NONE_T = 'NONE_T', 'Не имеется'
 
 
 
     word_type = models.CharField(max_length = 16,verbose_name='Тип слова',choices=WT_Chose.choices,default=WT_Chose.NOUN)
 
 
-    class WGen_Chose(models.TextChoices): # Подкласс рода слова
-        MALE = 'Male', 'Мужской'
-        NEUTRAL = 'Neutral', 'Средний'
-        NONE = 'NONE', 'Без рода'
-        FEMALE = 'Female', 'Женский'
-    
-    word_gender = models.CharField(max_length = 16,verbose_name='Род слова',choices=WGen_Chose.choices,default=WGen_Chose.NONE)
-
     word_des = models.TextField(blank=True,null=True,verbose_name='Значение слова')
 
     def __str__(self):
-        return "Слово: %s  ||  Тип: %s  ||  Константа: (%s)" % (self.word, self.word_type , self.constant_w)
+        return "Слово: %s  ||  Тип: %s  ||  Константа: (%s)" % (self.word, self.word_type )
 
     class Meta:
         verbose_name_plural = 'Постоянная Память - Вербальная Память'
