@@ -9,7 +9,7 @@ from Functional.VMS_Func import STD_Single
 
 class VM_Alph:
     class New:
-        def add_construct(self,cstr,type='LETTER',type_2 = 'NONE_T'):
+        def add_construct(self,cstr,type='SYMBOL',type_2 = 'NONE_T'):
             try:
 
                 connection = psycopg2.connect(
@@ -41,18 +41,125 @@ class VM_Alph:
                     #print('Дб отключена')
 
     class Get:
-        pass
+        def get_by_id(self,id):
+            try:
+
+                connection = psycopg2.connect(
+                
+                        host = host,
+                        user = user,
+                        password = password,
+                        database = db_name
+                        )
+                
+                cursor = connection.cursor()
+
+
+                select_query = f"""SELECT * FROM public."Asiya_vm_alph" WHERE id = '{id}'"""
+                cursor.execute(select_query)
+                raw_data = cursor.fetchall()
+                
+                #print(raw_data)
+                data_dict = {}
+
+                pulled_data = []
+                
+                for elem in raw_data:
+                    data_dict['ID'] = elem[0]
+                    data_dict['Конструкт'] = elem[1]
+                    data_dict['Тип'] = elem[2]
+                    data_dict['Тип_2'] = elem[3]
+                    pulled_data.append(data_dict)
+                #print(pulled_data)
+                return pulled_data[0]
+                #connection.commit()
+                        
+            
+            except Exception as _ex:
+                print('Ошибка в ходе чтения ДБ.[[VM_ALPH-GET[BY ID] ]', _ex)
+            
+            finally:
+                if connection:
+                    connection.close()
+                    #print('Дб отключена')
+
+
+        def get_by_construct(self,cstr):
+            try:
+
+                connection = psycopg2.connect(
+                
+                        host = host,
+                        user = user,
+                        password = password,
+                        database = db_name
+                        )
+                
+                cursor = connection.cursor()
+
+
+                select_query = f"""SELECT * FROM public."Asiya_vm_alph" WHERE construct = '{cstr}' """
+                cursor.execute(select_query)
+                raw_data = cursor.fetchall()
+                
+                #print(raw_data)
+                data_dict = {}
+
+                pulled_data = []
+                
+                for elem in raw_data:
+                    data_dict['ID'] = elem[0]
+                    data_dict['Конструкт'] = elem[1]
+                    data_dict['Тип'] = elem[2]
+                    data_dict['Тип_2'] = elem[3]
+                    pulled_data.append(data_dict)
+                #print(pulled_data)
+                return pulled_data[0]
+                #connection.commit()
+                        
+            
+            except Exception as _ex:
+                print('Ошибка в ходе чтения ДБ.[[VM_ALPH-GET[BY CONSTRUCT] ]', _ex)
+            
+            finally:
+                if connection:
+                    connection.close()
+                    #print('Дб отключена')
 
 # --Word Memory
 class VM_Word:
-    
+    def constuct_code(self,word):
+        Alph_Get = VM_Alph.Get()
+
+        some_word = word
+        
+        constr_id_list = []
+        c_code = ''
+        
+        for constr in some_word:
+            try:
+                
+                current_constr = Alph_Get.get_by_construct(constr)
+
+                constr_id_list.append(str(current_constr['ID']))
+
+            except Exception as _ex:
+                print('Ошибка в дешифраторе конструктов. [VM_Word - Construct Code]',_ex)
+                constr_id_list.append('??')
+
+        c_code = '-'.join(constr_id_list)
+        return c_code
+
+
+
     class New:
         def __init__(self,template):
             self.Word = template['Слово']
             self.Word_Type = template['Тип']
             self.Word_Des = template['Значение']
             self.Group_Id = template['Категория']
-            self.W_Code = template['Код']
+            constr_func = VM_Word()
+            self.W_Code = constr_func.constuct_code(self.Word)
             
 
         def learn_word(self):
@@ -74,7 +181,7 @@ class VM_Word:
                 second_query = f"""INSERT INTO public."Asiya_vm_word" (
                                 word, word_type, word_des, group_of_word_id, word_code) VALUES (
                                 '{self.Word}'::character varying, '{self.Word_Type}'::character varying, '{self.Word_Des}'::text,
-                                 '{self.Group_Id}'::bigint, '??'::character varying)
+                                 '{self.Group_Id}'::bigint, '{self.W_Code}'::character varying)
                                  returning id;"""
                 cursor.execute(second_query)
                 #СУКА КТО КОМИТ СПИЗДИЛ

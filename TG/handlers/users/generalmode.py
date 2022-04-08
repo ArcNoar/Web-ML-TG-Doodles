@@ -39,15 +39,30 @@ sent_config = sent_template.create()
 emote_template = Emote_Temp()
 emote_shell = emote_template.create()
 
+Alph_Get = VM_Alph.Get()
+
 
 non_duple_counter = 0
+ndc2 = 0
+
+TEST_MOD = False
+
+if TEST_MOD == True:
+    try:
+        for cst in 'абвгдеёжзийклмнопрстуфхцчшщъыьэюя':
+            print(Alph_Get.get_by_construct(cst))
+
+        print('Ебаная хуйня была исполнена брат.')
+    except Exception as _ex:
+        print('Опять? Только не снови все опять, ок?',_ex)
 
 @dp.message_handler(state=None)
 async def bot_echo(message: types.Message):
-    global non_duple_counter
+    global non_duple_counter, ndc2
 
     current_user = message.from_user
     Noah = 340981880
+    Artur = 743865349
 
     user_data['ID'] = current_user.id
     user_data['Имя'] = current_user.first_name
@@ -62,7 +77,7 @@ async def bot_echo(message: types.Message):
     VM_Get = VM_Word.Get()
     VM_Edit = VM_Word.Edit()
 
-    Alph_Func = VM_Alph.New()
+    Alph_New = VM_Alph.New()
 
     Emote_Func = Emote_Reg()
     
@@ -80,28 +95,38 @@ async def bot_echo(message: types.Message):
                 if message.text == 'Я состоятельный' :
                     await message.answer('К сожалению я не могу определить вашего состояния')
                 
-                
+                elif (message.text).startswith('Напиши Артуру :') == True:
+                    response = (message.text)[15:]
+                    print(response)
+                    await dp.bot.send_message(743865349, f"{response}")
+                    await dp.bot.send_message(Noah, f"{response}")
 
                 else:
-
+                    """
                     try:
                         sentence = message.text
 
                         words = sentence.split(' ')
 
-                        print(words)
+                        for word in words:
+                            
+                            for letter in word:
+                                print(letter)
+                                Alph_New.add_construct(letter.lower())
+                                
+
                         await message.answer('Хм...')
 
                     except Exception as _ex:
                         print('Blyat',_ex)
-
-
                     """
+
+                    
                     try:
                         bag_of_word = (message.text).split(' ')
                         #print(bag_of_word)
                         for word in bag_of_word: 
-                            word_params['Слово'] = word 
+                            word_params['Слово'] = word.lower() 
                             #print(word_params)
                             
                             
@@ -113,7 +138,7 @@ async def bot_echo(message: types.Message):
 
 
                     try:
-                        sent_config['Предложение'] = message.text
+                        sent_config['Предложение'] = (message.text).lower()
                         sent_config['От кого'] = current_user.id
                         Sentence_Func = VM_Sentence.New(sent_config)
                         Sentence_Func.sent_reg()
@@ -121,7 +146,7 @@ async def bot_echo(message: types.Message):
                         print('Регистрация предложения провалилась. Ну или просто коряво прошла. Я хз ес чесна.',_ex)
 
 
-                    
+                    """
                     try:
                         
                         sentence_lenght = randint(2,10)
@@ -149,8 +174,12 @@ async def bot_echo(message: types.Message):
                     except Exception as _ex:
                         print('При попытке спиздануть что то, возникла ошибка',_ex)
                     """
+                    
+            elif current_user.id == Artur:
+                print(message.text)
 
             else:
+                print(message.text)
                 pass
 
         else:

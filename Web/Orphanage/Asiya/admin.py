@@ -2,7 +2,7 @@ from django.contrib import admin
 
 from .models import Person_Memory,Ego
 from .models import RelationType,Character_Tags,Emote_Reg
-from .models import VM_Word, GOW, Sentence_Memory, Context_Table
+from .models import VM_Alph,VM_Word, GOW, Sentence_Memory, Context_Table
 from .models import Semantic_Memory, Constant_Expression
 from .models import Episode_Memory,EM_Type
 from .models import Identity,Motives,Postulates,Like_Dislike
@@ -18,6 +18,7 @@ admin.site.register(Character_Tags)
 admin.site.register(Emote_Reg)
 
 admin.site.register(VM_Word)
+admin.site.register(VM_Alph)
 admin.site.register(GOW)
 
 admin.site.register(Sentence_Memory)
