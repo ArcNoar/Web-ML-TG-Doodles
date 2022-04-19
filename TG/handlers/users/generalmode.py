@@ -123,6 +123,7 @@ async def bot_echo(message: types.Message):
 
                     
                     try:
+                        
                         bag_of_word = (message.text).split(' ')
                         #print(bag_of_word)
                         for word in bag_of_word: 
@@ -138,6 +139,9 @@ async def bot_echo(message: types.Message):
 
 
                     try:
+
+                        
+                        
                         sent_config['Предложение'] = (message.text).lower()
                         sent_config['От кого'] = current_user.id
                         Sentence_Func = VM_Sentence.New(sent_config)

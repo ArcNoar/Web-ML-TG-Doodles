@@ -377,6 +377,7 @@ class VM_Word(models.Model): # Память слов.
         PRICH = 'PRICH', 'Причастие'
         DEPRICH = 'DEPRICH', 'Деепричастие'
         UNION = 'UNION', 'Союз'
+        PARTIC = 'PARTIC', 'Частица'
         PREPOS = 'PREPOS', 'Предлог'
         NUMIN = 'NUMIN', 'Числительное'
         PREDICAT = 'PREDICAT', 'Предикатив'
@@ -396,7 +397,7 @@ class VM_Word(models.Model): # Память слов.
     word_des = models.TextField(blank=True,null=True,verbose_name='Значение слова')
 
     def __str__(self):
-        return "Слово: %s  ||  Тип: %s  ||  Константа: (%s)" % (self.word, self.word_type )
+        return "Слово: %s  ||  Тип: %s || Desc : %s" % (self.word, self.word_type,self.word_des )
 
     class Meta:
         verbose_name_plural = 'Постоянная Память - Вербальная Память'
