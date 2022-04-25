@@ -186,14 +186,141 @@ class VM_Word:
                 select_query = f""" SELECT * FROM public."Prima_Word_vm_word" WHERE word = '{the_word}' """
                 cursor.execute(select_query)
                 raw_data = cursor.fetchall()
-                print(raw_data)
+                #print(raw_data)
                 pulled_data = WTD_Prima(raw_data)
                 #print(pulled_data)
-                print(pulled_data)
+                #print(pulled_data)
                 return pulled_data
             
             except Exception as _ex:
                 print('Ошибка в ходе чтения ДБ.[VM_WORD-GET [ONEWORD] ]', _ex)
+            
+            finally:
+                if connection:
+                    connection.close()
+                    #print('Дб отключена')
+
+
+        def word_by_id(self,id):
+            try:
+
+
+                connection = psycopg2.connect(
+
+                
+                        host = host,
+                        user = user,
+                        password = password,
+                        database = db_name
+                        )
+                
+                cursor = connection.cursor()
+
+
+                select_query = f""" SELECT * FROM public."Prima_Word_vm_word" WHERE id = '{id}' """
+                cursor.execute(select_query)
+                raw_data = cursor.fetchall()
+                #print(raw_data)
+                pulled_data = WTD_Prima(raw_data)
+                #print(pulled_data)
+                #print(pulled_data)
+                return pulled_data
+            
+            except Exception as _ex:
+                print('Ошибка в ходе чтения ДБ.[VM_WORD-GET [ONEWORD] ]', _ex)
+            
+            finally:
+                if connection:
+                    connection.close()
+                    #print('Дб отключена')
+
+        def max_id(self):
+            try:
+
+
+                connection = psycopg2.connect(
+                
+                        host = host,
+                        user = user,
+                        password = password,
+                        database = db_name
+                        )
+                
+                cursor = connection.cursor()
+
+
+                select_query = """SELECT * FROM public."Prima_Word_vm_word"
+                                        ORDER BY id DESC LIMIT 1"""
+                cursor.execute(select_query)
+                pulled_data = WTD_Prima(cursor.fetchall())
+                #print('ВОТ ОН ЭТО МАКСИМАЛЬНЫЙ АЙДИ БРАТ',pulled_data)
+                
+                return pulled_data
+            
+            except Exception as _ex:
+                print('Ошибка в ходе чтения ДБ.[VM_WORD-GET [MAX_ID] ]', _ex)
+            
+            finally:
+                if connection:
+                    connection.close()
+                    #print('Дб отключена')
+
+    class Edit:
+        def X_Cord(self,id,new_x):
+            try:
+
+                connection = psycopg2.connect(
+                
+                        host = host,
+                        user = user,
+                        password = password,
+                        database = db_name
+                        )
+                
+                cursor = connection.cursor()
+
+
+                Edit_query = f"""UPDATE public."Prima_Word_vm_word" SET
+                                    x_cord = '{new_x}'::Double Precision WHERE
+                                    id = '{id}';"""
+                cursor.execute(Edit_query)
+                #СУКА КТО КОМИТ СПИЗДИЛ
+                connection.commit()
+                        
+            
+            except Exception as _ex:
+                print('Ошибка в ходе чтения ДБ[Word_Edit-X_CORD]', _ex)
+            
+            finally:
+                if connection:
+                    connection.close()
+                    #print('Дб отключена')
+
+
+        def Y_Cord(self,id,new_y):
+            try:
+
+                connection = psycopg2.connect(
+                
+                        host = host,
+                        user = user,
+                        password = password,
+                        database = db_name
+                        )
+                
+                cursor = connection.cursor()
+
+
+                Edit_query = f"""UPDATE public."Prima_Word_vm_word" SET
+                                    y_cord = '{new_y}'::Double Precision WHERE
+                                    id = '{id}';"""
+                cursor.execute(Edit_query)
+                #СУКА КТО КОМИТ СПИЗДИЛ
+                connection.commit()
+                        
+            
+            except Exception as _ex:
+                print('Ошибка в ходе чтения ДБ[Word_Edit-X_CORD]', _ex)
             
             finally:
                 if connection:
@@ -269,7 +396,7 @@ class VM_Sentence:
             finally:
                 if connection:
                     connection.close()
-                    print('Дб отключена')
+                    #print('Дб отключена')
 
     class Get:
         """
@@ -303,6 +430,68 @@ class VM_Sentence:
                 
             except Exception as _ex:
                 print('Ошибка в ходе чтения ДБ. [Prima_SENTENCE [Get-SENTENCE_DATA]]', _ex)
+            
+            finally:
+                if connection:
+                    connection.close()
+                    #print('Дб отключена')
+
+    class Edit:
+        def X_Cord(self,id,new_x):
+            try:
+
+                connection = psycopg2.connect(
+                
+                        host = host,
+                        user = user,
+                        password = password,
+                        database = db_name
+                        )
+                
+                cursor = connection.cursor()
+
+
+                Edit_query = f"""UPDATE public."Prima_Word_sentence_memory" SET
+                                    x_cord = '{new_x}'::Double Precision WHERE
+                                    id = '{id}';"""
+                cursor.execute(Edit_query)
+                #СУКА КТО КОМИТ СПИЗДИЛ
+                connection.commit()
+                        
+            
+            except Exception as _ex:
+                print('Ошибка в ходе чтения ДБ[Sent_Edit-X_CORD]', _ex)
+            
+            finally:
+                if connection:
+                    connection.close()
+                    #print('Дб отключена')
+
+
+        def Y_Cord(self,id,new_y):
+            try:
+
+                connection = psycopg2.connect(
+                
+                        host = host,
+                        user = user,
+                        password = password,
+                        database = db_name
+                        )
+                
+                cursor = connection.cursor()
+
+
+                Edit_query = f"""UPDATE public."Prima_Word_sentence_memory" SET
+                                    y_cord = '{new_y}'::Double Precision WHERE
+                                    id = '{id}';"""
+                cursor.execute(Edit_query)
+                #СУКА КТО КОМИТ СПИЗДИЛ
+                connection.commit()
+                        
+            
+            except Exception as _ex:
+                print('Ошибка в ходе чтения ДБ[Sent_Edit-X_CORD]', _ex)
             
             finally:
                 if connection:

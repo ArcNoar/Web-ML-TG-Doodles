@@ -69,6 +69,7 @@ async def word_remember(message: types.Message):
             
              
             """
+            """
             try:
                 
                 lines = (message.text).splitlines()
@@ -91,7 +92,7 @@ async def word_remember(message: types.Message):
                 await message.answer('Оке...')
             except Exception as _ex:
                 print('Запоминание слов пошло пиздй братанчик.',_ex)
-            
+            """
             """
             try:
   

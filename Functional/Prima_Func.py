@@ -105,7 +105,7 @@ def WTD_Prima(pulled_word):
 
     """
     data_list = pulled_word
-    print(data_list)
+    #print(data_list)
     try:
         converted_data = {
                 'ID' : data_list[0][0],
@@ -141,7 +141,7 @@ def WTDM_Prima(word_list):
                     'Код' : data_list[2],
                     'X_Cord' : data_list[3],
                     'Y_Cord' : data_list[4],
-                    'SF' : data_list[0][5],
+                    'SF' : data_list[5],
                     'Категория' : data_list[6],
 
 
