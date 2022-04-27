@@ -2,8 +2,7 @@
 from aiogram.dispatcher.filters.state import StatesGroup, State
 
 
-class SC_State(StatesGroup):
-    Guide = State()
+class SC_Alt(StatesGroup):
     Initial = State()
     Learning = State()
     Grading = State()

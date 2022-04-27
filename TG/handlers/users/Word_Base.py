@@ -69,7 +69,7 @@ async def word_remember(message: types.Message):
             
              
             """
-            """
+            
             try:
                 
                 lines = (message.text).splitlines()
@@ -80,7 +80,7 @@ async def word_remember(message: types.Message):
                         bag_of_word.append(word)
                 #print(bag_of_word)
                 for word in bag_of_word:
-                    
+                    #print(word)
 
                     #print(normal_word)
                     word_params['Слово'] = word.lower() 
@@ -89,10 +89,10 @@ async def word_remember(message: types.Message):
                     
                     Word_add = Word_func.New(word_params)
                     Word_add.learn_word()
-                await message.answer('Оке...')
+                #await message.answer('Оке...')
             except Exception as _ex:
                 print('Запоминание слов пошло пиздй братанчик.',_ex)
-            """
+            
             """
             try:
   
