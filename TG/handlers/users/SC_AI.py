@@ -17,13 +17,16 @@ import csv
 import pandas as pd
 
 
-from AI_Gen.CG_Data_Prep import Test_X
+#from AI_Gen.CG_Data_Prep import Test_X
 from AI_Gen.Construct_Grade import Construct_Grader
+#from AI_Gen.AB_CG import Construct_AB_Grader
 
 #duple_counter = 0
 
 Generated_Sentence = ''
 GS_Components = [] # Список айдишников сгенерированного предложения.
+USER_Sentence = ''
+US_Components = []
 S_Grade = 0
 # НУЖНО ПЕРЕДЕЛЫВАТЬ ВАЩЕ ВСЕ Я ПОМЕНЯЛ ВСЕ ФОРМУЛЫ И РАССЧЕТЫ
 
@@ -66,6 +69,25 @@ def SC_Random():
     except Exception as _ex:
         print('При попытке спиздануть что то, возникла ошибка',_ex)
 
+def US_Data(sentence):
+    
+    Word_Func = VM_Word.Get()
+    
+    bag_of_word = (sentence.lower()).split(' ')
+    words_id_list = []
+    d_code = ''
+    
+    for wd in bag_of_word:
+        try:
+            current_word = Word_Func.one_word(wd)
+            #print(current_word)
+            words_id_list.append(str(current_word['ID']))
+        except Exception as _ex:
+            print('Возникла ошиба при дешифрации предложения. [VM_Sentence - deschcode]',_ex)
+            words_id_list.append('??')
+    d_code = '-'.join(words_id_list)
+    return words_id_list
+
 # Cord Set
 def W_GC(Indexes):
     
@@ -87,7 +109,7 @@ def W_GC(Indexes):
 
     return [X,Y]
 
-def S_GS(Grade,W_Order): # Sentence Grade(Cord) Set
+def S_GS(W_Order): # Sentence Grade(Cord) Set
 
     Components_Data = [] # Данные компонент
     WX_List = [] # X Координаты компонент
@@ -102,32 +124,35 @@ def S_GS(Grade,W_Order): # Sentence Grade(Cord) Set
         WX_List.append(word_data['X_Cord'])
         WY_List.append(word_data['Y_Cord'])
 
-    def Loss(order_list): # Скаляр порядка компонент
+    def Loss(order_list): # Скаляр порядка компонент 
+        
+
         val_list = []
         for index in order_list:
             val_list.append(int(index))
 
-        proc_result = val_list[0]
+        proc_result = np.log(val_list[0])
         for i in range(1,len(val_list)):
-            proc_result -= val_list[i]
+            proc_result -= (np.log(val_list[i]) * (i * 0.1)) / len(val_list)
         
         if proc_result < 0:
             proc_result *= -1
+
+        
         
 
-        output = np.log(proc_result)
+        output = proc_result
         
         output = round(output,2)
 
         return output
 
     def Cord_Calc(loss_val,X_Cord,Y_Cord):
-        # Мы пока не закидываем в дб, а потом и нахуй нам це не надо.
-        #sent_template = Prima_sentence() # Темплейт для запоминания предложения
-        #sent_config = sent_template.create()
+         
 
         X_Sum = sum(X_Cord)
         Y_Sum = sum(Y_Cord)
+        
 
         neg_X = False
         neg_Y = False
@@ -137,21 +162,23 @@ def S_GS(Grade,W_Order): # Sentence Grade(Cord) Set
         elif Y_Sum < 0:
             Y_Sum *= -1
             neg_Y = True
+        
+        #print(f'Loss : {loss_val}')
 
-        """
-
-        Я вот бля не подумал насчет того что надо как то же взять эти координаты...
-        Мы ща делаем темплейт, высчитываем сумму координат 
-
-        крч
-        примерно так я полагаю
-        i_Scord = np.log(sum(i_cords) / np.exp(Loss))
-        """
-
-        X_Scord = (np.log(X_Sum / loss_val)) / (Grade * 0.1)
+        X_Scord = X_Sum / loss_val**0.5 
         X_Scord = round(X_Scord,2)
-        Y_Scord = (np.log(Y_Sum / loss_val)) / (Grade * 0.1)
+        #print(f'Components X list : {X_Cord}')
+        #print(f'Components X Sum : {X_Sum}')
+        #print(f'Sentence X : {X_Scord}')
+        
+        
+        Y_Scord = Y_Sum / loss_val**0.5 
         Y_Scord = round(Y_Scord,2)
+        #print(f'Components Y list : {Y_Cord}')
+        #print(f'Components Y Sum : {Y_Sum}')
+        #print(f'Sentence Y : {Y_Scord}')
+        #print('_-_' * 14)
+        
         
         if neg_X == True:
             X_Scord *= -1
@@ -170,7 +197,7 @@ def S_GS(Grade,W_Order): # Sentence Grade(Cord) Set
 # DATA PROC
 
 def D_Con(sent,grade,order,x_cord,y_cord): # Data Constructor
-    Header = ['Sentence','Order_Val','X','Y','Grade','Test_Result']
+    Header = ['Sentence','Order_Val','X','Y','Grade']
 
     TR = ''
 
@@ -178,41 +205,35 @@ def D_Con(sent,grade,order,x_cord,y_cord): # Data Constructor
     for index in order:
         val_list.append(int(index))
 
-    proc_result = val_list[0]
+    proc_result = np.log(val_list[0])
     for i in range(1,len(val_list)):
-        proc_result -= val_list[i]
+        proc_result -= (np.log(val_list[i]) * (i * 0.1)) / len(val_list)
     
     if proc_result < 0:
         proc_result *= -1
     
 
-    output = np.log(proc_result)
+    output = proc_result
     
     Order_Val = round(output,2)
 
     
     
-    if grade < 2:
-        TR = 'FAIL'
-    elif grade > 2:
-        TR = 'SUCCESS'
-    else:
-        TR = f'ERROR-Result. Grade = {grade}'
     
-    row = {'Sentence' : sent, 'Order_Val' : Order_Val, 'X' : x_cord, 'Y' : y_cord,'Grade' : grade,'Test_Result' : TR}
+    row = {'Sentence' : sent, 'Order_Val' : Order_Val, 'X' : x_cord, 'Y' : y_cord,'Grade' : grade}
 
     return [Header,row]
 
 
 def CSV_Write(fieldnames,row):
     try:
-        with open('Pred_S.csv', 'a',encoding='UTF8',newline='') as f_object:
+        with open('AB_CG.csv', 'a',encoding='UTF8',newline='') as f_object:
             # Pass the CSV  file object to the Dictwriter() function
             # Result - a DictWriter object
             Writer = csv.DictWriter(f_object, fieldnames=fieldnames)
             #Writer.writeheader()
-            if row['Test_Result'] == 'SUCCESS':
-                Writer.writerow(row)
+            
+            Writer.writerow(row)
             
             f_object.close()
     except Exception as _ex:
@@ -268,7 +289,7 @@ async def learn_start(message: types.Message,state: FSMContext):
     global duple_counter
     current_user = message.from_user
     if message.text == 'Старт.':
-        await message.answer('Штош. Ща попробуем.')
+        await message.answer('Впишите предложение на оценку.')
         await AI_State.Learning.set()
 
     else:
@@ -292,92 +313,114 @@ async def learn_start(message: types.Message,state: FSMContext):
 
 @dp.message_handler(state=AI_State.Learning)
 async def learn_proc(message: types.Message,state: FSMContext):
-    global Generated_Sentence, GS_Components
+    global Generated_Sentence, GS_Components, USER_Sentence, US_Components
     current_user = message.from_user
-    for i in range(1000):
-        SCR_Data = SC_Random()
-        answer = SCR_Data[0]
-        a_comp = SCR_Data[1]
-        Generated_Sentence = answer
-        GS_Components = a_comp
-
-        try:
-
-            
-
-            
-
-            Cords = W_GC(GS_Components)
-            #S_Cords = S_GS(S_Grade,GS_Components)
-
-            #CSV_Data = D_Con(Generated_Sentence,S_Grade,GS_Components,S_Cords[0],S_Cords[1])
-            val_list = []
-            for index in GS_Components:
-                val_list.append(int(index))
-
-            proc_result = val_list[0]
-            for i in range(1,len(val_list)):
-                proc_result -= val_list[i]
-            
-            if proc_result < 0:
-                proc_result *= -1
-            
-
-            output = np.log(proc_result)
-            
-            Order_Val = round(output,2)
-
-            
-            X_Data = Test_X(Order_Val,Cords[0],Cords[1])
-            
-            prediction = Construct_Grader.predict(X_Data)
-            
-            CSV_Data = D_Con(Generated_Sentence,prediction[0],GS_Components,Cords[0],Cords[1])
-            
-
-            CSV_Write(CSV_Data[0],CSV_Data[1])
-            
-
-            #await message.answer(f'Я полагаю что оценка этого предложения будет {prediction}')
-
-            #await AI_State.Learning.set()
-
+    
+    if message.text == 'Цикл.':
+        for i in range(1000):
+            SCR_Data = SC_Random()
+            answer = SCR_Data[0]
+            a_comp = SCR_Data[1]
+            Generated_Sentence = answer
+            GS_Components = a_comp
+        
+            try:
+        
                 
-        except ValueError as _ex:
-            print(_ex)
-            await message.answer('Недопустимый формат оценки.')
+        
+                
+        
+                #Cords = W_GC(GS_Components)
+                S_Cords = S_GS(GS_Components)
+        
+                #CSV_Data = D_Con(Generated_Sentence,S_Grade,GS_Components,S_Cords[0],S_Cords[1])
+                val_list = []
+                for index in GS_Components:
+                    val_list.append(int(index))
+        
+                proc_result = np.log(val_list[0])
+                for i in range(1,len(val_list)):
+                    proc_result -= (np.log(val_list[i]) * (i * 0.1)) / len(val_list)
+                
+                if proc_result < 0:
+                    proc_result *= -1
+        
+                
+                
+        
+                output = proc_result
+                
+                Order_Val = round(output,2)
+        
+                
+                X_Data = Test_X(Order_Val,S_Cords[0],S_Cords[1])
+                #print(X_Data)
+                prediction = Construct_Grader.predict(X_Data)
+                #prediction = Construct_AB_Grader.predict(X_Data)
+                if prediction[0] > -2:
+                    print(f'{Generated_Sentence} : {prediction}')
+                
+                #CSV_Data = D_Con(Generated_Sentence,prediction[0],GS_Components,S_Cords[0],S_Cords[1])
+                
+        
+                #CSV_Write(CSV_Data[0],CSV_Data[1])
+                
+        
+                #await message.answer(f'Я полагаю что оценка этого предложения будет {prediction}')
+        
+                #await AI_State.Learning.set()
+        
+                    
+            except ValueError as _ex:
+                print(_ex)
+                await message.answer('Недопустимый формат оценки.')
     
-    await dp.bot.send_message(current_user.id,'Я завершила свои предсказания.')
-    await state.finish()
+        await dp.bot.send_message(current_user.id,'Я завершила свои предсказания.')
+        await state.finish()
     #await asyncio.sleep(1)
+    else:
+        USER_Sentence = message.text
+        US_Components = US_Data(USER_Sentence)
+        await AI_State.Grading.set()
 
-    
-
-    #await AI_State.Grading.set()
-"""
 @dp.message_handler(state=AI_State.Grading)
 async def grading(message: types.Message, state: FSMContext):
-    global Generated_Sentence, GS_Components, S_Grade
+    global Generated_Sentence, GS_Components, S_Grade, USER_Sentence , US_Components
     current_user = message.from_user
 
     try:
 
-        S_Grade = None
-
+        #S_Cords = S_GS(GS_Components)
+        S_Cords = S_GS(US_Components)
         
-
-        Cords = W_GC(GS_Components)
-        #S_Cords = S_GS(S_Grade,GS_Components)
-
         #CSV_Data = D_Con(Generated_Sentence,S_Grade,GS_Components,S_Cords[0],S_Cords[1])
+        val_list = []
+        for index in US_Components:
+            val_list.append(int(index))
         
-
+        proc_result = np.log(val_list[0])
+        for i in range(1,len(val_list)):
+            proc_result -= (np.log(val_list[i]) * (i * 0.1)) / len(val_list)
         
-        X_Data = Test_X(GS_Components,Cords[0],Cords[1])
-
+        if proc_result < 0:
+            proc_result *= -1
+        
+        
+        
+        
+        output = proc_result
+        
+        Order_Val = round(output,2)
+        
+        
+        X_Data = Test_X(Order_Val,S_Cords[0],S_Cords[1])
+        
         prediction = Construct_Grader.predict(X_Data)
 
         await message.answer(f'Я полагаю что оценка этого предложения будет {prediction}')
+
+
+        await AI_State.Learning.set()
 
         
 
@@ -386,7 +429,7 @@ async def grading(message: types.Message, state: FSMContext):
         print(_ex)
         await message.answer('Недопустимый формат оценки.')
 
-"""
+
 
 """
 Нужно найти константу предсказания. (Резидуал?)

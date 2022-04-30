@@ -57,6 +57,31 @@ class VM_Word(models.Model): # Память слов.
     y_cord = models.FloatField(verbose_name='Y Координата')
 
     special_field = models.CharField(max_length = 150,verbose_name='Спец Поле')
+
+    class WT_Chose(models.TextChoices): # Подкласс типа слова
+        VERB = 'VERB', 'Глагол'
+        ADJECTIVE = 'ADJECTIVE', 'Прилагательное'
+        NOUN = 'NOUN', 'Существительное'
+        ADVERB = 'STATE', 'Наречие'
+        NOMIN = 'NOMIN', 'Местоимение'
+        INTER = 'INTER', 'Междометие'
+        UNION = 'UNION', 'Союз'
+        PREPOS = 'PREPOS', 'Предлог'
+        NUMIN = 'NUMIN', 'Числительное'
+        PTICK = 'PTICK', 'Частица'
+        PRICH = 'PRICH', 'причастие'
+        DEPRICH = 'DEPRICH', 'деепричастие'
+
+        PUNKT = 'PUNCTATION', 'Пунктуация'
+        NUM = 'NUM', 'Число'
+        SYMBOL = 'SYMBOL', 'Символ'
+        NAME = 'NAME', 'Имя'
+
+        NONE_T = 'NONE_T', 'Не имеется'
+
+
+
+    word_type = models.CharField(max_length = 20,verbose_name='Часть Речи',choices=WT_Chose.choices,default=WT_Chose.NONE_T)
     
 
     def __str__(self):

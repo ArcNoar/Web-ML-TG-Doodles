@@ -240,7 +240,7 @@ def D_Con(sent,grade,order,x_cord,y_cord): # Data Constructor
     TR = ''
 
     val_list = []
-    for index in order_list:
+    for index in order:
         val_list.append(int(index))
 
     proc_result = np.log(val_list[0])
@@ -255,9 +255,7 @@ def D_Con(sent,grade,order,x_cord,y_cord): # Data Constructor
 
     output = proc_result
     
-    output = round(output,2)
-
-    return output
+    Order_Val = round(output,2)
 
     
     

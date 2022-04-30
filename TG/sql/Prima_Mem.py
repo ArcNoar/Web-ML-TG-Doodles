@@ -124,6 +124,7 @@ class VM_Word:
             self.W_Y = template['Y_Cord']
             self.Group_Id = template['Категория']
             self.SpecF = template['SF']
+            self.W_Type = template['Тип']
             constr_func = VM_Word()
             self.W_Code = constr_func.constuct_code(self.Word)
             
@@ -145,11 +146,12 @@ class VM_Word:
 
 
                 second_query = f"""INSERT INTO public."Prima_Word_vm_word" (
-                                word,word_code,x_cord,y_cord,special_field, group_of_word_id) VALUES (
+                                word,word_code,x_cord,y_cord,special_field, group_of_word_id,word_type) VALUES (
                                 '{self.Word}'::character varying, '{self.W_Code}'::character varying,
                                 '{self.W_X}'::double precision,'{self.W_Y}'::double precision,
                                 '{self.SpecF}'::character varying,
-                                 '{self.Group_Id}'::bigint)
+                                 '{self.Group_Id}'::bigint,
+                                 '{self.W_Type}'::character varying)
                                  returning id;"""
                 cursor.execute(second_query)
                 #СУКА КТО КОМИТ СПИЗДИЛ
@@ -157,7 +159,7 @@ class VM_Word:
                         
             
             except Exception as _ex:
-                #print('Ошибка в ходе чтения ДБ.[[VM_WORD-NEW[LEARN_NEW] ]', _ex)
+                print('Ошибка в ходе чтения ДБ.[[VM_WORD-NEW[LEARN_NEW] ]', _ex)
                 pass
             
             finally:
@@ -259,6 +261,37 @@ class VM_Word:
             
             except Exception as _ex:
                 print('Ошибка в ходе чтения ДБ.[VM_WORD-GET [MAX_ID] ]', _ex)
+            
+            finally:
+                if connection:
+                    connection.close()
+                    #print('Дб отключена')
+
+        def all(self):
+            try:
+
+
+                connection = psycopg2.connect(
+                
+                        host = host,
+                        user = user,
+                        password = password,
+                        database = db_name
+                        )
+                
+                cursor = connection.cursor()
+
+
+                select_query = """SELECT * FROM public."Prima_Word_vm_word"
+                                        ORDER BY id ASC """
+                cursor.execute(select_query)
+                pulled_data = WTDM_Prima(cursor.fetchall())
+                #print('ВОТ ОН ЭТО МАКСИМАЛЬНЫЙ АЙДИ БРАТ',pulled_data)
+                
+                return pulled_data
+            
+            except Exception as _ex:
+                print('Ошибка в ходе чтения ДБ.[VM_WORD-GET [ALL] ]', _ex)
             
             finally:
                 if connection:

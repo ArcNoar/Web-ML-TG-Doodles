@@ -57,7 +57,7 @@ def STD_Prima(sent_data):
                 'X_Cord' : data_list[0][3],
                 'Y_Cord' : data_list[0][4],
                 'SF' : data_list[0][5],
-                'Контекст' : data_list[0][6]
+                
                 }
         
         return converted_data
@@ -80,6 +80,7 @@ class Prima_word:
             'Y_Cord' : -1,
             'SF' : 'Empty',
             'Категория' : '1',
+            'Тип' : 'NONE_T'
 
             }
         return Word_Template
@@ -115,6 +116,7 @@ def WTD_Prima(pulled_word):
                 'Y_Cord' : data_list[0][4],
                 'SF': data_list[0][5],
                 'Категория' : data_list[0][6],
+                'Тип' : data_list[0][7]
                 }
         
         return converted_data
@@ -143,6 +145,7 @@ def WTDM_Prima(word_list):
                     'Y_Cord' : data_list[4],
                     'SF' : data_list[5],
                     'Категория' : data_list[6],
+                    'Тип' : data_list[7]
 
 
                     }
@@ -152,3 +155,98 @@ def WTDM_Prima(word_list):
             pass
             #print(_ex)
     return collected_users
+
+
+
+
+import requests
+
+#from TG.sql.Verbal_Mem import VM_Word 
+
+from bs4 import BeautifulSoup
+
+HEADERS = {'user-agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.174 YaBrowser/22.1.5.810 Yowser/2.5 Safari/537.36','accept':'*/*'}
+
+
+#VM_Get = VM_Word.Get()
+
+def get_html(url,params=None):
+    r = requests.get(url,headers=HEADERS,params=params)
+    return r
+
+
+def get_gramma(html):
+    soup = BeautifulSoup(html,'html.parser')
+    items = soup.find_all('div', class_= "morphology-analysis")
+
+    gramma_text = (items[0].get_text())
+    return gramma_text
+
+
+
+
+
+
+
+def parse(word):
+    html = get_html(f"https://wikislovo.ru/morphology/{word}")
+    if html.status_code == 200:
+        return get_gramma(html.text)
+    else:
+        pass
+        #print('Oh no.')
+
+
+
+
+def G_Delay(G_data):
+    Data_String = G_data
+    #print(G_data)
+    Codes = {'имя существительное': 'NOUN',
+              'глагол' : 'VERB',
+              'имя прилагательное' : 'ADJECTIVE',
+              'местоимение' : 'NOMIN',
+              'междометие' : 'INTER',
+              'наречие' : 'STATE',
+              'союз' : 'UNION',
+              'частица' : 'PTICK',
+              'предлог' : 'PREPOS',
+              'имя числительное' : 'NUMIN',
+              'причастие' : 'PRICH',
+              'деепричастие' : 'DEPRICH',
+              'NONE_T' : 'NONE_T',
+              }
+    def SP(data):
+        
+        try:
+            if data[data.find('Вариант'):8] == 'Вариант':
+                #print('1')
+                #print(data[data.find('Вариант'):])
+                SP_Loc = data[len('Часть речи —  ') + 11:data.find('Морфологические') -1 ] # Часть речи.
+                
+                #print(SP_Loc)
+                return SP_Loc
+            elif data[data.find('Отвечает'):8] == 'Отвечает':
+                SP_Loc = data[len('Часть речи —  ') + 1:data.find('Отвечает') -1 ]
+                return SP_Loc
+            else:
+                SP_Loc = data[len('Часть речи —  ') + 1:data.find('Морфологические') -1 ] # Часть речи.
+                #print('2')
+                #print(data[data.find('Вариант'):8])
+                #print(SP_Loc)
+                return SP_Loc
+        except Exception as _ex:
+            #print('Нэ получилось дать тип.', _ex)
+            SP_Loc = 'NONE_T'
+            return SP_Loc
+    Gramma = 'NONE_T'
+    try:
+        Gramma = Codes[f'{SP(Data_String)}']
+    except Exception as _ex:
+        Gramma = 'NONE_T'
+    
+
+    return Gramma
+
+#result = G_Delay(output)
+#print(result)
