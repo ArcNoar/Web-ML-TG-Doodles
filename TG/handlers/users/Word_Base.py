@@ -77,6 +77,10 @@ async def word_remember(message: types.Message):
     
             await message.answer('К сожалению я не могу определить вашего состояния')
         elif message.text == 'Пул Слов.':
+            """
+            Создает ЦСВ ФАЙЛ данных слов для грамматической модели.
+            """
+
             data = VM_Get.all()
             fields = ['ID','Слово','Длина','Количество слогов.','Слоги','Код Слогов','Код','X_Cord','Y_Cord','SF','Категория','Тип']
             better_data = []

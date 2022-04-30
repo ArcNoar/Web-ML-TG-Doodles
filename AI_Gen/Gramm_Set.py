@@ -1,11 +1,11 @@
 from os import name
-from AI_Gen.Gramma_Data_Prep import dataf,y_pek,a_y, y_df, data_test
+from AI_Gen.Gramma_Data_Prep import dataf ,a_y, data_test #, y_pek,y_df
 
-import torch
-import torch.nn as nn
-import numpy as np
-from sklearn import datasets
-from sklearn.preprocessing import StandardScaler
+#import torch
+#import torch.nn as nn
+#import numpy as np
+#from sklearn import datasets
+#from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
 
 from sklearn.tree import DecisionTreeClassifier
@@ -28,8 +28,8 @@ def model():
     
     y_pred = Construct_Grader.predict(X_test)
 
-    blyat = Construct_Grader.predict(data_test)
-    print(blyat)
+    #Test_Pred = Construct_Grader.predict(data_test)
+    #print(blyat)
     
     print("Accuracy:",metrics.accuracy_score(y_test,y_pred))
    

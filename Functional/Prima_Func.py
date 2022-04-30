@@ -10,14 +10,7 @@
 
 class Prima_sentence:
     """
-        Sentence (Предложение) = None
-        Sent_Dech (Дешифровка) = false
-        Short_Mean (Краткая суть) = false
-
-        From_Who_id (От кого) = false
-        Sent_Context_id (Айди контекста) = NOUN
-        
-        
+       Класс создающий темплейт заполнения данных в дб. 
     """
     def create(self):
         Word_Template = {
@@ -38,14 +31,8 @@ def STD_Prima(sent_data):
     """
     STD = Sentence To Dict
     !!! ONLY FOR CONVERT SQL REQUEST DATA_LIST !!!
-    
-    data_list = sql_pull_func(user_data).get_user() => returns [(ID,first_name,sur_name,....,appearance)]
-    
-    func(data_list) => return dict = {
-                                                'ID' : ID,
-                                                'first_name' : first_name,
-                                                 Key : Value,
-                                                }
+    Конвертирует Данные из дб в Словарь.
+   
 
     """
     data_list = sent_data
@@ -69,7 +56,17 @@ def STD_Prima(sent_data):
 
 class Prima_word:
     """
-        
+    Шаблон заполнения данных в дб. 
+    Word_Template = {
+            'Слово' : None ,
+            'Код' : '??',
+            'X_Cord' : 1,
+            'Y_Cord' : -1,
+            'SF' : 'Empty',
+            'Категория' : '1',
+            'Тип' : 'NONE_T'
+
+            }
         
     """
     def create(self):
@@ -93,16 +90,11 @@ class Prima_word:
 
 def WTD_Prima(pulled_word): 
     """
-    CTD = Conver To Dict
+    WTD = Word To Dict
     !!! ONLY FOR CONVERT SQL REQUEST DATA_LIST !!!
-    
-    data_list = Pm_sql(user_data).get_user() => returns [(ID,first_name,sur_name,....,appearance)]
-    
-    covert_to_dict(data_list) => return dict = {
-                                                'ID' : ID,
-                                                'first_name' : first_name,
-                                                 Key : Value,
-                                                }
+    Достает слово из дб.
+    Одно!.
+   
 
     """
     data_list = pulled_word
@@ -128,8 +120,8 @@ def WTD_Prima(pulled_word):
 def WTDM_Prima(word_list):
     """
     !!! ONLY FOR CONVERT SQL REQUEST DATA_LIST !!!
-    CTD = Conver To Dict
-    data_list = Pm_sql(user_data).get_user() => returns [(ID,first_name,sur_name,....,appearance)]
+    Достает слово из дб.
+    Много!.
     # Это можно по сути сделать основной функцией пушо что один что много, норм буит
     """
     dt_list = word_list
@@ -157,11 +149,11 @@ def WTDM_Prima(word_list):
     return collected_users
 
 
-
+# Грамматический пул (Парсер Частей речи.)
 
 import requests
 
-#from TG.sql.Verbal_Mem import VM_Word 
+
 
 from bs4 import BeautifulSoup
 
@@ -198,7 +190,7 @@ def parse(word):
 
 
 
-
+# Парсит полученные данные, доставая из них часть речи.
 def G_Delay(G_data):
     Data_String = G_data
     #print(G_data)

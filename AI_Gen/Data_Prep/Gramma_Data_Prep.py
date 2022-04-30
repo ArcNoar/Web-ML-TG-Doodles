@@ -16,9 +16,6 @@ from ast import literal_eval
 
 
 
-
-
-
 pd.set_option('display.max_rows', None) # Sets Unlimited columns to display
 pd.set_option('display.max_columns', None) # Sets Unlimited columns to display
 df = pd.read_csv("C:\\Users\\ArcNoar\\Desktop\\WORK\\Codeing\\ProjectCOde\\FREEZED\\AsiyaPROJ\\Sheesh\\Word_Data.csv")
@@ -37,15 +34,20 @@ df = pd.read_csv("C:\\Users\\ArcNoar\\Desktop\\WORK\\Codeing\\ProjectCOde\\FREEZ
 'Категория' - 
 'Тип' - 
 """
-df_WT = df.loc[(df['Тип'] != 'NONE_T')]
-df_Bad = df.loc[(df['Тип'] == 'NONE_T')]
-print(df_Bad['Слово'])
+
+df_WT = df.loc[(df['Тип'] != 'NONE_T')] # Классифицированные Данные
+df_Bad = df.loc[(df['Тип'] == 'NONE_T')] # Неклассифицированные Данные
+
+
+#print(df_Bad['Слово'])
 #print(df_WT.head())
 #parts = df_WT['Код Слогов']
 
-X = df_WT.drop('ID',axis=1).copy() # Вырезаем ответ из данных.
-X = X.drop('Тип',axis=1).copy()
-X = X.drop('Категория',axis=1).copy()
+X = X.drop('Тип',axis=1).copy() # Вырезаем ответ из данных.
+
+# Вырезаем Лишние данные.
+X = df_WT.drop('ID',axis=1).copy() 
+X = X.drop('Категория',axis=1).copy() 
 X = X.drop('Слово',axis=1).copy()
 X = X.drop('Слоги',axis=1).copy()
 X = X.drop('X_Cord',axis=1).copy()
@@ -53,8 +55,14 @@ X = X.drop('Y_Cord',axis=1).copy()
 X = X.drop('SF',axis=1).copy()
 #X = X.drop('Код',axis=1).copy()
 
+y_pek = df_WT['Тип'].copy() # Стандартный Датафрейм из ответами на классифицированные данные.
 
-Normal_X = []
+
+
+
+Normal_X = [] # Матричный Вариант Полезных Данных
+
+
 #print(X['Код'])
 #print(len(X['Код']))
 
@@ -84,12 +92,11 @@ for i in range(0,657):
 
 #print(Normal_X[0])
 
-y_pek = df_WT['Тип'].copy()
 
 #print(y.unique())
 
-Normal_Y = []
-another_Y = []
+Normal_Y = [] # Данные Тип в числовом эквиваленте
+another_Y = [] # Данные Тип в текстовом эквиваленте
 
 """
 ['NAME' 'VERB' 'STATE' 'NOUN' 'PTICK' 'UNION' 'PREPOS' 'NOMIN' 'ADJECTIVE'
@@ -120,36 +127,29 @@ for i in range(0,657):
     else:
         pass
 
-"""
-[[15, 16, 11], 3, 1]
-Code = [15, 16, 11] => 
-Len = 3
-P_A = 1
 
-"""
 y_df = pd.DataFrame(Normal_Y, columns = ['NAME' 'VERB' 'STATE' 'NOUN' 'PTICK' 'UNION' 'PREPOS' 'NOMIN' 'ADJECTIVE'
- 'INTER' 'DEPRICH' 'NUMIN'])
+ 'INTER' 'DEPRICH' 'NUMIN']) #  Фрейм Ответов с числовым эквом
 
-# initialize list of lists
+
 data = Normal_X
 
-code = []
+code = [] # Забираем лист с индексами из массива данных
 for i in data:
     code = i[0]
     
    
-#code = [j for j in [i for i in data]]
-#print(code)
 
-pizdec = [] 
-columba = ['Lenght','P_Amount']
 
-def Pedoro(d):
+Code_Columns = [] 
+Additional_Col = ['Lenght','P_Amount']
+
+def Column_Create(d):
     
     try:    
-        for numba in range(40):
+        for w_index in range(40):
             
-            pizdec.append(f'Code_{numba}')
+            Code_Columns.append(f'Code_{w_index}')
     except Exception as _ex:
         print('ТЫ ДОЛБАЕБ')
             
@@ -176,20 +176,20 @@ def data_trans(data_b):
 
     return collected_data
 
-Pedoro(code)
-#print(pizdec)
-mega_columba = pizdec + columba
-#print(pizdec + columba)
+Column_Create(code)
+
+DF_Columns = Code_Columns + Additional_Col
+
 
 proc_data = data_trans(data)
 test_pd = data_trans(Test_Data)
-#print(mega_columba)
 
-#print(proc_data)
+
+
 # Create the pandas DataFrame
-dataf = pd.DataFrame(proc_data, columns = mega_columba)
-data_test = pd.DataFrame(test_pd, columns = mega_columba)
-a_y = pd.DataFrame(another_Y,columns = ['Тип'])
+dataf = pd.DataFrame(proc_data, columns = mega_columba) # X_DF
+data_test = pd.DataFrame(test_pd, columns = mega_columba) # X_Test_DF
+a_y = pd.DataFrame(another_Y,columns = ['Тип']) # Y_Text DF
 #print(a_y)
 #print(data_test.head())
 

@@ -19,7 +19,7 @@ Construct_Grader = Construct_Grader.fit(X_train,y_train)
 
 y_pred = Construct_Grader.predict(X_test)
 
-print("Accuracy:",metrics.accuracy_score(y_test,y_pred))
+#print("Accuracy:",metrics.accuracy_score(y_test,y_pred))
 
 
 
