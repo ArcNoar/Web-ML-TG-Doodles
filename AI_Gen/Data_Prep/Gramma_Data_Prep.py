@@ -43,10 +43,10 @@ df_Bad = df.loc[(df['Тип'] == 'NONE_T')] # Неклассифицирован
 #print(df_WT.head())
 #parts = df_WT['Код Слогов']
 
-X = X.drop('Тип',axis=1).copy() # Вырезаем ответ из данных.
 
 # Вырезаем Лишние данные.
 X = df_WT.drop('ID',axis=1).copy() 
+X = X.drop('Тип',axis=1).copy() # Вырезаем ответ из данных.
 X = X.drop('Категория',axis=1).copy() 
 X = X.drop('Слово',axis=1).copy()
 X = X.drop('Слоги',axis=1).copy()
@@ -71,9 +71,9 @@ Test_Data = []
 for i in range(0,657):
     if df['Тип'][i] != 'NONE_T':
         Data_I = []
-        Data_I.append(literal_eval(df['Код'][i]))
         Data_I.append(int(df['Длина'][i]))
         Data_I.append(int(df['Количество слогов.'][i]))
+        Data_I.append(literal_eval(df['Код'][i]))
         #Data_I.append(literal_eval(df['Код Слогов'][i]))
 
 
@@ -115,7 +115,11 @@ group_Keys = {
         'ADJECTIVE' : 8,
         'INTER' : 9,
         'DEPRICH' : 10,
-        'NUMIN' : 11
+        'NUMIN' : 11,
+        'PUNCTATION' : 12,
+        'PRICH' : 13,
+        'SYMBOL' : 14,
+        'NUM' : 15
 }
 
 
@@ -128,15 +132,15 @@ for i in range(0,657):
         pass
 
 
-y_df = pd.DataFrame(Normal_Y, columns = ['NAME' 'VERB' 'STATE' 'NOUN' 'PTICK' 'UNION' 'PREPOS' 'NOMIN' 'ADJECTIVE'
- 'INTER' 'DEPRICH' 'NUMIN']) #  Фрейм Ответов с числовым эквом
+#y_df = pd.DataFrame(Normal_Y, columns = ['NAME' 'VERB' 'STATE' 'NOUN' 'PTICK' 'UNION' 'PREPOS' 'NOMIN' 'ADJECTIVE'
+# 'INTER' 'DEPRICH' 'NUMIN','PUNCTATION','PRICH','SYMBOL','NUM']) #  Фрейм Ответов с числовым эквом
 
 
 data = Normal_X
 
 code = [] # Забираем лист с индексами из массива данных
 for i in data:
-    code = i[0]
+    code = i[2]
     
    
 
@@ -178,18 +182,20 @@ def data_trans(data_b):
 
 Column_Create(code)
 
-DF_Columns = Code_Columns + Additional_Col
+DF_Columns = Additional_Col + Code_Columns 
 
 
 proc_data = data_trans(data)
 test_pd = data_trans(Test_Data)
-
+#print(f'Actual Data : {proc_data}')
 
 
 # Create the pandas DataFrame
-dataf = pd.DataFrame(proc_data, columns = mega_columba) # X_DF
-data_test = pd.DataFrame(test_pd, columns = mega_columba) # X_Test_DF
+dataf = pd.DataFrame(proc_data, columns = DF_Columns) # X_DF
+data_test = pd.DataFrame(test_pd, columns = DF_Columns) # X_Test_DF
 a_y = pd.DataFrame(another_Y,columns = ['Тип']) # Y_Text DF
+
+#print(dataf.head())
 #print(a_y)
 #print(data_test.head())
 

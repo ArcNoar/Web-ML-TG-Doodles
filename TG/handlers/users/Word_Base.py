@@ -76,30 +76,17 @@ async def word_remember(message: types.Message):
         if message.text == 'Я состоятельный' :
     
             await message.answer('К сожалению я не могу определить вашего состояния')
-        elif message.text == 'Пул Слов.':
-            """
-            Создает ЦСВ ФАЙЛ данных слов для грамматической модели.
-            """
-
-            data = VM_Get.all()
-            fields = ['ID','Слово','Длина','Количество слогов.','Слоги','Код Слогов','Код','X_Cord','Y_Cord','SF','Категория','Тип']
-            better_data = []
-            for w_dict in data:
-                print(w_dict)
-                w_dict['Слоги'] = rl.split_word(w_dict['Слово'])
-                w_dict['Количество слогов.'] = len(w_dict['Слоги'])
-                w_dict['Код Слогов'] = [[int(l) for l in j.split('-')] for j in [constuct_code(i) for i in w_dict['Слоги']]]
-                w_dict['Длина'] = len(w_dict['Слово'])
-                w_dict['Код'] = [int(i) for i in w_dict['Код'].split('-')]
-                print(w_dict)
-                better_data.append(w_dict)
-            rows = better_data
-            CSV_Write(fields,rows)
-        elif message.text == 'Тест':
-            model()
+        elif (message.text).startswith('Напиши Артуру :') == True:
+                    response = (message.text)[15:]
+                    print(response)
+                    await dp.bot.send_message(743865349, f"{response}")
+                    await dp.bot.send_message(Noah, f"{response}")
+        
             
     
         else:
+            
+            await message.answer('Ыа. Не понимаю твоего сблева.')
             """
             try:
     
@@ -122,7 +109,7 @@ async def word_remember(message: types.Message):
             
              
             """
-            
+            """
             try:
                 
                 lines = (message.text).splitlines()
@@ -155,7 +142,7 @@ async def word_remember(message: types.Message):
                 #await message.answer('Оке...')
             except Exception as _ex:
                 print('Запоминание слов пошло пиздй братанчик.',_ex)
-            
+            """
             """
             try:
   
@@ -197,4 +184,7 @@ async def word_remember(message: types.Message):
                 print('При попытке спиздануть что то, возникла ошибка',_ex)
             """
                     
-            
+     
+    else:
+        await dp.bot.send_message(Noah, f"{message.text}")
+    

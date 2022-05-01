@@ -85,12 +85,12 @@ class VM_Word(models.Model): # Память слов.
     
 
     def __str__(self):
-        return "Слово: %s  ||  X: %s || Y : %s" % (self.word, self.x_cord,self.y_cord )
+        return "Слово: %s  ||  Тип: %s ||" % (self.word, self.word_type)
 
     class Meta:
         verbose_name_plural = 'Хранилище Слов'
         verbose_name = 'Слова'
-        ordering = ['word']
+        ordering = ['word_type']
 
 
 
