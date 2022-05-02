@@ -7,7 +7,6 @@ import numpy as np
 
 from random import randint
 
-import matplotlib.pyplot as plt
 
 #import rusyllab as rl
 
@@ -38,8 +37,8 @@ df = pd.read_csv("C:\\Users\\ArcNoar\\Desktop\\WORK\\Codeing\\ProjectCOde\\FREEZ
 df_WT = df.loc[(df['Тип'] != 'NONE_T')] # Классифицированные Данные
 df_Bad = df.loc[(df['Тип'] == 'NONE_T')] # Неклассифицированные Данные
 
-
-#print(df_Bad['Слово'])
+print('Данные без классификации.')
+print(df_Bad['Слово'])
 #print(df_WT.head())
 #parts = df_WT['Код Слогов']
 
@@ -59,7 +58,7 @@ y_pek = df_WT['Тип'].copy() # Стандартный Датафрейм из 
 
 
 
-
+print(len(df['Тип']))
 Normal_X = [] # Матричный Вариант Полезных Данных
 
 
@@ -68,7 +67,7 @@ Normal_X = [] # Матричный Вариант Полезных Данных
 
 Test_Data = []
 
-for i in range(0,657):
+for i in range(0,3178):
     if df['Тип'][i] != 'NONE_T':
         Data_I = []
         Data_I.append(int(df['Длина'][i]))
@@ -123,7 +122,7 @@ group_Keys = {
 }
 
 
-for i in range(0,657):
+for i in range(0,3178):
 
     if df['Тип'][i] != 'NONE_T':
         another_Y.append(df['Тип'][i])
@@ -186,6 +185,7 @@ DF_Columns = Additional_Col + Code_Columns
 
 
 proc_data = data_trans(data)
+print(len(proc_data))
 test_pd = data_trans(Test_Data)
 #print(f'Actual Data : {proc_data}')
 
@@ -197,7 +197,7 @@ a_y = pd.DataFrame(another_Y,columns = ['Тип']) # Y_Text DF
 
 #print(dataf.head())
 #print(a_y)
-#print(data_test.head())
+
 
 
 

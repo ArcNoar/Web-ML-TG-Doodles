@@ -6,6 +6,7 @@ class Word_Type(StatesGroup):
     Pulling = State()
     Testing = State()
     TT_Set = State() # Test - Typeset
+    Alpha_Find = State()
     Reset_Ask = State()
     #Learning = State()
     #Grading = State()

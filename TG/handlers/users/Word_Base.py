@@ -20,37 +20,7 @@ word_params = word_template.create()
 
 sent_template = Prima_sentence() # Темплейт для запоминания предложения
 sent_config = sent_template.create()
-def constuct_code(word):
-        Alph_Get = VM_Alph.Get()
 
-        some_word = word
-        
-        constr_id_list = []
-        c_code = ''
-        
-        for constr in some_word:
-            try:
-                
-                current_constr = Alph_Get.get_by_construct(constr)
-
-                constr_id_list.append(str(current_constr['ID']))
-
-            except Exception as _ex:
-                #print('Ошибка в дешифраторе конструктов. [VM_Word - Construct Code]',_ex)
-                constr_id_list.append('0')
-
-        c_code = '-'.join(constr_id_list)
-        return c_code
-
-def CSV_Write(fieldnames,row):
-    try:
-        with open('Word_Data.csv','w',encoding='UTF8',newline='') as f:
-            writer = csv.DictWriter(f, fieldnames=fieldnames)
-            writer.writeheader()
-            writer.writerows(row)
-            f.close()
-    except Exception as _ex:
-        print(f'Возникла ошибка при записи CSV-Файла.  {_ex}')
 
 
 @dp.message_handler(state=None)

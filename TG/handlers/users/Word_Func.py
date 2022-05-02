@@ -12,7 +12,7 @@ import rusyllab as rl # Дробление на слоги.
 import numpy as np
 import pandas as pd
 
-from AI_Gen.Gramm_Set import model
+from AI_Gen.Gramm_Set import model, alpha_trainer
 
 from Functional.Prima_Func import Prima_word, parse , G_Delay
 
@@ -121,7 +121,7 @@ async def Nav_State(message: types.Message,state: FSMContext):
     
                 
     if current_user.id == Noah:
-        await dp.bot.send_message(Noah,'Вы в функциональном состоянии. Доступные Функции. \n (Пул Слов.) \n T01 \n T02')
+        await dp.bot.send_message(Noah,'Вы в функциональном состоянии. Доступные Функции. \n (Пул Слов.) \n T01 \n T02 \n T03')
     
         if message.text == 'Я состоятельный' :
     
@@ -141,6 +141,10 @@ async def Nav_State(message: types.Message,state: FSMContext):
         elif message.text == 'T02':
             await message.answer('Прошу вводить только одно слово, даже если ввёдете предложения, я учту только первое слово.')
             await Word_Type.TT_Set.set()
+
+        elif message.text == 'T03':
+            await message.answer('Как будете готовы. Напишите любое сообщение.')
+            await Word_Type.Alpha_Find.set()
         
             
             
@@ -214,7 +218,7 @@ async def word_pull(message: types.Message,state: FSMContext):
 async def model_test(message: types.Message,state: FSMContext):
     await message.answer('Ок, запускаю модель.')
 
-    await message.answer(model())
+    await message.answer(model(0.0007390000000000115))
 
     await state.finish()
 
@@ -292,8 +296,9 @@ async def WTS_Test(message: types.Message,state:FSMContext):
     #print(f'Test Data : {proc_data}')
     testf = pd.DataFrame([proc_data], columns = DF_Columns) # X_DF
     #print(DF_Columns)
+    #c_alph = 0.006497000000000538
 
-    await message.answer(model(testf))
+    await message.answer(alpha_trainer(type=1,aword=testf))
     await message.answer('Продолжаем?')
     await Word_Type.Reset_Ask.set()
 
@@ -307,6 +312,14 @@ async def WTS_Test(message: types.Message,state:FSMContext):
         
     else:
         await state.finish()
+
+
+
+@dp.message_handler(state=Word_Type.Alpha_Find)
+async def WTS_Test(message: types.Message,state:FSMContext):
+    await message.answer(f'Лучшая альфа : {alpha_trainer()}')
+
+    await state.finish()
 
 
 
