@@ -2,17 +2,25 @@ from aiogram import types
 from aiogram.dispatcher import FSMContext
 from TG.loader import dp
 from aiogram.dispatcher.filters import Text
-
-
 import asyncio
-import csv
+
+
 from time import sleep
 from random import randint
-import rusyllab as rl # Дробление на слоги.
+
+import csv
 import numpy as np
 import pandas as pd
 
-from AI_Gen.Gramm_Set import model, alpha_trainer
+import rusyllab as rl # Дробление на слоги.
+#import nltk
+#from nltk.stem.snowball import SnowballStemmer
+
+
+
+from AI_Gen.MBoost.MB_Trees.Type_Trees import model_list
+from AI_Gen.MBoost.MB_Grads.Type_Grad import Gmodel_list
+from AI_Gen.Tools.Alpha_Calibrator import alpha_trainer
 
 from Functional.Prima_Func import Prima_word, parse , G_Delay
 
@@ -121,73 +129,42 @@ async def Nav_State(message: types.Message,state: FSMContext):
     
                 
     if current_user.id == Noah:
-        await dp.bot.send_message(Noah,'Вы в функциональном состоянии. Доступные Функции. \n (Пул Слов.) \n T01 \n T02 \n T03')
+        await dp.bot.send_message(Noah,"""Вы в функциональном состоянии. Доступные Функции. 
+                                        F01 - Пул Слов. Формат - 1
+                                        
+                                        
+                                        T01 - Поиск идеальной Альфы.
+                                        T02 - Альтернативный Тест Слова.
+                                        
+                                        """)
     
         if message.text == 'Я состоятельный' :
     
             await message.answer('Ваше состояние : Функциональное - Слова')
-        elif message.text == 'Пул Слов.':
+        elif message.text == 'F01':
             """
             Создает ЦСВ ФАЙЛ данных слов для грамматической модели.
             """
             await message.answer('Как будете готовы. Напишите любое сообщение.')
             await Word_Type.Pulling.set()
 
-           
+        
+
         elif message.text == 'T01':
             await message.answer('Как будете готовы. Напишите любое сообщение.')
-            await Word_Type.Testing.set()
+            await Word_Type.Alpha_Find.set()
+
 
         elif message.text == 'T02':
             await message.answer('Прошу вводить только одно слово, даже если ввёдете предложения, я учту только первое слово.')
-            await Word_Type.TT_Set.set()
-
-        elif message.text == 'T03':
-            await message.answer('Как будете готовы. Напишите любое сообщение.')
-            await Word_Type.Alpha_Find.set()
+            await Word_Type.ATT_Set.set()
         
             
             
     
         else:
             await message.answer('Неа, вы ошиблись.')
-            # Запоминание Слов
-            """
-            if REM_STATE == True:
-                try:
-                    
-                    
-                    lines = (message.text).splitlines()
-                    bag_of_word = []
-
-                    for line in lines:
-                        for w in line.split():
-                            except_symbol = ['.','?',',','(',')','!',"'",'"','-']
-
-                            word = [i for i in w if i not in except_symbol]
-                            #symbols = [i for i in w if i in except_symbol]
-                            word = ''.join(word)
-                            
-                            bag_of_word.append(word)
-                    print(bag_of_word)
-                    for word in bag_of_word:
-                        if word == '':
-                            word = 'пустота'
-                        else:
-                            #print(word)
-                            word = word.lower()
-                            #print(normal_word)
-                            word_params['Слово'] = word
-                            word_params['Тип'] = G_Delay(parse(word))
-                            #print(word_params)
-                            
-                            #print(word)
-                            Word_add = Word_func.New(word_params)
-                            Word_add.learn_word()
-                    #await message.answer('Оке...')
-                except Exception as _ex:
-                    print('Запоминание слов пошло пиздй братанчик.',_ex)
-            """
+           
 
 @dp.message_handler(state=Word_Type.Pulling)
 async def word_pull(message: types.Message,state: FSMContext):
@@ -214,16 +191,8 @@ async def word_pull(message: types.Message,state: FSMContext):
     await state.finish()
 
 
-@dp.message_handler(state=Word_Type.Testing)
-async def model_test(message: types.Message,state: FSMContext):
-    await message.answer('Ок, запускаю модель.')
 
-    await message.answer(model(0.0007390000000000115))
-
-    await state.finish()
-
-
-@dp.message_handler(state=Word_Type.TT_Set)
+@dp.message_handler(state=Word_Type.ATT_Set)
 async def WTS_Test(message: types.Message,state:FSMContext):
     global word_params
     raw_message = message.text
@@ -238,29 +207,30 @@ async def WTS_Test(message: types.Message,state:FSMContext):
 
     template['Код'] = constuct_code(word)
 
-
-    
-    
     template['Слоги'] = rl.split_word(template['Слово'])
     template['Количество слогов.'] = len(template['Слоги']) #+
     template['Код Слогов'] = [[int(l) for l in j.split('-')] for j in [constuct_code(i) for i in template['Слоги']]]
     template['Длина'] = len(template['Слово']) #+
     template['Код'] = [int(i) for i in template['Код'].split('-')] #+
     #print(template)
-    better_data = [template['Длина'],template['Количество слогов.'],template['Код']]
+    better_data = [template['Длина'],template['Количество слогов.'],template['Код Слогов'],template['Код']]
 
     data = better_data
 
-    code = data[2] # Забираем лист с индексами из массива данных
+    #code = data[3] # Забираем лист с индексами из массива данных
 
+    w_part = data[2][len(data[2]) - 1]
+
+    joined_part = int(''.join([str(i) for i in w_part]))
+    data[2] = round(np.log(joined_part),3)
     
     Code_Columns = [] 
-    Additional_Col = ['Lenght','P_Amount']
+    Additional_Col = ['Lenght','P_Amount','Ending']
     
-    def Column_Create(d):
+    def Column_Create():
         
         try:    
-            for w_index in range(40):
+            for w_index in range(35):
                 
                 Code_Columns.append(f'Code_{w_index}')
         except Exception as _ex:
@@ -281,7 +251,7 @@ async def WTS_Test(message: types.Message,state:FSMContext):
             else:
                 #print(blyat)
                 new_data.append(i)
-        while len(new_data) < 42:
+        while len(new_data) < 38:
             new_data.append(0)
         #collected_data.append(new_data)
             
@@ -289,26 +259,36 @@ async def WTS_Test(message: types.Message,state:FSMContext):
     
         return new_data
     
-    Column_Create(code)
+    Column_Create()
     
     DF_Columns = Additional_Col + Code_Columns
     proc_data = data_trans(data)
+    #print(proc_data)
     #print(f'Test Data : {proc_data}')
     testf = pd.DataFrame([proc_data], columns = DF_Columns) # X_DF
-    #print(DF_Columns)
-    #c_alph = 0.006497000000000538
-
-    await message.answer(alpha_trainer(type=1,aword=testf))
+    #print(testf.head())
+    #print(proc_data)
+    #outpute_grade = Verb_Gmodel([proc_data])
+    
+    
+    #print(outpute_grade)
+    for i in Gmodel_list:
+        cur_model = Gmodel_list[f'{i}']
+        await message.answer(f'Дерево {i} Gmodel предсказало : {cur_model([proc_data])}')
+    """
+    for i in model_list:
+        cur_model = model_list[f'{i}']
+        await message.answer(f'Дерево {i} model предсказало : {cur_model(testf)}')
+    """
     await message.answer('Продолжаем?')
     await Word_Type.Reset_Ask.set()
-
-    #await state.finish()
+    
 
 @dp.message_handler(state=Word_Type.Reset_Ask)
-async def WTS_Test(message: types.Message,state:FSMContext):
+async def Asker(message: types.Message,state:FSMContext):
     if message.text == 'Да.':
         await message.answer('Следующее слово?')
-        await Word_Type.TT_Set.set()
+        await Word_Type.ATT_Set.set()
         
     else:
         await state.finish()
@@ -316,10 +296,19 @@ async def WTS_Test(message: types.Message,state:FSMContext):
 
 
 @dp.message_handler(state=Word_Type.Alpha_Find)
-async def WTS_Test(message: types.Message,state:FSMContext):
-    await message.answer(f'Лучшая альфа : {alpha_trainer()}')
+async def Alpha_Search(message: types.Message,state:FSMContext):
+    #print(model_list)
+    for i in model_list:
+        cur_model = model_list[f'{i}']
+        await message.answer(f'Лучшая альфа для {i} model : {alpha_trainer(cur_model)}')
 
     await state.finish()
+
+
+
+
+
+
 
 
 

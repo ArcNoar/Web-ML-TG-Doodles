@@ -109,8 +109,9 @@ class VM_Word:
                 constr_id_list.append(str(current_constr['ID']))
 
             except Exception as _ex:
+                pass
                 #print('Ошибка в дешифраторе конструктов. [VM_Word - Construct Code]',_ex)
-                constr_id_list.append('0')
+                #constr_id_list.append('0')
 
         c_code = '-'.join(constr_id_list)
         return c_code

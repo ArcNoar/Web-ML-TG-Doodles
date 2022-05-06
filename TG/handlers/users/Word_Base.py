@@ -2,13 +2,8 @@ from aiogram import types
 from aiogram.dispatcher import FSMContext
 from TG.loader import dp
 
-import asyncio
-import csv
-from time import sleep
-from random import randint
-import rusyllab as rl # Дробление на слоги.
 
-from AI_Gen.Gramm_Set import model
+
 
 from Functional.Prima_Func import Prima_sentence, Prima_word, parse , G_Delay
 
@@ -87,7 +82,7 @@ async def word_remember(message: types.Message):
 
                 for line in lines:
                     for w in line.split():
-                        except_symbol = ['.','?',',','(',')','!',"'",'"','-']
+                        except_symbol = ['.','?',',','(',')','!',"'",'"','*'] # Вернуть дефис
 
                         word = [i for i in w if i not in except_symbol]
                         #symbols = [i for i in w if i in except_symbol]
@@ -103,7 +98,9 @@ async def word_remember(message: types.Message):
                         word = word.lower()
                         #print(normal_word)
                         word_params['Слово'] = word
-                        word_params['Тип'] = G_Delay(parse(word))
+                        #word_params['Тип'] = G_Delay(parse(word))
+                        #print(word_params['Тип'])
+                        word_params['Тип'] = 'PTICK'
                         #print(word_params)
                         
                         #print(word)

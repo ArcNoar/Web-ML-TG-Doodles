@@ -37,8 +37,28 @@ df = pd.read_csv("C:\\Users\\ArcNoar\\Desktop\\WORK\\Codeing\\ProjectCOde\\FREEZ
 df_WT = df.loc[(df['Тип'] != 'NONE_T')] # Классифицированные Данные
 df_Bad = df.loc[(df['Тип'] == 'NONE_T')] # Неклассифицированные Данные
 
-print('Данные без классификации.')
-print(df_Bad['Слово'])
+print(len(df_WT))
+"""
+1.NAME
+2.VERB
+3.STATE
+4.NOUN
+5.PTICK
+6.UNION
+7.PREPOS
+8.NOMIN
+9.ADJECTIVE
+10.INTER
+11.DEPRICH
+12.PUNCTATION
+13.SYMBOL
+14.NUM
+15.NUMIN
+16.PRICH
+"""
+
+#print('Данные без классификации.')
+#print(df_Bad['Слово'])
 #print(df_WT.head())
 #parts = df_WT['Код Слогов']
 
@@ -58,22 +78,23 @@ y_pek = df_WT['Тип'].copy() # Стандартный Датафрейм из 
 
 
 
-print(len(df['Тип']))
+#print(len(df['Тип']))
 Normal_X = [] # Матричный Вариант Полезных Данных
 
 
 #print(X['Код'])
 #print(len(X['Код']))
-
+#print(df['Слоги'][0])
+#print(type(df['Слоги'][0]))
 Test_Data = []
 
-for i in range(0,3178):
+for i in range(0,3369):
     if df['Тип'][i] != 'NONE_T':
         Data_I = []
-        Data_I.append(int(df['Длина'][i]))
-        Data_I.append(int(df['Количество слогов.'][i]))
+        Data_I.append(np.exp(int(df['Длина'][i])))
+        Data_I.append(np.exp(int(df['Количество слогов.'][i])))
+        Data_I.append(literal_eval(df['Код Слогов'][i]))
         Data_I.append(literal_eval(df['Код'][i]))
-        #Data_I.append(literal_eval(df['Код Слогов'][i]))
 
 
         Normal_X.append(Data_I)
@@ -81,8 +102,8 @@ for i in range(0,3178):
         Data_I = []
         Data_I.append(literal_eval(df['Код'][i]))
         Data_I.append(int(df['Длина'][i]))
+        Data_I.append(literal_eval(df['Код Слогов'][i]))
         Data_I.append(int(df['Количество слогов.'][i]))
-        #Data_I.append(literal_eval(df['Код Слогов'][i]))
 
 
         Test_Data.append(Data_I)
@@ -122,7 +143,7 @@ group_Keys = {
 }
 
 
-for i in range(0,3178):
+for i in range(0,3369):
 
     if df['Тип'][i] != 'NONE_T':
         another_Y.append(df['Тип'][i])
@@ -136,21 +157,30 @@ for i in range(0,3178):
 
 
 data = Normal_X
-
+#print(data)
 code = [] # Забираем лист с индексами из массива данных
+#w_part = []
+#print(type(data[0][0]))
+
 for i in data:
-    code = i[2]
-    
-   
+    code = i[3]
+  
+#endings = []    
+for i in data:
+    w_part = i[2][len(i[2]) - 1]
 
+    joined_part = int(''.join([str(i) for i in w_part]))
+    i[2] = joined_part
+    #endings.append(joined_part)
 
+#print(w_part)
 Code_Columns = [] 
-Additional_Col = ['Lenght','P_Amount']
+Additional_Col = ['Lenght','P_Amount','Ending']
 
-def Column_Create(d):
+def Column_Create():
     
     try:    
-        for w_index in range(40):
+        for w_index in range(35):
             
             Code_Columns.append(f'Code_{w_index}')
     except Exception as _ex:
@@ -171,7 +201,7 @@ def data_trans(data_b):
             else:
                 #print(blyat)
                 new_data.append(blyat)
-        while len(new_data) < 42:
+        while len(new_data) < 38:
             new_data.append(0)
         collected_data.append(new_data)
         
@@ -179,13 +209,14 @@ def data_trans(data_b):
 
     return collected_data
 
-Column_Create(code)
+Column_Create()
 
 DF_Columns = Additional_Col + Code_Columns 
 
 
 proc_data = data_trans(data)
-print(len(proc_data))
+#print(proc_data[0])
+#print(len(proc_data))
 test_pd = data_trans(Test_Data)
 #print(f'Actual Data : {proc_data}')
 
