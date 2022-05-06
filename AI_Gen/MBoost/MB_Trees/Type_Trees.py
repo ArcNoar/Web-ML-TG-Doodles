@@ -34,12 +34,11 @@ from AI_Gen.Data_Prep.MB_Data_Prep import Y_STATE
 
 
 def ADJ_Model(word=None,ccpa=0.0019300000000000044):
-    #print('ДЕРЕВО ИКС НИЖЕ')
-    #print(X)
-    #print('ДЕРЕВО ИКС ВЫШЕ')
+    
+    
     X_train, X_test, y_train, y_test = train_test_split(X,Y_ADJECTIVE,test_size=0.4)
     
-    Construct_Grader = DecisionTreeClassifier(ccp_alpha=ccpa)
+    Construct_Grader = DecisionTreeClassifier()
     
     Construct_Grader = Construct_Grader.fit(X_train,y_train)
     
@@ -63,7 +62,7 @@ def Deprich_Model(word=None,ccpa=0.000610000000000001):
     X_train, X_test, y_train, y_test = train_test_split(X,Y_DEPRICH,test_size=0.4)
     
 
-    Construct_Grader = DecisionTreeClassifier(ccp_alpha=ccpa)
+    Construct_Grader = DecisionTreeClassifier()
     
     Construct_Grader = Construct_Grader.fit(X_train,y_train)
     
@@ -87,7 +86,7 @@ def Inter_Model(word=None,ccpa=0.0007700000000000014):
     X_train, X_test, y_train, y_test = train_test_split(X,Y_INTER,test_size=0.4)
     
 
-    Construct_Grader = DecisionTreeClassifier(ccp_alpha=ccpa)
+    Construct_Grader = DecisionTreeClassifier()
     
     Construct_Grader = Construct_Grader.fit(X_train,y_train)
     
@@ -111,7 +110,7 @@ def Name_Model(word=None,ccpa=0.0005600000000000008):
     X_train, X_test, y_train, y_test = train_test_split(X,Y_NAME,test_size=0.4)
     
 
-    Construct_Grader = DecisionTreeClassifier(ccp_alpha=ccpa)
+    Construct_Grader = DecisionTreeClassifier()
     
     Construct_Grader = Construct_Grader.fit(X_train,y_train)
     
@@ -135,7 +134,7 @@ def Nomin_Model(word=None,ccpa=0.0010700000000000022):
     X_train, X_test, y_train, y_test = train_test_split(X,Y_NOMIN,test_size=0.4)
     
 
-    Construct_Grader = DecisionTreeClassifier(ccp_alpha=ccpa)
+    Construct_Grader = DecisionTreeClassifier()
     
     Construct_Grader = Construct_Grader.fit(X_train,y_train)
     
@@ -159,7 +158,7 @@ def Noun_Model(word=None,ccpa=0.0035400000000000084):
     X_train, X_test, y_train, y_test = train_test_split(X,Y_NOUN,test_size=0.4)
     
 
-    Construct_Grader = DecisionTreeClassifier(ccp_alpha=ccpa)
+    Construct_Grader = DecisionTreeClassifier()
     
     Construct_Grader = Construct_Grader.fit(X_train,y_train)
     
@@ -183,7 +182,7 @@ def Numin_Model(word=None,ccpa=0.0005400000000000008):
     X_train, X_test, y_train, y_test = train_test_split(X,Y_NUMIN,test_size=0.4)
     
 
-    Construct_Grader = DecisionTreeClassifier(ccp_alpha=ccpa)
+    Construct_Grader = DecisionTreeClassifier()
     
     Construct_Grader = Construct_Grader.fit(X_train,y_train)
     
@@ -207,7 +206,7 @@ def Prepos_Model(word=None,ccpa=0.0008600000000000016):
     X_train, X_test, y_train, y_test = train_test_split(X,Y_PREPOS,test_size=0.4)
     
 
-    Construct_Grader = DecisionTreeClassifier(ccp_alpha=ccpa)
+    Construct_Grader = DecisionTreeClassifier()
     
     Construct_Grader = Construct_Grader.fit(X_train,y_train)
     
@@ -231,7 +230,7 @@ def Prich_Model(word=None,ccpa=0.0005100000000000007):
     X_train, X_test, y_train, y_test = train_test_split(X,Y_PRICH,test_size=0.4)
     
 
-    Construct_Grader = DecisionTreeClassifier(ccp_alpha=ccpa)
+    Construct_Grader = DecisionTreeClassifier()
     
     Construct_Grader = Construct_Grader.fit(X_train,y_train)
     
@@ -255,7 +254,7 @@ def Ptick_Model(word=None,ccpa=0.000990000000000002):
     X_train, X_test, y_train, y_test = train_test_split(X,Y_PTICK,test_size=0.4)
     
 
-    Construct_Grader = DecisionTreeClassifier(ccp_alpha=ccpa)
+    Construct_Grader = DecisionTreeClassifier()
     
     Construct_Grader = Construct_Grader.fit(X_train,y_train)
     
@@ -279,7 +278,7 @@ def State_Model(word=None,ccpa=0.0013100000000000028):
     X_train, X_test, y_train, y_test = train_test_split(X,Y_STATE,test_size=0.4)
     
 
-    Construct_Grader = DecisionTreeClassifier(ccp_alpha=ccpa)
+    Construct_Grader = DecisionTreeClassifier()
     
     Construct_Grader = Construct_Grader.fit(X_train,y_train)
     
@@ -303,7 +302,7 @@ def Union_Model(word=None,ccpa=0.000620000000000001):
     X_train, X_test, y_train, y_test = train_test_split(X,Y_UNION,test_size=0.4)
     
 
-    Construct_Grader = DecisionTreeClassifier(ccp_alpha=ccpa)
+    Construct_Grader = DecisionTreeClassifier()
     
     Construct_Grader = Construct_Grader.fit(X_train,y_train)
     
@@ -326,7 +325,7 @@ def Verb_Model(word=None,ccpa=0.0015400000000000034):
     X_train, X_test, y_train, y_test = train_test_split(X,Y_Verb,test_size=0.4)
     
 
-    Construct_Grader = DecisionTreeClassifier(ccp_alpha=ccpa)
+    Construct_Grader = DecisionTreeClassifier()
     
     Construct_Grader = Construct_Grader.fit(X_train,y_train)
     

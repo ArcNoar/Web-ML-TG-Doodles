@@ -1,5 +1,5 @@
 from sklearn.ensemble import GradientBoostingClassifier
-import numpy as np
+
 
 from AI_Gen.Data_Prep.MB_Data_Prep import GX_Base # General Grad X
 
@@ -33,7 +33,6 @@ from AI_Gen.Data_Prep.MB_Data_Prep import GY_Prich
 
 def Verb_Gmodel(word):
     print('Мы в глаголе.')
-    
     model = GradientBoostingClassifier()
     model.fit(GX_Base, GY_Verb)
     
@@ -42,9 +41,7 @@ def Verb_Gmodel(word):
 def Noun_Gmodel(word):
     print('Мы в Существительном.')
     model = GradientBoostingClassifier()
-    GX = np.array(GX_Base)
-    print(GX)
-    model.fit(GX, np.array(GY_Noun))
+    model.fit(GX_Base, GY_Noun)
     
     return model.predict(word)
 
@@ -114,8 +111,7 @@ def State_Gmodel(word):
 def Numin_Gmodel(word):
     print('Мы в Числительном.')
     model = GradientBoostingClassifier()
-    GX = np.array(GX_Base)
-    model.fit(GX, GY_Numin)
+    model.fit(GX_Base, GY_Numin)
     
     return model.predict(word)
 

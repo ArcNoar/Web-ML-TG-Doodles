@@ -275,11 +275,11 @@ async def WTS_Test(message: types.Message,state:FSMContext):
     for i in Gmodel_list:
         cur_model = Gmodel_list[f'{i}']
         await message.answer(f'Дерево {i} Gmodel предсказало : {cur_model([proc_data])}')
-    """
+
     for i in model_list:
         cur_model = model_list[f'{i}']
         await message.answer(f'Дерево {i} model предсказало : {cur_model(testf)}')
-    """
+    
     await message.answer('Продолжаем?')
     await Word_Type.Reset_Ask.set()
     

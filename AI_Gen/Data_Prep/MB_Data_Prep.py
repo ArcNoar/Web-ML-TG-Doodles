@@ -168,8 +168,8 @@ def X_Get(DF):
                     else:
                         
                         new_data.append(info)
-                #while len(new_data) < 38:
-                #    pass
+                while len(new_data) < 38:
+                    new_data.append(0)
                 collected_data.append(new_data)
                 
     
@@ -183,8 +183,7 @@ def X_Get(DF):
         proc_data = data_trans(data)
         
         # Create the pandas DataFrame
-        #dataf = pd.DataFrame(proc_data, columns = DF_Columns) # X_DF
-        dataf = 0
+        dataf = pd.DataFrame(proc_data, columns = DF_Columns) # X_DF
     
         #print(dataf.head())
         return dataf, proc_data
