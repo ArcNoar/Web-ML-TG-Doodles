@@ -123,7 +123,7 @@ class VM_Word:
             self.Word = template['Слово']
             self.W_X = template['X_Cord']
             self.W_Y = template['Y_Cord']
-            self.Group_Id = template['Категория']
+            #self.Group_Id = template['Категория']
             self.SpecF = template['SF']
             self.W_Type = template['Тип']
             constr_func = VM_Word()
@@ -147,11 +147,10 @@ class VM_Word:
 
 
                 second_query = f"""INSERT INTO public."Prima_Word_vm_word" (
-                                word,word_code,x_cord,y_cord,special_field, group_of_word_id,word_type) VALUES (
+                                word,word_code,x_cord,y_cord,special_field,word_type) VALUES (
                                 '{self.Word}'::character varying, '{self.W_Code}'::character varying,
                                 '{self.W_X}'::double precision,'{self.W_Y}'::double precision,
                                 '{self.SpecF}'::character varying,
-                                 '{self.Group_Id}'::bigint,
                                  '{self.W_Type}'::character varying)
                                  returning id;"""
                 cursor.execute(second_query)
@@ -364,7 +363,7 @@ class VM_Word:
 
 
 
-class VM_Sentence:
+class VM_Correct_Answer:
     """
     
     """
@@ -387,12 +386,21 @@ class VM_Sentence:
         return d_code
     class New:
         def __init__(self,template):
-            self.Sentence = template['Предложение']
+            self.User_Sent = template['US']
             sent_func = VM_Sentence()
-            self.Sent_Desch = sent_func.deschcode(self.Sentence)
-            self.S_X = template['X_Cord']
-            self.S_Y = template['Y_Cord']
-            self.Spec_F = template['SF']
+            self.US_Desch = sent_func.deschcode(self.User_Sent)
+            self.Answer_Sent = template['AS']
+            self.AS_Desch = sent_func.deschcode(self.Answer_Sent)
+
+            self.G1 = template['G1']
+            self.G2 = template['G2']
+            self.G3 = template['G3']
+            self.G4 = template['G4']
+            self.G5 = template['G5']
+            self.G6 = template['G6']
+            self.G7 = template['G7']
+            self.G8 = template['G8']
+            self.Category_id = template['Категория']
             self.Context_id = template['Контекст']
 
 
@@ -412,13 +420,19 @@ class VM_Sentence:
                
 
 
-                add_query = f"""INSERT INTO public."Prima_Word_sentence_memory" (
-                                sentence, sent_dech, x_cord, y_cord,special_field, sent_context_id) VALUES (
-                                '{self.Sentence}'::text, '{self.Sent_Desch}'::text,
-                                '{self.S_X}'::double precision,'{self.S_Y}'::double precision,
-                                '{self.Spec_F}'::character varying,
-                                 {self.Context_id}::bigint)
-                                 returning sentence;"""
+                add_query = f"""INSERT INTO public."Prima_Word_correct_answers" (
+                                user_sent, us_dech, actual_resp, ar_dech,
+                                g1, g2, g3, g4, g5, g6, g7, g8,
+                                category_id, sent_context_id) VALUES (
+                                '{self.User_Sent}'::text, '{self.US_Desch}'::text,
+                                '{self.Answer_Sent}'::text, '{self.AS_Desch}'::text,
+                                {self.G1}::double precision,{self.G2}::double precision,
+                                {self.G3}::double precision,{self.G4}::double precision,
+                                {self.G5}::double precision,{self.G6}::double precision,
+                                {self.G7}::double precision,{self.G8}::double precision,
+                                {self.Category_id}::bigint,
+                                {self.Context_id}::bigint)
+                                 returning id;"""
                 cursor.execute(add_query)
                 #СУКА КТО КОМИТ СПИЗДИЛ
                 connection.commit()
@@ -434,9 +448,7 @@ class VM_Sentence:
 
     class Get:
         """
-        Зачем ей доставать предложения если предложения добавляется всегда? Тип слова, потом предложения.
-        Что даст сопоставление? (Наверное тогда и париться не буду кек.)
-        Мб конечно в будушем при поиске схожих предложений, тип пусть будет ок, но хз.
+        Pull by User Message
         """
 
         def sentence_data(self,proc_sent):
@@ -453,7 +465,7 @@ class VM_Sentence:
 
 
 
-                select_query = f"""SELECT * FROM public."Prima_Word_sentence_memory" WHERE sentence = '{proc_sent}' """
+                select_query = f"""SELECT * FROM public."Prima_Word_correct_answers" WHERE user_sent = '{proc_sent}' """
                 cursor.execute(select_query)
                 pulled_data = STD_Prima(cursor.fetchall())
                 
@@ -471,7 +483,15 @@ class VM_Sentence:
                     #print('Дб отключена')
 
     class Edit:
-        def X_Cord(self,id,new_x):
+        # Когда сможешь филлерить оценки, забьем эдитор.
+        pass
+
+
+
+
+class Prima_Contexts:
+    class New:
+        def context(self,cont_name):
             try:
 
                 connection = psycopg2.connect(
@@ -483,18 +503,21 @@ class VM_Sentence:
                         )
                 
                 cursor = connection.cursor()
+                
+               
 
 
-                Edit_query = f"""UPDATE public."Prima_Word_sentence_memory" SET
-                                    x_cord = '{new_x}'::Double Precision WHERE
-                                    id = '{id}';"""
-                cursor.execute(Edit_query)
+                add_query = f"""INSERT INTO public."Prima_Word_context_table" (
+                                    context) VALUES (
+                                    '{cont_name}'::character varying)
+                                     returning id;"""
+                cursor.execute(add_query)
                 #СУКА КТО КОМИТ СПИЗДИЛ
                 connection.commit()
                         
             
             except Exception as _ex:
-                print('Ошибка в ходе чтения ДБ[Sent_Edit-X_CORD]', _ex)
+                print('Ошибка в ходе чтения ДБ.[[Prima_Context-NEW[Context_REG] ]', _ex)
             
             finally:
                 if connection:
@@ -502,9 +525,9 @@ class VM_Sentence:
                     #print('Дб отключена')
 
 
-        def Y_Cord(self,id,new_y):
+    class Get:
+        def check_for(self,proc_cont):
             try:
-
                 connection = psycopg2.connect(
                 
                         host = host,
@@ -516,18 +539,101 @@ class VM_Sentence:
                 cursor = connection.cursor()
 
 
-                Edit_query = f"""UPDATE public."Prima_Word_sentence_memory" SET
-                                    y_cord = '{new_y}'::Double Precision WHERE
-                                    id = '{id}';"""
-                cursor.execute(Edit_query)
-                #СУКА КТО КОМИТ СПИЗДИЛ
-                connection.commit()
-                        
-            
+
+                select_query = f"""SELECT * FROM public."Prima_Word_context_table" WHERE context = '{proc_cont}' """
+                cursor.execute(select_query)
+                if cursor.fetchall() == []:
+                    return False
+                else:
+                    return True
+                #pulled_data = cursor.fetchall()
+                
+                # 
+                #return pulled_data
+                
+                
+                
             except Exception as _ex:
-                print('Ошибка в ходе чтения ДБ[Sent_Edit-X_CORD]', _ex)
+                print('Ошибка в ходе чтения ДБ. [Prima_CONTEXT [Get-CHECK FOR]]', _ex)
             
             finally:
                 if connection:
                     connection.close()
                     #print('Дб отключена')
+
+
+
+class Prima_Categories:
+    class New:
+        def category(self,cat_name):
+            try:
+
+                connection = psycopg2.connect(
+                
+                        host = host,
+                        user = user,
+                        password = password,
+                        database = db_name
+                        )
+                
+                cursor = connection.cursor()
+                
+               
+
+
+                add_query = f"""INSERT INTO public."Prima_Word_gos" (
+                                    cos) VALUES (
+                                    '{cat_name}'::character varying)
+                                     returning id;"""
+                cursor.execute(add_query)
+                #СУКА КТО КОМИТ СПИЗДИЛ
+                connection.commit()
+                        
+            
+            except Exception as _ex:
+                print('Ошибка в ходе чтения ДБ.[[Prima_Category-NEW[COS_REG] ]', _ex)
+            
+            finally:
+                if connection:
+                    connection.close()
+                    #print('Дб отключена')
+
+
+    class Get:
+        def check_for(self,proc_cat):
+            try:
+                connection = psycopg2.connect(
+                
+                        host = host,
+                        user = user,
+                        password = password,
+                        database = db_name
+                        )
+                
+                cursor = connection.cursor()
+
+
+
+                select_query = f"""SELECT * FROM public."Prima_Word_gos" WHERE cos = '{proc_cat}' """
+                
+                cursor.execute(select_query)
+                if cursor.fetchall() == []:
+                    return False
+                else:
+                    return True
+                
+                #pulled_data = cursor.fetchall()
+                
+                # 
+                #return pulled_data
+                
+                
+                
+            except Exception as _ex:
+                print('Ошибка в ходе чтения ДБ. [Prima_Category [Get-CHECK FOR]]', _ex)
+            
+            finally:
+                if connection:
+                    connection.close()
+                    #print('Дб отключена')
+        

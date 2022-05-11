@@ -13,17 +13,24 @@ class Prima_sentence:
        Класс создающий темплейт заполнения данных в дб. 
     """
     def create(self):
-        Word_Template = {
-            'Предложение' : 'Пустое предложение' ,
-            'Дешифровка' : '91-92',
-            'X_Cord' : 1,
-            'Y_Cord' : -1,
-            'SF' : 'Empty',
+        sent_Template = {
+            'US' : 'Пустое предложение' ,
+            'US_Dech' : '91-92',
+            'AS' : 'Пустое предложение' ,
+            'AS_Dech' : '91-92',
+            'G1' : 1.0,
+            'G2' : 1.0,
+            'G3' : 1.0,
+            'G4' : 1.0,
+            'G5' : 1.0,
+            'G6' : 1.0,
+            'G7' : 1.0,
+            'G8' : 1.0,
+            'Категория' : '1',
             'Контекст' : '1',
-            
-
             }
-        return Word_Template
+        # Тебе сейчас надо доделать хендлер положительной оценки и переделать сентенс класс в Прима Мем
+        return sent_Template
 
 
 
@@ -39,11 +46,20 @@ def STD_Prima(sent_data):
     try:
         converted_data = {
                 'ID' : data_list[0][0],
-                'Предложение' : data_list[0][1],
-                'Дешифровка' : data_list[0][2],
-                'X_Cord' : data_list[0][3],
-                'Y_Cord' : data_list[0][4],
-                'SF' : data_list[0][5],
+                'US' : data_list[0][1],
+                'US_Dech' : data_list[0][2],
+                'AS' : data_list[0][3],
+                'AS_Dech' : data_list[0][4],
+                'G1' : data_list[0][5],
+                'G2' : data_list[0][6],
+                'G3' : data_list[0][7],
+                'G4' : data_list[0][8],
+                'G5' : data_list[0][9],
+                'G6' : data_list[0][10],
+                'G7' : data_list[0][11],
+                'G8' : data_list[0][12],
+                'Категория' : data_list[0][13],
+                'Контекст' : data_list[0][13]
                 
                 }
         
@@ -76,7 +92,6 @@ class Prima_word:
             'X_Cord' : 1,
             'Y_Cord' : -1,
             'SF' : 'Empty',
-            'Категория' : '1',
             'Тип' : 'NONE_T'
 
             }
@@ -107,8 +122,7 @@ def WTD_Prima(pulled_word):
                 'X_Cord' : data_list[0][3],
                 'Y_Cord' : data_list[0][4],
                 'SF': data_list[0][5],
-                'Категория' : data_list[0][6],
-                'Тип' : data_list[0][7]
+                'Тип' : data_list[0][6]
                 }
         
         return converted_data
@@ -136,8 +150,7 @@ def WTDM_Prima(word_list):
                     'X_Cord' : data_list[3],
                     'Y_Cord' : data_list[4],
                     'SF' : data_list[5],
-                    'Категория' : data_list[6],
-                    'Тип' : data_list[7]
+                    'Тип' : data_list[6]
 
 
                     }

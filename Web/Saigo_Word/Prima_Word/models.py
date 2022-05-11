@@ -50,8 +50,8 @@ class VM_Word(models.Model): # Память слов.
     
     
     
-    group_of_word = models.ForeignKey('GOW',blank=True,null=True,on_delete=models.SET_NULL,
-                                      related_name='GOW',verbose_name='Группировка Слов')
+    #group_of_word = models.ForeignKey('GOW',blank=True,null=True,on_delete=models.SET_NULL,
+    #                                  related_name='GOW',verbose_name='Группировка Слов')
    
     x_cord = models.FloatField(verbose_name='X Координата')
     y_cord = models.FloatField(verbose_name='Y Координата')
@@ -94,36 +94,17 @@ class VM_Word(models.Model): # Память слов.
 
 
 
-class GOW(models.Model): # Group of Words
-    """
-    Класс Группировки слов.
-    COW = Category Of Words , Категория Слов (Как пример Приветственные)
-    """
-    cow = models.CharField(max_length = 50,db_index=True,unique=True,verbose_name='Категория Слов')
 
-
-    def __str__(self):
-        return self.cow
-
-    class Meta:
-        verbose_name_plural = 'Постоянная Память - Группирование Слов'
-        verbose_name = 'Группа'
-        ordering = ['cow']
-
-
-
+"""
 class Sentence_Memory(models.Model): # Память содержащая в себе цельные предложения (В идеале не распознанные)
-    """
-    Sentence
-    Sent_Dech - Дешифрация предложения (Как было сказано в заметках, будет содержать КОД АЙДИ СЛОВ СОДЕРЖАЩИХ)
-    Sent_Context
-    From_Who
-    Short_Mean 
-    """
+    
     sentence = models.TextField(db_index=True,unique=True,verbose_name='Предложение')
     sent_dech = models.TextField(verbose_name='Код-Дешифровка предложения')
     sent_context = models.ForeignKey('Context_Table',blank=True,null=True,
                                      on_delete=models.SET_NULL,verbose_name='Контекст предложения')
+
+    group_of_sent = models.ForeignKey('GOS',blank=True,null=True,on_delete=models.SET_NULL,
+                                      related_name='GOS',verbose_name='Категории Предложений')
 
     x_cord = models.FloatField(verbose_name='X Координата')
     y_cord = models.FloatField(verbose_name='Y Координата')
@@ -138,7 +119,65 @@ class Sentence_Memory(models.Model): # Память содержащая в се
         verbose_name_plural = 'Постоянная Память - Предложения'
         verbose_name = 'Предложение'
         ordering = ['sentence']
+"""
 
+class Correct_Answers(models.Model):
+
+    user_sent = models.TextField(verbose_name='Предложение Пользователя')
+
+    us_dech = models.TextField(verbose_name='Код-Дешифровка US')
+
+    actual_resp = models.TextField(db_index=True,verbose_name='Корректный Ответ.')
+
+    ar_dech = models.TextField(verbose_name='Код-Дешифровка AR')
+
+    category = models.ForeignKey('GOS',blank=True,null=True,on_delete=models.SET_NULL,
+                                      related_name='GOS',verbose_name='Категория')
+
+    sent_context = models.ForeignKey('Context_Table',blank=True,null=True,
+                                     on_delete=models.SET_NULL,verbose_name='Контекст')
+
+    g1 = models.FloatField(default=5.0,null=False,verbose_name='Структура')
+
+    g2 = models.FloatField(default=5.0,null=False,verbose_name='Грамматика')
+
+    g3 = models.FloatField(default=10.0,null=False,verbose_name='Локальная Универсальность')
+
+    g4 = models.FloatField(default=10.0,null=False,verbose_name='Глобальная Универсальность')
+
+    g5 = models.FloatField(default=10.0,null=False,verbose_name='МоноРезистентность')
+
+    g6 = models.FloatField(default=5.0,null=False,verbose_name='Осмысленность')
+
+    g7 = models.BooleanField(default=False,null=False,verbose_name='Завершенность')
+
+    g8 = models.BooleanField(default=False,null=False,verbose_name='Гибкая Дополняемость.')
+
+
+    def __str__(self):
+        return "US: %s  ||  AR: %s ||" % (self.user_sent, self.actual_resp)
+
+    class Meta:
+        verbose_name_plural = 'Постоянная Память - Корректные предложения.'
+        verbose_name = 'Предложение'
+        ordering = ['category']
+
+
+class GOS(models.Model): # Group of Words
+    """
+    Класс Группировки Sentence.
+    COS = Category Of Sentences , Категория Sentence (Как пример Приветственные)
+    """
+    cos = models.CharField(max_length = 50,db_index=True,unique=True,verbose_name='Категория Слов')
+
+
+    def __str__(self):
+        return self.cos
+
+    class Meta:
+        verbose_name_plural = 'Постоянная Память - Категории Предложений.'
+        verbose_name = 'Группа'
+        ordering = ['cos']
 
 
 class Context_Table(models.Model): # Содержит в себе вероятные контексты сообщения
