@@ -162,6 +162,63 @@ class Correct_Answers(models.Model):
         verbose_name = 'Предложение'
         ordering = ['category']
 
+class incorrect_answers(models.Model):
+
+    #user_sent = models.TextField(verbose_name='Предложение Пользователя')
+
+    #us_dech = models.TextField(verbose_name='Код-Дешифровка US')
+
+    actual_resp = models.TextField(db_index=True,verbose_name='Ответ.')
+
+    ar_dech = models.TextField(verbose_name='Код-Дешифровка AR')
+
+    cat = models.ForeignKey('GOS',blank=True,null=True,on_delete=models.SET_NULL,
+                                      related_name='GOSI',verbose_name='Категория')
+
+    sent_contex = models.ForeignKey('Context_Table',blank=True,null=True,
+                                     on_delete=models.SET_NULL,verbose_name='Контекст')
+
+    g1 = models.FloatField(default=5.0,null=False,verbose_name='Структура')
+
+    g2 = models.FloatField(default=5.0,null=False,verbose_name='Грамматика')
+
+    g3 = models.FloatField(default=10.0,null=False,verbose_name='Локальная Универсальность')
+
+    g4 = models.FloatField(default=10.0,null=False,verbose_name='Глобальная Универсальность')
+
+    g5 = models.FloatField(default=10.0,null=False,verbose_name='МоноРезистентность')
+
+    g6 = models.FloatField(default=5.0,null=False,verbose_name='Осмысленность')
+
+    g7 = models.BooleanField(default=False,null=False,verbose_name='Завершенность')
+
+    g8 = models.BooleanField(default=False,null=False,verbose_name='Гибкая Дополняемость.')
+
+
+    def __str__(self):
+        return "AR: %s ||" % (self.actual_resp)
+
+    class Meta:
+        verbose_name_plural = 'Постоянная Память - НеКорректные предложения.'
+        verbose_name = 'Предложение'
+        ordering = ['cat']
+
+class Trash_Answers(models.Model):
+
+    actual_resp = models.TextField(db_index=True,verbose_name='Мусорный Ответ.')
+
+    ar_dech = models.TextField(verbose_name='Код-Дешифровка AR')
+
+   
+
+
+    def __str__(self):
+        return "AR: %s ||" % (self.actual_resp)
+
+    class Meta:
+        verbose_name_plural = 'Постоянная Память - Мусорные предложения.'
+        verbose_name = 'Предложение'
+        ordering = ['actual_resp']
 
 class GOS(models.Model): # Group of Words
     """

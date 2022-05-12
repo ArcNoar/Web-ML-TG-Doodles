@@ -29,7 +29,26 @@ class Prima_sentence:
             'Категория' : '1',
             'Контекст' : '1',
             }
-        # Тебе сейчас надо доделать хендлер положительной оценки и переделать сентенс класс в Прима Мем
+        
+        return sent_Template
+
+    def alt_create(self):
+        sent_Template = {
+            
+            'AS' : 'Пустое предложение' ,
+            'AS_Dech' : '91-92',
+            'G1' : 1.0,
+            'G2' : 1.0,
+            'G3' : 1.0,
+            'G4' : 1.0,
+            'G5' : 1.0,
+            'G6' : 1.0,
+            'G7' : 1.0,
+            'G8' : 1.0,
+            'Категория' : '1',
+            'Контекст' : '1',
+            }
+        
         return sent_Template
 
 
@@ -66,6 +85,44 @@ def STD_Prima(sent_data):
         return converted_data
     except Exception as _ex:
         print(_ex)
+
+def MSTD_Prima(sent_data):
+    """
+    MSTD = Many Sentence To Dict
+    !!! ONLY FOR CONVERT SQL REQUEST DATA_LIST !!!
+    Конвертирует Данные из дб в Словарь.
+    Возвращает список
+   
+
+    """
+    data_list = sent_data
+    #print(data_list)
+    collected_sent = []
+    
+    for sent_d in data_list:
+        converted_data = {
+                'ID' : sent_d[0],
+                'US' : sent_d[1],
+                'US_Dech' : sent_d[2],
+                'AS' : sent_d[3],
+                'AS_Dech' : sent_d[4],
+                'G1' : sent_d[5],
+                'G2' : sent_d[6],
+                'G3' : sent_d[7],
+                'G4' : sent_d[8],
+                'G5' : sent_d[9],
+                'G6' : sent_d[10],
+                'G7' : sent_d[11],
+                'G8' : sent_d[12],
+                'Категория' : sent_d[13],
+                'Контекст' : sent_d[13]
+                
+                }
+        #print(converted_data)
+        collected_sent.append(converted_data)
+    #print(collected_sent)
+    return collected_sent
+    
 
 
 

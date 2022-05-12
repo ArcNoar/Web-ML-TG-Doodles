@@ -5,7 +5,7 @@ from TG.loader import dp
 
 
 
-from Functional.Prima_Func import Prima_sentence, Prima_word, parse , G_Delay
+from Functional.Prima_Func import Prima_sentence, Prima_word # parse , G_Delay
 
 from TG.sql.Prima_Mem import VM_Alph, VM_Word 
 
