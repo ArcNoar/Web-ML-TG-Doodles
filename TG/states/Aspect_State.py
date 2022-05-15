@@ -3,7 +3,7 @@ from aiogram.dispatcher.filters.state import StatesGroup, State
 
 class Aspect(StatesGroup):
     Initial = State() # получение предложения
-
+    FunMode = State()
     Pur_Find = State()
 
     Listen_Answer = State() # Ответ и уточнение корректности 

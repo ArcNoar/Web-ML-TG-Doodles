@@ -38,12 +38,12 @@ Grade_Dict = {}
 Correction_Route = False
 Fiction_Route = False
 
-
+FUN_MODE = False
 
 
 @dp.message_handler(commands="Aspect",state=None)
 async def Aspect_Init(message: types.Message):
-    global actual_sentence
+    global actual_sentence, FUN_MODE
 
     current_user = message.from_user
     Noah = 340981880
@@ -57,19 +57,22 @@ async def Aspect_Init(message: types.Message):
 
     #Alph_New = VM_Alph.New()
 
-    
-    actual_sentence = None            
-    if current_user.id == Noah:
-    
-        await Aspect.Initial.set()
-        await message.answer('Нейрон Аспекта. Запуск.')
-        await message.answer('Напишите что угодно.')
+    if FUN_MODE == False:
+        actual_sentence = None            
+        if current_user.id == Noah:
         
-        #await dp.bot.send_message(current_user.id,'В общем. Ты перенаправлен в состояние инструктажа. \n Если ты уже проходил этот гайд, то напиши "Пропустить."')
+            await Aspect.Initial.set()
+            await message.answer('Нейрон Аспекта. Запуск.')
+            await message.answer('Напишите что угодно.')
+            
+            #await dp.bot.send_message(current_user.id,'В общем. Ты перенаправлен в состояние инструктажа. \n Если ты уже проходил этот гайд, то напиши "Пропустить."')
 
-    
+        
+        else:
+            await message.answer('А ты уверен что у тебя есть права?')
     else:
-        await message.answer('А ты уверен что у тебя есть права?')
+        await Aspect.FunMode.set()
+        await message.answer('Игровой режим? Ну ок, напиши что угодно,и я верну рандомное предложение.')
 
 #Отмена.
 
@@ -83,12 +86,21 @@ async def cancel_handler(message: types.Message, state = FSMContext):
     await message.reply('Ну окэ.')
 
 
+@dp.message_handler(state=Aspect.FunMode)
+async def Fun_Mode(message: types.Message,state: FSMContext):
+    global actual_sentence, US , RS
+    RS = SC_Random(Generated_Sentence=actual_sentence)
+    actual_sentence = RS
+    await message.answer(actual_sentence)
+    actual_sentence = None
+    await message.answer('Для повторной генерации снова напишите что угодно.')
+
 
 @dp.message_handler(state=Aspect.Initial)
 async def Listen_Answer(message: types.Message,state: FSMContext):
     global actual_sentence, US , RS , Purpose_Find
     US = (message.text).lower()
-
+    print(f'-{US}')
     CA_Get = VM_Correct_Answer.Get()
     ICA_Get = VM_InCorrect_Answer.Get()
 
@@ -107,14 +119,14 @@ async def Listen_Answer(message: types.Message,state: FSMContext):
             RS = SC_Random(Generated_Sentence=actual_sentence)
             actual_sentence = RS
             await message.answer(actual_sentence)
-
+            print(f'-{actual_sentence}')
             await message.answer('Мой ответ корректный? (Да \ Нет)')
 
             await Aspect.Listen_Answer.set()
         else:
             actual_sentence = purposed_answer['AS']
             await message.answer(actual_sentence) 
-            
+            print(f'-{actual_sentence}')
             await message.answer('Это предложение имеет место быть здесь?')
 
             await Aspect.Pur_Find.set()
@@ -126,11 +138,13 @@ async def Listen_Answer(message: types.Message,state: FSMContext):
             variate_answer = 0
             actual_sentence = potential_answer[variate_answer]['AS']
             await message.answer(actual_sentence)
+            print(f'-{actual_sentence}')
             actual_sentence = None
         else:
             variate_answer = randint(0,len(potential_answer) - 1)
             actual_sentence = potential_answer[variate_answer]['AS']
             await message.answer(actual_sentence)
+            print(f'-{actual_sentence}')
             actual_sentence = None
 
         
@@ -177,6 +191,11 @@ async def Grade_Init(message: types.Message,state: FSMContext):
         await Aspect.Neg_Nav.set()
         #await message.answer(f'Допускаете ли вы, что ваше предложение "{US}" \n Само по себе является некорректным? \n (Да \ Нет)')
         #await Aspect.Review.set()
+
+    elif (message.text).lower() == 'заново':
+        await message.answer('Ок. Напишите любое предложение.')
+        await Aspect.Initial.set()
+
 
 
 @dp.message_handler(state=Aspect.Neg_Nav)
@@ -582,6 +601,24 @@ async def Repeat(message: types.Message,state: FSMContext):
 Конечно я бы мог сделать стэйт сбора , а нет не мог, каким образом я 2 состояния сотворю? Значит нужно просто куда то логировать диалог.
 
 Так тупо что я в итоге возвращаюсь к самой первой схеме и самому первому методу разговора.
+
+___
+Контексты потом надо разбить по оценка вроде, Дружеское / Вражбедное 
+    Мягкое / Грубое 
+    и тд.
+
+
+Возможно и группировки слов надо параметризировать получше
+но это по ходу дела.
+
+А, еще стоит как то определять не по строгости, а по содержанию одного в другом, крч как контекстуальная нейронка
+ДА ДА
+КАКАЯ БЫ ОНА ТУПАЯ НЕ БЫЛА, ОНА ИМЕЕТ МЕСТО БЫТЬ
+
+
+____
+Таймлайн(Время Суток) тоже надо сделать, это пиздец как влияет на самом деле на форму ответа
+
 
 
 """
