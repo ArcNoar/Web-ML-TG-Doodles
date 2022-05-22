@@ -1,0 +1,86 @@
+
+
+body {
+    background: rgb(20,97,143);
+    background: linear-gradient(0deg, rgba(2, 3, 18,1) 0%, rgba(4,31,47,1) 49%, rgba(0,0,0,1) 79%);
+    margin-bottom: -20px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+.Stars {
+    position: absolute;
+    width: 80%;
+    height: 60%;
+    left: 10%;
+    top: -20px;
+    background: url("Images/BG_Stars.png");
+    background-attachment: local;
+    opacity: 0.1;
+    filter: blur(5px);
+    animation: Stars 15s infinite;
+}
+
+@keyframes Stars {
+    15% {
+        opacity: 0.2;
+        filter: blur(4px);
+    }
+
+    25% {
+        opacity: 0.4;
+        filter: blur(3px);
+    }
+
+    30% {
+        opacity: 0.8;
+        filter: blur(2px);
+    }
+
+    40% {
+        opacity: 0.9;
+        filter: blur(1px);
+    }
+
+    50% {
+        opacity: 1;
+        filter: blur(1px);
+    }
+}
+
+
+.Nav-Panel {
+    margin: 0;
+    position: fixed;
+}
+
+
+.Login-Button {
+    position: fixed;
+    text-decoration: none;
+    padding: 5px 10px 5px 10px;
+    border-radius: 17px;
+    text-align: center;
+    font-family: 'Neue Machina Medium';
+    font-size: 40px;
+    color: aliceblue;
+    margin-left: 84%;
+    margin-top: 1%;
+    text-shadow: 0.7px 0.4px 1px, 0 0 0.1em rgb(151, 226, 255);
+    filter: drop-shadow(-1px 2px 4px rgb(0, 29, 40));
+    transition: 0.2s;
+}
+
+
+.Login-Button:hover {
+    position: fixed;
+    text-decoration: none;
+    text-align: center;
+    font-family: 'Neue Machina Medium';
+    font-size: 42px;
+    color: aliceblue;
+    margin-left: 84%;
+    margin-top: 1%;
+    text-shadow: 0.7px 0.4px 1px, 0 0 0.2em rgb(151, 226, 255);
+}

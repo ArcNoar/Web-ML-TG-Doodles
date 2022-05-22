@@ -1,0 +1,262 @@
+/*Это сокрытие кнопки HOME*/
+
+.Arc-Button {
+    visibility: hidden;
+}
+
+
+.Arc_Label {
+    color: rgb(225, 255, 247);
+
+    position: fixed;
+    margin-left: 36%;
+    font-family: 'N_Mach Medium',Bahnschrift;
+    font-size: 100px;
+
+    text-shadow: 1.4px 0.8px 2px, 0 0 0.1em rgb(151, 226, 255);
+
+}
+
+
+.AboutB {
+    text-decoration: none;
+    background: none;
+    text-align: center;
+    font-family: 'N_Mach Medium',Bahnschrift;
+    font-size: 30px;
+    color: aliceblue;
+    margin-right: 15px;
+    margin-left: 10px;
+}
+
+.AdminB {
+    text-decoration: none;
+    background: none;
+    text-align: center;
+    font-family: 'N_Mach Medium',Bahnschrift;
+    font-size: 30px;
+    color: aliceblue;
+    margin-right: 15px;
+    margin-left: 10px;
+}
+
+
+.First_h {
+    font-size: 58px;
+    color: #7ee9dd;
+    font-family: 'N_Mach Medium',Bahnschrift;
+    text-align: center;
+    vertical-align: central;
+    opacity: 1.0;
+}
+
+.Main_Content {
+    
+/*    background: radial-gradient(circle, rgba(37,0,68,1) 0%, rgba(20,62,57,1) 73%, rgba(22,0,27,1) 100%);*/
+
+/*    line-height: 480px;*/
+
+    position: relative;
+    align-items: center;
+    display: flex;
+
+    justify-content: center;
+    transition: 0.3s;
+
+
+    margin-top: 180px;
+    margin-left: 190px;
+    margin-bottom: 30px;
+
+    height: 550px;
+    width: 1100px;
+}
+
+.Main_Content::before {
+    content: ' ';
+    position: absolute;
+    top: 0;
+    width: 75%;
+    height: 65%;
+
+    text-decoration: none;
+    background: linear-gradient(0deg, rgba(40,159,159,1) 0%, rgba(2,32,37,1) 100%);
+
+    border-top-right-radius: 10px;
+    border-top-left-radius: 40px;
+    border-bottom-right-radius: 40px;
+    border-bottom-left-radius: 10px;
+
+    transform: skewX(-2deg);
+    transition: 0.4s;
+}
+
+.Main_Content::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    width: 75%;
+    height: 65%;
+
+    background: linear-gradient(0deg, rgba(40,159,159,1) 0%, rgba(2,32,37,1) 100%);
+
+    border-top-right-radius: 10px;
+    border-top-left-radius: 40px;
+    border-bottom-right-radius: 40px;
+    border-bottom-left-radius: 10px;
+
+    transform: skewX(-2deg);
+    transition: 0.4s;
+    filter: blur(30px);
+}
+
+.Main_Content:hover:before,
+.Main_Content:hover:after {
+
+    transform: skewX(0deg);
+    transform: skewY(0deg);
+    width: calc(100% - 90px);
+    height: calc(100% - 10px);
+}
+
+.Main_Content:nth-child(1):before,
+.Main_Content:nth-child(1):after {
+    background: linear-gradient(315deg, #ffbc00, #ff0058)
+}
+
+.Main_Content:nth-child(2):before,
+.Main_Content:nth-child(2):after {
+    background: linear-gradient(315deg, #03a9f4, #ff0058)
+}
+
+.Main_Content:nth-child(3):before,
+.Main_Content:nth-child(3):after {
+    background: linear-gradient(315deg, #4dff03, #00d0ff)
+}
+
+.Main_Content span {
+
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 5;
+    pointer-events: none;
+}
+
+Main_Content span::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    opacity: 0;
+    transition: 0.1s;
+    animation: animate 2s ease-in-out infinite;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08)
+}
+
+Main_Content:hover span::before {
+    top: -50px;
+    left: 50px;
+    width: 100px;
+    height: 100px;
+    opacity: 1;
+}
+
+
+Main_Content span::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    opacity: 0;
+    transition: 0.5s;
+    animation: animate 2s ease-in-out infinite;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    animation-delay: -1s;
+}
+
+Main_Content:hover span::after {
+    bottom: -50px;
+    right: 50px;
+    width: 100px;
+    height: 100px;
+    opacity: 1;
+}
+
+@keyframes animate
+{
+    0%, 100%
+    {
+        transform: translateY(10px);
+    }
+
+    50%
+    {
+        transform: translate(-10px);
+    }
+}
+
+.Main_Content .content {
+    position: relative;
+    left: 0;
+    top: -80px;
+    padding: 10px 20px;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    z-index: 1;
+    transition: 0.5s;
+    font-family: 'N_Mach Medium', Bahnschrift;
+    color: #fff;
+}
+
+.Main_Content:hover .content {
+    left: -5px;
+    padding: 30px 20px;
+}
+
+.Main_Content .content h2 {
+    font-size: 2em;
+    color: #fff;
+    margin-bottom: 10px;
+}
+
+.Main_Content .content p {
+    font-size: 1.1em;
+    margin-bottom: 10px;
+    line-height: 1.4em;
+}
+
+
+.Main_Content .content a {
+    display: inline-block;
+    font-size: 1.1em;
+    color: #111;
+    background: #fff;
+    padding: 10px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: 700;
+    margin-top: 5px;
+}
+
+.Main_Content .content a:hover {
+
+    background: rgb(3, 5, 21);
+    color: rgb(115, 255, 246);
+    box-shadow: 0 1px 15px rgba(1, 1, 1, 0.2);
+}

@@ -1,0 +1,33 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>{% block title %} {% endblock %}</title>
+    <link rel="icon" type="image/png" href="{% static 'Orph_Pack/img/NoahIcon.png' %}" />
+    <link rel="stylesheet" href="{% static 'Orph_Pack/css/Fonts/stylesheet.css' %}" />
+    <link rel="stylesheet" href="{% static 'Orph_Pack/css/Base.css' %}" />
+    {% block css_add %} {% endblock %}
+</head>
+<body>
+    <div class="Stars"></div>
+    <div class="Nav-Panel">
+        <!-- Nav Buttons -->
+        {% block Nav-Buttons %}
+        {% endblock %}
+
+    </div>
+
+    <a href="{% url 'Main' %}" class="Arc-Button">
+        HOME
+    </a>
+
+    {% block page_label %}{% endblock %}
+    <a href="#" class="Login-Button">
+        Login
+    </a>
+    <!-- Content -->
+    {% block content %} {% endblock %}
+    <!-- End Content -->
+</body>
+</html>

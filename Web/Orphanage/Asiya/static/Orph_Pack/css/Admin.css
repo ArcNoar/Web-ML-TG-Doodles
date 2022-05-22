@@ -1,0 +1,30 @@
+
+
+.Arc-Button {
+    text-decoration: none;
+    background: none;
+    text-align: center;
+    font-family: 'Neue Machina Medium';
+    font-size: 40px;
+    color: aliceblue;
+    margin-top: 40px;
+    margin-right: 70px;
+    margin-left: 35px;
+    text-shadow: 0.7px 0.4px 1px, 0 0 0.1em rgb(151, 226, 255);
+}
+
+
+.Admin_Label {
+    color: rgb(225, 255, 247);
+    font-family: 'Neue Machina Medium';
+    font-size: 100px;
+    text-shadow: 1.4px 0.8px 2px, 0 0 0.1em rgb(151, 226, 255);
+}
+
+.Admin_Content {
+    font-size: 48px;
+    color: #7ee9dd;
+    font-family: 'Neue Machina Medium';
+    margin-top: 200px;
+    text-align: center;
+}

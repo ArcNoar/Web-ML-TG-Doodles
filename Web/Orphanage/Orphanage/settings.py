@@ -13,7 +13,7 @@ SECRET_KEY = 'django-insecure-kgoa1txr13w8&62)&a1u-id9^ao)xzf_vu7_@122bzq8(-&$(*
 
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1','e4c1-2-132-112-67.eu.ngrok.io']
 
 
 # Application definition
@@ -104,7 +104,9 @@ USE_TZ = True
 
 
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR,'static')
+
 
 MEDIA_ROOT = os.path.join(BASE_DIR,'Media')
 MEDIA_URL = '/Media/'

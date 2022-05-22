@@ -4,7 +4,13 @@ from django.db import models
 # Секция Личностой Памяти - Эмоции
 class Ego(models.Model):
     """
-    Этот класс содержит данные Асии. Вроде Имени, Возраста, Дня рождения 
+    Этот класс содержит данные Асии. Вроде Имени, Возраста, Дня рождения
+    appearance = Внешность Асии.
+
+    first_name = Имя
+    sur_name = Фамилия
+    age = 16
+    birthday = 13.06.2005
     """
     
     appearance = models.ImageField(upload_to='photo/Asiya/%Y/%m/%d',verbose_name='Облик',null=True) #Это в последнюю очередь тип, там сложный момент, потом сделаю.

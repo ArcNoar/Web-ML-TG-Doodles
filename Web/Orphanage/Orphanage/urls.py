@@ -10,7 +10,7 @@ from Orphanage import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('Asiya/', include('Asiya.urls')),
+    path('', include('Asiya.urls')),
     path('__debug__/', include('debug_toolbar.urls'))
 ]
 
