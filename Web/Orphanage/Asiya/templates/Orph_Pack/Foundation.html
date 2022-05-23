@@ -10,22 +10,16 @@
     {% block css_add %} {% endblock %}
 </head>
 <body>
+
     <div class="Stars"></div>
+
     <div class="Nav-Panel">
-        <!-- Nav Buttons -->
-        {% block Nav-Buttons %}
-        {% endblock %}
 
+        <a class="AboutB" href="{% url 'About' %}">About</a>
+        <a class="AdminB" href="{% url 'Admin' %}">Admin</a>
+        <a href="#" class="Arc_Label">A R C</a>
+        <a href="#" class="Login-Button">Login</a>
     </div>
-
-    <a href="{% url 'Main' %}" class="Arc-Button">
-        HOME
-    </a>
-
-    {% block page_label %}{% endblock %}
-    <a href="#" class="Login-Button">
-        Login
-    </a>
     <!-- Content -->
     {% block content %} {% endblock %}
     <!-- End Content -->

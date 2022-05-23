@@ -1,75 +1,27 @@
-/*Это сокрытие кнопки HOME*/
-
-.Arc-Button {
-    visibility: hidden;
-}
 
 
-.Arc_Label {
-    color: rgb(225, 255, 247);
-
-    position: fixed;
-    margin-left: 36%;
-    font-family: 'N_Mach Medium',Bahnschrift;
-    font-size: 100px;
-
-    text-shadow: 1.4px 0.8px 2px, 0 0 0.1em rgb(151, 226, 255);
-
-}
-
-
-.AboutB {
-    text-decoration: none;
-    background: none;
-    text-align: center;
-    font-family: 'N_Mach Medium',Bahnschrift;
-    font-size: 30px;
-    color: aliceblue;
-    margin-right: 15px;
-    margin-left: 10px;
-}
-
-.AdminB {
-    text-decoration: none;
-    background: none;
-    text-align: center;
-    font-family: 'N_Mach Medium',Bahnschrift;
-    font-size: 30px;
-    color: aliceblue;
-    margin-right: 15px;
-    margin-left: 10px;
-}
-
-
-.First_h {
-    font-size: 58px;
-    color: #7ee9dd;
-    font-family: 'N_Mach Medium',Bahnschrift;
-    text-align: center;
-    vertical-align: central;
-    opacity: 1.0;
+.Content_Block {
+    margin-top: 8%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    padding: 1% 1%;
 }
 
 .Main_Content {
-    
-/*    background: radial-gradient(circle, rgba(37,0,68,1) 0%, rgba(20,62,57,1) 73%, rgba(22,0,27,1) 100%);*/
-
-/*    line-height: 480px;*/
-
-    position: relative;
+    position:relative;
     align-items: center;
     display: flex;
 
     justify-content: center;
     transition: 0.3s;
 
-
-    margin-top: 180px;
-    margin-left: 190px;
-    margin-bottom: 30px;
-
-    height: 550px;
-    width: 1100px;
+    margin-left: 6%;
+    margin-right: 10%;
+    margin-top: 4%;
+    height: 60%;
+    width: 70%;
 }
 
 .Main_Content::before {
@@ -115,8 +67,8 @@
 
     transform: skewX(0deg);
     transform: skewY(0deg);
-    width: calc(100% - 90px);
-    height: calc(100% - 10px);
+    width: calc(100% - 10%);
+    height: calc(100% - 6%);
 }
 
 .Main_Content:nth-child(1):before,
@@ -165,8 +117,8 @@ Main_Content span::before {
 Main_Content:hover span::before {
     top: -50px;
     left: 50px;
-    width: 100px;
-    height: 100px;
+    width: 100%;
+    height: 100%;
     opacity: 1;
 }
 
@@ -212,7 +164,7 @@ Main_Content:hover span::after {
 .Main_Content .content {
     position: relative;
     left: 0;
-    top: -80px;
+    top: -30px;
     padding: 10px 20px;
     background: rgba(255, 255, 255, 0.05);
     backdrop-filter: blur(10px);
@@ -260,3 +212,5 @@ Main_Content:hover span::after {
     color: rgb(115, 255, 246);
     box-shadow: 0 1px 15px rgba(1, 1, 1, 0.2);
 }
+
+

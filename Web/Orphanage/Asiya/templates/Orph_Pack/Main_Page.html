@@ -13,22 +13,28 @@
 {{title}}
 {% endblock %}
 
-{% block page_label %}
-<span class="Arc_Label">A R C</span>
 
-{% endblock %}
-
-{% block Nav-Buttons %}
-<a class="AboutB" href="{% url 'About' %}">About</a>
-<a class="AdminB" href="{% url 'Admin' %}">Admin</a>
-{% endblock %}
 {% block content %}
-<div class="Main_Content">
-    <span></span>
-    <div class="content">
-        <h2>Future Content</h2>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-        <a href="#">Read More</a>
+<div class="Content_Block">
+    <div class="Main_Content">
+        <span></span>
+        <div class="content">
+            <h2>Future Content</h2>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+            <a href="#">Read More</a>
+        </div>
     </div>
+    <div class="Main_Content">
+        <span></span>
+        <div class="content">
+            <h2>Future Content</h2>
+            <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+
+            </p>
+            <a href="#">Read More</a>
+        </div>
+    </div>
+
 </div>
 {% endblock %}
