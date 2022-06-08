@@ -2,6 +2,15 @@
 from django.http import HttpResponse, HttpResponseNotFound
 from django.shortcuts import render
 
+from django.urls import reverse_lazy
+from django.views.generic import CreateView
+from django.contrib.auth.mixins import LoginRequiredMixin
+
+from .forms import *
+
+
+
+
 
 
 
@@ -14,6 +23,9 @@ def About(request):
 
 def Admin(request):
     return render(request,'Orph_Pack/Admin.html', {'title' : 'Администрирование'})
+
+def Login(request):
+    return render(request,'Orph_Pack/Login.html', {'title' : 'Авторизация'})
 
 
 

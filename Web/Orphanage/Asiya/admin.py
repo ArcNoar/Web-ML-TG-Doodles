@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Person_Memory,Ego
+from .models import User_Memory,Ego
 from .models import RelationType,Character_Tags,Emote_Reg
 from .models import VM_Alph,VM_Word, GOW, Sentence_Memory, Context_Table
 from .models import Semantic_Memory, Constant_Expression
@@ -9,7 +9,7 @@ from .models import Identity,Motives,Postulates,Like_Dislike
 
 
 
-admin.site.register(Person_Memory)
+admin.site.register(User_Memory)
 admin.site.register(Ego)
 
 admin.site.register(RelationType)

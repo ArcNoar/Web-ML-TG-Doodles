@@ -5,8 +5,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    flex-wrap: wrap;
-    padding: 1% 1%;
+/*    flex-wrap: wrap;*/ /* Расскоментируй если хочешь изменить вид карточек. */
+    padding: 5% 4% 2% 4%;
 }
 
 .Main_Content {
@@ -17,29 +17,27 @@
     justify-content: center;
     transition: 0.3s;
 
-    margin-left: 6%;
-    margin-right: 10%;
-    margin-top: 4%;
-    height: 60%;
-    width: 70%;
+    margin: 2%;
+    height: 80%;
+    width: 40%;
 }
 
 .Main_Content::before {
     content: ' ';
     position: absolute;
     top: 0;
-    width: 75%;
-    height: 65%;
+    width: 35%;
+    height: 100%;
 
     text-decoration: none;
     background: linear-gradient(0deg, rgba(40,159,159,1) 0%, rgba(2,32,37,1) 100%);
 
-    border-top-right-radius: 10px;
+    border-top-right-radius: 30px;
     border-top-left-radius: 40px;
     border-bottom-right-radius: 40px;
-    border-bottom-left-radius: 10px;
+    border-bottom-left-radius: 30px;
 
-    transform: skewX(-2deg);
+    transform: skewX(10deg);
     transition: 0.4s;
 }
 
@@ -47,8 +45,8 @@
     content: '';
     position: absolute;
     top: 0;
-    width: 75%;
-    height: 65%;
+    width: 35%;
+    height: 100%;
 
     background: linear-gradient(0deg, rgba(40,159,159,1) 0%, rgba(2,32,37,1) 100%);
 
@@ -57,7 +55,7 @@
     border-bottom-right-radius: 40px;
     border-bottom-left-radius: 10px;
 
-    transform: skewX(-2deg);
+    transform: skewX(10deg);
     transition: 0.4s;
     filter: blur(30px);
 }
@@ -67,8 +65,8 @@
 
     transform: skewX(0deg);
     transform: skewY(0deg);
-    width: calc(100% - 10%);
-    height: calc(100% - 6%);
+    width: calc(100% - 45%);
+    height: calc(100% + 25%);
 }
 
 .Main_Content:nth-child(1):before,

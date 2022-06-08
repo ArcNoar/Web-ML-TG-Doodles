@@ -13,7 +13,7 @@ SECRET_KEY = 'django-insecure-kgoa1txr13w8&62)&a1u-id9^ao)xzf_vu7_@122bzq8(-&$(*
 
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1','dbd7-2-132-112-67.eu.ngrok.io']
+ALLOWED_HOSTS = ['127.0.0.1','a677-2-132-112-67.eu.ngrok.io']
 
 
 # Application definition

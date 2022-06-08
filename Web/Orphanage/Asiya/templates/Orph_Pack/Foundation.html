@@ -13,12 +13,22 @@
 
     <div class="Stars"></div>
 
-    <div class="Nav-Panel">
+    <div id="Nav-Panel">
+        <ul>
+            <li>
+                <a href="{% url 'About' %}">About</a>
+            </li>
+            <li>
+                <a href="{% url 'Admin' %}">Admin</a>
+            </li>
+        </ul>
+        <a href="{% url 'Main' %}" class="Arc_Label">A R C</a>
+        <a href="{% url 'Login' %}" class="Login-Button">Log in</a>
+        <div id="toggle">
+            <i class="indicator"></i>
+        </div>
+        <script type="text/javascript" src="{% static 'Orph_Pack/js/Base.js' %}"></script>
 
-        <a class="AboutB" href="{% url 'About' %}">About</a>
-        <a class="AdminB" href="{% url 'Admin' %}">Admin</a>
-        <a href="#" class="Arc_Label">A R C</a>
-        <a href="#" class="Login-Button">Login</a>
     </div>
     <!-- Content -->
     {% block content %} {% endblock %}

@@ -18,7 +18,7 @@ class Ego(models.Model):
 
     first_name = models.CharField(max_length=25,verbose_name='Имя')
     sur_name = models.CharField(max_length=40,verbose_name='Фамилия')
-    age = models.FloatField(verbose_name='Возраст',default= 15)
+    age = models.FloatField(verbose_name='Возраст',default= 16)
     birthday = models.DateField(blank=True,verbose_name = 'Дата Рождения')
 
     def __str__(self):
@@ -29,7 +29,7 @@ class Ego(models.Model):
         verbose_name = 'Данные Асии'
 
 
-class Person_Memory(models.Model): # Память о существах, и мнение о них.
+class User_Memory(models.Model): # Память о существах, и мнение о них.
     """
         Это класс Личностей
         Будет содержать в себе тех кого Асия запомнила, ее отношение к ним, их имя, ну и известные данные
@@ -79,12 +79,23 @@ class Person_Memory(models.Model): # Память о существах, и мн
 
     """
     
-    unic_id = models.CharField(max_length = 25,primary_key=True,verbose_name='ID')
+    unic_id = models.CharField(max_length = 25,unique=True,verbose_name='ID')
     first_name = models.CharField(max_length=25,null=True,verbose_name='Имя')
     sur_name = models.CharField(max_length=40,null=True,verbose_name='Фамилия')
     appearance = models.ImageField(upload_to=f'photo/%Y/%m',verbose_name='Внешний Вид',null=True) #Это в последнюю очередь тип, там сложный момент, потом сделаю.
     birthday = models.DateField(blank=True,null=True,verbose_name = 'Дата Рождения')
 
+    class PermChose(models.TextChoices): #Подкласс для параметра Гендера
+        ABSOLUTE = 'Absolute', 'Абсолют.'
+        HIGH_PERM = 'High_Perm','Афелий.'
+        MID_PERM = 'Mid_Perm','Апсид.'
+        LOW_PERM = 'Low_Perm','Перигелий.'
+        ZERO_PERM = 'Zero_Perm','Zero.'
+
+    perms = gender = models.CharField(max_length = 18,verbose_name='Права',choices=PermChose.choices,default=PermChose.ZERO_PERM)
+
+    login = models.CharField(max_length = 20, primary_key=True, verbose_name='Login')
+    password = models.CharField(max_length = 38, verbose_name='Password')
 
     class GenChose(models.TextChoices): #Подкласс для параметра Гендера
         MALE = 'male', 'Мужской'
@@ -201,7 +212,7 @@ class Emote_Reg(models.Model): # Эмоциональное состояние
                             verbose_name= 'Код Чувства')
     
     # Описательные переменные
-    emote_trigger = models.ForeignKey(Person_Memory,related_name='ETrig',blank=True,null=True,
+    emote_trigger = models.ForeignKey(User_Memory,related_name='ETrig',blank=True,null=True,
                                       on_delete=models.SET_NULL,verbose_name='Кто Причина')
 
     class ET_TypeChose(models.TextChoices): #Подкласс для параметра типа
@@ -443,7 +454,7 @@ class Sentence_Memory(models.Model): # Память содержащая в се
     sent_context = models.ForeignKey('Context_Table',blank=True,null=True,
                                      on_delete=models.SET_NULL,verbose_name='Контекст предложения')
 
-    from_who = models.ForeignKey(Person_Memory,blank=True,null=True,
+    from_who = models.ForeignKey(User_Memory,blank=True,null=True,
                                      on_delete=models.SET_NULL,verbose_name='Источник Предложения')
 
     short_mean = models.TextField(blank=True,null=True,verbose_name='Краткая суть')
@@ -493,7 +504,7 @@ class Semantic_Memory(models.Model): # Обобщенные знания о Ми
     Note - Знание.
     """
     don = models.DateField(auto_now_add=True,verbose_name='Дата Занесения')
-    son = models.ForeignKey(Person_Memory,on_delete=models.SET_NULL,null=True,blank=True,verbose_name='Источник Записи')
+    son = models.ForeignKey(User_Memory,on_delete=models.SET_NULL,null=True,blank=True,verbose_name='Источник Записи')
     von = models.FloatField(default=0.0,verbose_name='Доверие к записи')
 
     note = models.TextField(db_index=True,unique=True,verbose_name='Запись')
@@ -549,7 +560,7 @@ class Episode_Memory(models.Model): # Эпизодическая Память
     """
 
     episode = models.TextField(db_index=True,unique=True,verbose_name='Содержание Воспоминания')
-    share_with = models.ForeignKey(Person_Memory,on_delete=models.SET_NULL,blank=True,null=True,verbose_name='С кем разделяет')
+    share_with = models.ForeignKey(User_Memory,on_delete=models.SET_NULL,blank=True,null=True,verbose_name='С кем разделяет')
     emote_score = models.ForeignKey(Emote_Reg,on_delete=models.PROTECT,blank=True,null=True,verbose_name='Испытываемые Эмоции')
 
     dor = models.DateField(auto_now_add=True,verbose_name='Дата Приобретения')

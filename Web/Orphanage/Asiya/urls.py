@@ -8,7 +8,7 @@ urlpatterns = [
     path('',index,name='Main'),
     path('Admin/',Admin,name='Admin'),
     path('About/',About,name='About'),
-
+    path('Login/',Login,name='Login'),
     ]
 
 

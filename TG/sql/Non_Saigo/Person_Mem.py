@@ -74,7 +74,7 @@ class Person_M:
 
 
 
-                insert_query = """ INSERT INTO public."Asiya_person_memory" (unic_id,first_name,sur_name,appearance,gender,birthday,
+                insert_query = """ INSERT INTO public."Asiya_user_memory" (unic_id,first_name,sur_name,appearance,gender,birthday,
                                                     meet_date,affection,sympathy,friendship,admiration,mania,
                                                     abhorrence,spite,disaffection,fright,
                                                     rep_sum,fund_description,local_description,relation_from_id,relation_to_id) VALUES """ + f"""
@@ -116,7 +116,7 @@ class Person_M:
 
 
 
-                select_query = f"""SELECT * FROM public."Asiya_person_memory" WHERE unic_id = '{id}' ;"""
+                select_query = f"""SELECT * FROM public."Asiya_user_memory" WHERE unic_id = '{id}' ;"""
                 cursor.execute(select_query)
 
                 #print(f'Данные пользователя по ID - [{id}] . Получены. ')
