@@ -9,7 +9,7 @@ import os
 
 
 
-SECRET_KEY = 'django-insecure-kgoa1txr13w8&62)&a1u-id9^ao)xzf_vu7_@122bzq8(-&$(*'
+SECRET_KEY = 'KEY'
 
 DEBUG = True
 
