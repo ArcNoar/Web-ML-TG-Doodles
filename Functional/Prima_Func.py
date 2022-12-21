@@ -218,6 +218,73 @@ def WTDM_Prima(word_list):
             #print(_ex)
     return collected_users
 
+#Alternate Model for Sentences
+
+class Prima_SENT:
+    """
+       Класс создающий темплейт заполнения данных в дб. 
+    """
+    def create(self):
+        sent_Template = {
+            'SENT' : 'Пустое предложение' , # "Empty Sentence"
+            'SENT_Dech' : '91-92', # Empty - 92 ; Sentence - 92
+            'GRADE' : 1.0 , # 1 - True ; 0 - False
+            }
+        
+        return sent_Template
+
+
+
+def SENT_Prima(sent_data):
+    """
+    SENT - Sentence To Dict
+    !!! ONLY FOR CONVERT SQL REQUEST DATA_LIST !!!
+    Конвертирует Данные из дб в Словарь.
+   
+
+    """
+    data_list = sent_data
+    try:
+        converted_data = {
+                'ID' : data_list[0][0],
+                'SENT' : data_list[0][1],
+                'SENT_Dech' : data_list[0][2],
+                'GRADE' : data_list[0][3],
+                
+                }
+        
+        return converted_data
+    except Exception as _ex:
+        print(_ex)
+
+def MSENT_Prima(sent_data):
+    """
+    MSENT = Many Sentence To Dict
+    !!! ONLY FOR CONVERT SQL REQUEST DATA_LIST !!!
+    Конвертирует Данные из дб в Словарь.
+    Возвращает список
+   
+
+    """
+    data_list = sent_data
+    #print(data_list)
+    collected_sent = []
+    
+    for sent_d in data_list:
+        converted_data = {
+                'ID' : sent_d[0],
+                'SENT' : sent_d[1],
+                'SENT_Dech' : sent_d[2],
+                'GRADE' : sent_d[3],
+                
+                
+                }
+        #print(converted_data)
+        collected_sent.append(converted_data)
+    #print(collected_sent)
+    return collected_sent
+
+
 
 # Грамматический пул (Парсер Частей речи.)
 

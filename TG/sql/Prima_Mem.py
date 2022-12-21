@@ -2,7 +2,7 @@ import psycopg2
 
 from .conf_Saigo import db_name,host,user,password
 
-from Functional.Prima_Func import STD_Prima,MSTD_Prima, WTD_Prima, WTDM_Prima , parse, G_Delay, Prima_word
+from Functional.Prima_Func import STD_Prima,MSTD_Prima, WTD_Prima, WTDM_Prima , parse, G_Delay, Prima_word, Prima_SENT, SENT_Prima, MSENT_Prima
 
 word_template = Prima_word() # Темплейт запоминания слов
 word_params = word_template.create()
@@ -1039,3 +1039,235 @@ class Prima_Categories:
                 if connection:
                     connection.close()
                     #print('Дб отключена')
+
+
+# Alternative Model for sentences
+class VM_Sentence:
+    """
+    
+    """
+    def deschcode(self,sentence):
+        Word_Func = VM_Word.Get()
+        
+        bag_of_word = (sentence).split(' ')
+        words_id_list = []
+        d_code = ''
+        
+        for wd in bag_of_word:
+            try:
+                current_word = Word_Func.one_word(wd)
+                #print(current_word)
+                words_id_list.append(str(current_word['ID']))
+            except Exception as _ex:
+                print('Возникла ошиба при дешифрации предложения. [VM_Sentence - deschcode]',_ex)
+
+                word_params['Слово'] = wd
+                word_params['Тип'] = G_Delay(parse(wd))
+                Word_F = VM_Word()
+                Word_add = Word_F.New(word_params)
+                Word_add.learn_word()
+                current_word = Word_Func.one_word(wd)
+                #print(current_word)
+                words_id_list.append(str(current_word['ID']))
+        d_code = '-'.join(words_id_list)
+        return d_code
+    class New:
+        def __init__(self,template):
+            self.User_Sent = template['SENT']
+            sent_func = VM_Sentence()
+            self.SENT_Desch = sent_func.deschcode(self.User_Sent)
+            self.Grade = template['GRADE']
+            
+
+
+        def sent_reg(self):
+            try:
+
+                connection = psycopg2.connect(
+                
+                        host = host,
+                        user = user,
+                        password = password,
+                        database = db_name
+                        )
+                
+                cursor = connection.cursor()
+                
+               
+
+
+                add_query = f"""INSERT INTO public."Prima_Word_sentence_memory" (
+                                sentence, sent_dech, grade) VALUES (
+                                '{self.User_Sent}'::text,
+                                '{self.SENT_Desch}'::text,
+                                {self.Grade}::boolean)
+                                 returning id;"""
+                cursor.execute(add_query)
+                #СУКА КТО КОМИТ СПИЗДИЛ
+                connection.commit()
+                        
+            
+            except Exception as _ex:
+                print('Ошибка в ходе чтения ДБ.[[Prima_Sentence-NEW[SENT_REG] ]', _ex)
+            
+            finally:
+                if connection:
+                    connection.close()
+                    #print('Дб отключена')
+
+    class Get:
+        """
+        Pull by User Message
+        """
+
+        def sentence_data(self,proc_sent):
+            try:
+                connection = psycopg2.connect(
+                
+                        host = host,
+                        user = user,
+                        password = password,
+                        database = db_name
+                        )
+                
+                cursor = connection.cursor()
+
+
+
+                select_query = f"""SELECT * FROM public."Prima_Word_sentence_memory" WHERE sentence = '{proc_sent}' """
+                cursor.execute(select_query)
+
+                raw_data = cursor.fetchall().copy()
+                if raw_data == []:
+                    return False
+                else:
+                    pulled_data = MSENT_Prima(raw_data)
+                    #print(pulled_data)
+                    # 
+                    return pulled_data
+                
+                
+                
+            except Exception as _ex:
+                print('Ошибка в ходе чтения ДБ. [Prima_SENTENCE [Get-SENTENCE_DATA]]', _ex)
+            
+            finally:
+                if connection:
+                    connection.close()
+                    #print('Дб отключена')
+        def get_all(self):
+            try:
+                connection = psycopg2.connect(
+                
+                        host = host,
+                        user = user,
+                        password = password,
+                        database = db_name
+                        )
+                
+                cursor = connection.cursor()
+
+
+
+                select_query = f"""SELECT * FROM public."Prima_Word_sentence_memory" """
+                cursor.execute(select_query)
+
+                raw_data = cursor.fetchall().copy()
+                if raw_data == []:
+                    return False
+                else:
+                    pulled_data = MSENT_Prima(raw_data)
+                    #print(pulled_data)
+                    # 
+                    return pulled_data
+            except Exception as _ex:
+                print('Ошибка в ходе чтения ДБ. [Prima_SENTENCE [Get-ALL_SENTENCE_DATA]]', _ex)
+            
+            finally:
+                if connection:
+                    connection.close()
+                    #print('Дб отключена')
+
+        def get_by_id(self,sent_id):
+            try:
+                connection = psycopg2.connect(
+                
+                        host = host,
+                        user = user,
+                        password = password,
+                        database = db_name
+                        )
+                
+                cursor = connection.cursor()
+
+
+
+                select_query = f"""SELECT * FROM public."Prima_Word_sentence_memory" WHERE id = '{sent_id}' """
+                cursor.execute(select_query)
+
+                raw_data = cursor.fetchall().copy()
+                if raw_data == []:
+                    return False
+                else:
+                    pulled_data = MSENT_Prima(raw_data)
+                    #print(pulled_data)
+                    # 
+                    return pulled_data[0]
+                
+                
+                
+            except Exception as _ex:
+                print('Ошибка в ходе чтения ДБ. [Prima_SENTENCE [Get-SENTENCE_DATA]]', _ex)
+            
+            finally:
+                if connection:
+                    connection.close()
+                    #print('Дб отключена')
+
+
+
+        def max_id(self):
+            try:
+                connection = psycopg2.connect(
+                
+                        host = host,
+                        user = user,
+                        password = password,
+                        database = db_name
+                        )
+                
+                cursor = connection.cursor()
+
+
+
+                select_query = """SELECT * FROM public."Prima_Word_sentence_memory"
+                                        ORDER BY id DESC LIMIT 1"""
+                cursor.execute(select_query)
+
+                raw_data = cursor.fetchall().copy()
+                if raw_data == []:
+                    return False
+                else:
+                    pulled_data = MSENT_Prima(raw_data)
+
+                    id_limit = pulled_data[0]
+                    #print(pulled_data)
+                    # 
+                    return id_limit['ID']
+
+
+            except Exception as _ex:
+                print('Ошибка в ходе чтения ДБ. [Prima_SENTENCE [Get-SENTENCE_MAX_ID]]', _ex)
+            
+            finally:
+                if connection:
+                    connection.close()
+                    #print('Дб отключена')
+
+
+
+
+
+
+          
+

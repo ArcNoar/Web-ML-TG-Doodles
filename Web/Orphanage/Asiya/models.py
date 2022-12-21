@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.contrib.auth.models import AbstractBaseUser
 
 # Секция Личностой Памяти - Эмоции
 class Ego(models.Model):
@@ -29,61 +29,14 @@ class Ego(models.Model):
         verbose_name = 'Данные Асии'
 
 
-class User_Memory(models.Model): # Память о существах, и мнение о них.
-    """
-        Это класс Личностей
-        Будет содержать в себе тех кого Асия запомнила, ее отношение к ним, их имя, ну и известные данные
-    
-        Appearance - Внешность (скорее всего приложен файл будет, правда хер пойми как это будет с тг работать, и как будет работать с сайтом.)
-        #TO-DO НУЖНО СДЕЛАТЬ ЭТУ ХУЙНЮ С ВНЕШНКОЙ БРАТАН, ПЕРЕД ЗАПУСКОМ ОБЯЗАЛОВКА БРАТАН. 
-    
-        unic_id - Поскольку этот сайт по сути является оболочкой, будем брать айдишник пользователя с телеграм канала.
-        first_name - Имя
-        sur_name - Фамилия
-        birthday - Дата рождения
-        gender - Пол
-    
-        Species - Расса (*была удалена*)
-    
-    Rep_SUM - (Репутация В числовом Экв) Наверное это будет показателм ощущения комфорта ?
-        Тут будет список эквивалентов: (Количество знаком это сила воздействия к коэффиценту влияния репутации.)
-            Affection - Любовь (+++++)
-            Sympathy - Симпатия (++++)
-            FriendShip - Дружба (+++)
-            Admiration - Восхищение (++)
-            Interest - Интерес (+) (Удалено)
-
-            Mania - Мания (Должна влиять на установку пункта зависимости.)
-
-
-            Abhorrence - Ненависть\Отторжение (-----)
-            Spite - Злоба\Враждебность (----)
-            DisAffection - Неприязнь\Недружелюбность (---)
-            Fright - Страх (--)
-            Ennui -  Тоска(Скука) по отношению к объетку(-) (Удалено)
-
-
-
-
-    Relation_To - (Как Асия относится к Юниту)
-    Relation_From - (Как Юнит относится к Асии)
-    Meet_Date - (Дата встречи)
-    
-    Fund_Description - Описание занесенное пользователем
-    Local_Description - Описание подмеченное асией
-    
-    Самые выделяющиеся черты характера
-    Char_1 - Черта характера присвоенная Асией 
-    Char_2 - Черта Характера Присвоенная Асией
-    Char_3 - Черта Характера Присвоенная Асией
-
-    """
+class User_Memory(AbstractBaseUser): # Память о существах, и мнение о них.
     
     unic_id = models.CharField(max_length = 25,unique=True,verbose_name='ID')
     first_name = models.CharField(max_length=25,null=True,verbose_name='Имя')
     sur_name = models.CharField(max_length=40,null=True,verbose_name='Фамилия')
     appearance = models.ImageField(upload_to=f'photo/%Y/%m',verbose_name='Внешний Вид',null=True) #Это в последнюю очередь тип, там сложный момент, потом сделаю.
     birthday = models.DateField(blank=True,null=True,verbose_name = 'Дата Рождения')
+
 
     class PermChose(models.TextChoices): #Подкласс для параметра Гендера
         ABSOLUTE = 'Absolute', 'Абсолют.'

@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import VM_Alph, VM_Word, Context_Table, Correct_Answers, GOS
+from .models import VM_Alph, VM_Word, Context_Table, Correct_Answers, GOS , Sentence_Memory
 
 
 
@@ -10,3 +10,4 @@ admin.site.register(GOS)
 
 admin.site.register(Correct_Answers)
 admin.site.register(Context_Table)
+admin.site.register(Sentence_Memory)

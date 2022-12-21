@@ -95,31 +95,22 @@ class VM_Word(models.Model): # Память слов.
 
 
 
-"""
+
 class Sentence_Memory(models.Model): # Память содержащая в себе цельные предложения (В идеале не распознанные)
     
     sentence = models.TextField(db_index=True,unique=True,verbose_name='Предложение')
     sent_dech = models.TextField(verbose_name='Код-Дешифровка предложения')
-    sent_context = models.ForeignKey('Context_Table',blank=True,null=True,
-                                     on_delete=models.SET_NULL,verbose_name='Контекст предложения')
-
-    group_of_sent = models.ForeignKey('GOS',blank=True,null=True,on_delete=models.SET_NULL,
-                                      related_name='GOS',verbose_name='Категории Предложений')
-
-    x_cord = models.FloatField(verbose_name='X Координата')
-    y_cord = models.FloatField(verbose_name='Y Координата')
-
-    special_field = models.CharField(max_length = 150,verbose_name='Спец Поле')
-
+    
+    grade = models.BooleanField(verbose_name='Бинарная Оценка')
     
     def __str__(self):
-        return self.sent_dech
+        return "SENT: %s  ||  GRADE: %s ||" % (self.sentence, self.grade)
 
     class Meta:
         verbose_name_plural = 'Постоянная Память - Предложения'
         verbose_name = 'Предложение'
         ordering = ['sentence']
-"""
+
 
 class Correct_Answers(models.Model):
 

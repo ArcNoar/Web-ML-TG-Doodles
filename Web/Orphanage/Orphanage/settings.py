@@ -66,7 +66,7 @@ WSGI_APPLICATION = 'Orphanage.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE':'django.db.backends.postgresql_psycopg2',
-        'NAME':'AsiyaHeart',
+        'NAME':'Saigo_Ai',
         'USER':'postgres',
         'PASSWORD':'Tettman2343',
         'HOST':'localhost',
