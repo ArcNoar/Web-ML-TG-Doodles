@@ -1,5 +1,3 @@
-from . import Sentence_Constructer
-from . import Word_Base
 
 #from . import Aspect_Talk
 #from . import Word_Func
