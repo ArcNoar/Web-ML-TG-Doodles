@@ -13,7 +13,7 @@ SECRET_KEY = 'django-insecure-kgoa1txr13w8&62)&a1u-id9^ao)xzf_vu7_@122bzq8(-&$(*
 
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1','a677-2-132-112-67.eu.ngrok.io']
+ALLOWED_HOSTS = ['127.0.0.1']
 
 
 # Application definition
@@ -66,7 +66,7 @@ WSGI_APPLICATION = 'Orphanage.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE':'django.db.backends.postgresql_psycopg2',
-        'NAME':'Saigo_Ai',
+        'NAME':'Saigo_Vinez',
         'USER':'postgres',
         'PASSWORD':'Tettman2343',
         'HOST':'localhost',
